@@ -1,41 +1,41 @@
-export type Fecha = string;
+export type DateString = string;
 
-export type RolUsuario =
+export type UserRole =
   | "user"
   | "moderator"
   | "administrator";
 
-export type EstadoUsuario =
+export type UserStatus =
   | "active"
   | "blocked";
 
-export type EstadoConservacion =
+export type ConservationStatus =
   | "draft"
   | "published"
   | "under_review"
   | "removed"
   | "sold";
 
-export type EstadoArticulo =
+export type ItemStatus =
   | "available"
   | "sold"
   | "paused"
   | "deleted";
 
-export type EstadoIntercambio =
+export type TradeStatus =
   | "pending"
   | "done"
   | "cancelled";
 
-export type EstadoReporte =
+export type ReportStatus =
   | "pending"
   | "resolved";
 
-export type DecisionModeracion =
+export type ModerationDecision =
   | "reactivated"
   | "removed";
 
-export type TipoNotificacion =
+export type NotificationType =
   | "message"
   | "report"
   | "moderation"
@@ -53,10 +53,10 @@ export interface User {
   email: string;
   password: string;
   profile_picture: string | null;
-  role: RolUsuario;
-  status: EstadoUsuario;
-  registration_date: Fecha;
-  user_birthday: Fecha;
+  role: UserRole;
+  status: UserStatus;
+  registration_date: DateString;
+  user_birthday: DateString;
   user_city: string;
   user_province: string;
   user_zipcode: string;
@@ -67,13 +67,13 @@ export interface Item {
   title: string;
   description: string | null;
   price: number;
-  conservation_status: EstadoConservacion;
+  conservation_status: ConservationStatus;
   location: string | null;
-  publication_date: Fecha;
+  publication_date: DateString;
   fk_seller_id: number;
   fk_categories_id: number;
-  item_update: Fecha | null;
-  item_status: EstadoArticulo | null;
+  item_update: DateString | null;
+  item_status: ItemStatus | null;
 }
 
 export interface ItemPhoto {
@@ -86,7 +86,7 @@ export interface ItemPhoto {
 export interface Message {
   id_messages: number;
   content: string;
-  sent_date: Fecha;
+  sent_date: DateString;
   read: boolean;
   fk_users_id_sent: number;
   fk_users_id_received: number;
@@ -96,9 +96,9 @@ export interface Message {
 export interface Report {
   id_reports: number;
   reason: string;
-  status: EstadoReporte;
-  report_date: Fecha;
-  resolution_date: Fecha | null;
+  status: ReportStatus;
+  report_date: DateString;
+  resolution_date: DateString | null;
   fk_items_id: number;
   fk_user_reported: number;
   fk_user_reports_received: number;
@@ -107,9 +107,9 @@ export interface Report {
 
 export interface ModerationAction {
   id_action: number;
-  decision: DecisionModeracion;
+  decision: ModerationDecision;
   notification_sent: boolean;
-  action_date: Fecha;
+  action_date: DateString;
   fk_moderator_id: number;
   fk_reports_id: number;
 }
@@ -117,8 +117,8 @@ export interface ModerationAction {
 export interface ItemHistory {
   id_item_history: number;
   final_price: number;
-  trade_status: EstadoIntercambio;
-  trade_date: Fecha;
+  trade_status: TradeStatus;
+  trade_date: DateString;
   fk_items_id: number;
   fk_buyer_id: number;
 }
@@ -127,7 +127,7 @@ export interface Review {
   id_reviews: number;
   rating: number;
   comment: string | null;
-  review_date: Fecha;
+  review_date: DateString;
   fk_items_id: number;
   fk_reviewer_id: number;
   fk_reviewed_id: number;
@@ -135,23 +135,23 @@ export interface Review {
 
 export interface Favorite {
   id_favorite: number;
-  saved_date: Fecha;
+  saved_date: DateString;
   fk_users_id: number;
   fk_items_id: number;
 }
 
 export interface Notification {
   id_notifications: number;
-  notification_type: TipoNotificacion;
+  notification_type: NotificationType;
   content: string;
   read: boolean;
-  notification_date: Fecha;
+  notification_date: DateString;
   fk_users_id: number;
 }
 
 export interface Conversation {
   id_conversations: number;
-  started_date: Fecha;
+  started_date: DateString;
   fk_items_id: number;
   fk_seller_id: number;
   fk_buyer_id: number;
@@ -159,7 +159,7 @@ export interface Conversation {
 
 export interface ItemView {
   id_items_view: number;
-  view_date: Fecha;
+  view_date: DateString;
   fk_items_id: number;
   fk_users_id: number;
 }
