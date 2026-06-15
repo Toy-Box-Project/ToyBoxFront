@@ -1,0 +1,65 @@
+.not-found-container{
+
+    min-height:100vh;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    padding:32px;
+
+}
+
+.not-found-card{
+
+    max-width:550px;
+
+    width:100%;
+
+    text-align:center;
+
+    padding:48px;
+
+}
+
+.toy-icon{
+
+    font-size:72px;
+
+    margin-bottom:24px;
+
+}
+
+.not-found-card h1{
+
+    margin-bottom:16px;
+
+    color:var(--color-primary);
+
+}
+
+.not-found-card p{
+
+    color:var(--color-text-secondary);
+
+    line-height:1.7;
+
+    margin-bottom:32px;
+
+}
+
+.btn{
+
+    text-decoration:none;
+
+    display:inline-flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    min-width:220px;
+
+}
