@@ -1,0 +1,85 @@
+.badge{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    padding:6px 14px;
+
+    border-radius:999px;
+
+    font-size:12px;
+
+    font-weight:600;
+
+    text-transform:capitalize;
+
+    white-space:nowrap;
+
+}
+
+/* Disponible */
+
+.available{
+
+    background:#E7F4EC;
+
+    color:#198754;
+
+}
+
+/* Reservado */
+
+.reserved{
+
+    background:#FFF4D6;
+
+    color:#C28700;
+
+}
+
+/* Vendido */
+
+.sold{
+
+    background:#FDE8EA;
+
+    color:#D84565;
+
+}
+
+/* Como nuevo */
+
+.new{
+
+    background:#EEF5FF;
+
+    color:#6188C1;
+
+}
+
+/* Usado */
+
+.used{
+
+    background:#F3F4F6;
+
+    color:#4B5563;
+
+}
+
+/* Destacado */
+
+.featured{
+
+    background:linear-gradient(
+        135deg,
+        #6188C1,
+        #D84565
+    );
+
+    color:white;
+
+}
