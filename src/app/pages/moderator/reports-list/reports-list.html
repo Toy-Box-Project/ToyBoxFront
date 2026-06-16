@@ -1,1 +1,31 @@
-<p>reports list works!</p>
+<main class="moderator-page">
+  <header class="page-header">
+    <div>
+      <p class="eyebrow">Moderation</p>
+      <h1>Reports list</h1>
+    </div>
+    <div class="filters">
+      <input type="search" placeholder="Search reports" [(ngModel)]="searchTerm" />
+      <select [(ngModel)]="statusFilter" aria-label="Filter reports by status">
+        <option value="all">All reports</option>
+        <option value="pending">Pending</option>
+        <option value="resolved">Resolved</option>
+      </select>
+    </div>
+  </header>
+
+  <section class="reports-list">
+    <article class="report-card" *ngFor="let report of filteredReports">
+      <div class="report-main">
+        <span class="status-pill" [class.resolved]="report.status === 'resolved'">{{ report.status }}</span>
+        <h2>{{ report.itemTitle }}</h2>
+        <p>{{ report.reason }}</p>
+        <small>Reported user: {{ report.reportedUser }} · Reporter: {{ report.reporter }}</small>
+      </div>
+      <div class="report-side">
+        <time>{{ report.date }}</time>
+        <a [routerLink]="['/moderator/report', report.id]">View detail</a>
+      </div>
+    </article>
+  </section>
+</main>
