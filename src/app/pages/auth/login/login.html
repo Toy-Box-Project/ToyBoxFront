@@ -1,1 +1,108 @@
-<p>login works!</p>
+<div class="pattern-bg"></div>
+
+<div class="container py-5 relative-z-10">
+
+  <div class="card-toybox login-card p-4 p-md-5">
+
+    <div class="text-center mb-4">
+
+      <img
+        class="logo mb-3 d-block mx-auto"
+        src="./assets/images/Logos/toybox_logoprincipal.svg"
+        alt="ToyBox Logo">
+
+      <h1 class="login-title">Iniciar sesión</h1>
+
+      <p class="login-subtitle">Bienvenido de nuevo a ToyBox</p>
+
+    </div>
+
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+
+      <!-- Email -->
+      <div class="mb-3">
+        <label class="form-label">Email</label>
+
+        <div class="input-group-wrapper">
+
+          <input
+            class="form-control with-icon-right"
+            type="email"
+            formControlName="email"
+            placeholder="tuemail@ejemplo.com">
+
+          <span class="input-icon-right material-symbols-outlined">mail</span>
+
+        </div>
+
+        @if (checkControl('email','required')) {
+          <p class="error-message">Campo requerido</p>
+        }
+
+        @if (checkControl('email','pattern')) {
+          <p class="error-message">Email inválido</p>
+        }
+      </div>
+
+      <!-- Password -->
+      <div class="mb-3">
+        <label class="form-label">Contraseña</label>
+
+        <div class="input-group-wrapper">
+
+          <input
+            class="form-control"
+            [type]="showPassword ? 'text' : 'password'"
+            formControlName="password"
+            placeholder="••••••••">
+
+          <button
+            class="password-toggle"
+            type="button"
+            (click)="togglePassword()">
+
+            <span class="material-symbols-outlined">
+              {{ showPassword ? 'visibility_off' : 'visibility' }}
+            </span>
+
+          </button>
+
+        </div>
+
+        @if (checkControl('password','required')) {
+          <p class="error-message">Campo requerido</p>
+        }
+
+        @if (checkControl('password','minlength')) {
+          <p class="error-message">Mínimo 6 caracteres</p>
+        }
+      </div>
+
+      @if (loginError) {
+        <p class="error-message">{{ loginError }}</p>
+      }
+
+      <button class="btn-toybox-primary w-100 mb-3" type="submit">
+        <span>Iniciar sesión</span>
+        <span class="material-symbols-outlined">arrow_forward</span>
+      </button>
+
+      <div class="text-center mb-4">
+        <a class="forgot-link" (click)="goToForgotPassword()">
+          ¿Olvidaste tu contraseña?
+        </a>
+      </div>
+
+    </form>
+
+    <div class="border-top pt-4 text-center">
+      <p class="text-on-surface-variant mb-0">
+        ¿No tienes una cuenta?
+        <a class="signup-link" (click)="goToRegister()">Regístrate</a>
+      </p>
+    </div>
+
+  </div>
+
+</div>
+
