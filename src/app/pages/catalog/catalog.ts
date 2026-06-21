@@ -2,15 +2,18 @@ import { Component } from '@angular/core';
 import { Product } from '../../shared/interfaces/product.interface';
 import { Category } from '../../shared/interfaces/category.interface';
 import { ProductCardComponent } from '../../shared/components/product-card/product-card';
+import { SearchBarComponent } from '../../shared/components/search-bar/search-bar';
 
 @Component({
   selector: 'app-catalog',
   standalone: true,
-  imports: [ProductCardComponent],
+  imports: [ProductCardComponent, SearchBarComponent],
   templateUrl: './catalog.html',
   styleUrl: './catalog.css'
 })
 export class CatalogComponent {
+  searchTerm = '';
+
   categories: Category[] = [
     {
       id: 0,
@@ -141,4 +144,8 @@ export class CatalogComponent {
       badge: 'Publicado'
     }
   ];
+
+  onSearch(term: string): void {
+    this.searchTerm = term;
+  }
 }

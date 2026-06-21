@@ -47,18 +47,6 @@
   font-size: 1.2rem;
 }
 
-.catalog-search-box {
-  display: flex;
-  gap: .75rem;
-}
-
-.catalog-search-box input {
-  flex: 1;
-}
-
-.catalog-search-box button {
-  white-space: nowrap;
-}
 
 .catalog-categories {
   margin-bottom: 2.5rem;
@@ -330,11 +318,10 @@
     padding-top: 2rem;
   }
 
-  .catalog-search-box,
-  .catalog-results__top {
-    flex-direction: column;
-    align-items: stretch;
-  }
+.catalog-results__top {
+  flex-direction: column;
+  align-items: stretch;
+}
 
   .catalog-sort {
     width: 100%;

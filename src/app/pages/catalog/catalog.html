@@ -15,22 +15,13 @@
     </div>
 
     <div class="catalog-hero__search card-toybox">
-      <label for="catalog-search">¿Qué juguete estás buscando?</label>
-
-      <div class="catalog-search-box">
-        <input
-          id="catalog-search"
-          class="form-control"
-          type="text"
-          placeholder="Buscar juguetes, categorías o ciudad"
-        />
-
-        <button class="btn-toybox-primary" type="button">
-          <span class="material-symbols-outlined">search</span>
-          Buscar
-        </button>
-      </div>
-    </div>
+  <app-search-bar
+    label="¿Qué juguete estás buscando?"
+    placeholder="Buscar juguetes, categorías o ciudad"
+    buttonText="Buscar"
+    (search)="onSearch($event)"
+  ></app-search-bar>
+</div>
   </section>
 
   <section class="catalog-categories">
