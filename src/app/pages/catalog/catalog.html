@@ -1,1 +1,167 @@
-<p>catalog works!</p>
+<div class="pattern-bg"></div>
+
+<main class="catalog-page relative-z-10">
+  <section class="catalog-hero">
+    <div class="catalog-hero__text">
+      <span class="catalog-hero__eyebrow">Catálogo Toybox</span>
+
+      <h1>Encuentra juguetes con una segunda vida</h1>
+
+      <p>
+        Explora juguetes de segunda mano publicados por otras familias.
+        Busca por categoría, precio, ubicación o estado y descubre nuevas
+        oportunidades para seguir jugando.
+      </p>
+    </div>
+
+    <div class="catalog-hero__search card-toybox">
+      <label for="catalog-search">¿Qué juguete estás buscando?</label>
+
+      <div class="catalog-search-box">
+        <input
+          id="catalog-search"
+          class="form-control"
+          type="text"
+          placeholder="Buscar juguetes, categorías o ciudad"
+        />
+
+        <button class="btn-toybox-primary" type="button">
+          <span class="material-symbols-outlined">search</span>
+          Buscar
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <section class="catalog-categories">
+    <div class="catalog-section-heading">
+      <h2>Categorías</h2>
+      <p class="text-on-surface-variant">
+        Elige el tipo de juguete que quieres encontrar.
+      </p>
+    </div>
+
+    <div class="category-grid">
+      @for (category of categories; track category.id) {
+        <button class="category-card" type="button">
+          @if (category.icon) {
+            <img [src]="category.icon" [alt]="category.name" />
+          } @else {
+            <span class="category-card__all">Todo</span>
+          }
+
+          <span>{{ category.name }}</span>
+        </button>
+      }
+    </div>
+  </section>
+
+  <section class="catalog-layout">
+    <aside class="catalog-filters card-toybox">
+      <div class="catalog-filters__header">
+        <span class="material-symbols-outlined">tune</span>
+        <h2>Filtros</h2>
+      </div>
+
+      <div class="filter-group">
+        <label for="category">Categoría</label>
+        <select id="category" class="form-control">
+          @for (category of categories; track category.id) {
+            <option>{{ category.name }}</option>
+          }
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <label for="price">Precio máximo</label>
+        <input
+          id="price"
+          class="form-control"
+          type="number"
+          placeholder="Ej. 30 €"
+        />
+      </div>
+
+      <div class="filter-group">
+        <label for="location">Ubicación</label>
+        <input
+          id="location"
+          class="form-control"
+          type="text"
+          placeholder="Ciudad o provincia"
+        />
+      </div>
+
+      <div class="filter-group">
+        <label for="status">Estado</label>
+        <select id="status" class="form-control">
+          <option>Todos</option>
+          <option>Como nuevo</option>
+          <option>Muy buen estado</option>
+          <option>Buen estado</option>
+          <option>Usado</option>
+        </select>
+      </div>
+
+      <button class="btn-toybox-secondary catalog-filters__button" type="button">
+        Aplicar filtros
+      </button>
+    </aside>
+
+    <section class="catalog-results">
+      <div class="catalog-results__top">
+        <div>
+          <h2>Juguetes disponibles</h2>
+          <p class="text-on-surface-variant">
+            Mostrando productos publicados recientemente.
+          </p>
+        </div>
+
+        <select class="form-control catalog-sort">
+          <option>Más recientes</option>
+          <option>Precio: menor a mayor</option>
+          <option>Precio: mayor a menor</option>
+        </select>
+      </div>
+
+      <div class="products-grid">
+        @for (product of products; track product.id) {
+          <article class="product-card card-toybox">
+            <div class="product-card__image">
+              <img [src]="product.image" [alt]="product.title" />
+
+              <span class="product-card__badge">
+                {{ product.badge }}
+              </span>
+            </div>
+
+            <div class="product-card__content">
+              <span class="product-card__category">
+                {{ product.category }}
+              </span>
+
+              <h3>{{ product.title }}</h3>
+
+              <p class="product-card__status">
+                {{ product.status }}
+              </p>
+
+              <div class="product-card__footer">
+                <strong>{{ product.price }} €</strong>
+
+                <span class="product-card__location">
+                  <span class="material-symbols-outlined">location_on</span>
+                  {{ product.location }}
+                </span>
+              </div>
+
+              <button class="btn-toybox-primary product-card__button" type="button">
+                Ver detalle
+              </button>
+            </div>
+          </article>
+        }
+      </div>
+    </section>
+  </section>
+</main>
