@@ -1,7 +1,7 @@
 .management-page {
   max-width: 1120px;
   margin: 0 auto;
-  padding: 2rem 1rem;
+  padding: var(--space-8) var(--space-4);
 }
 
 .page-header,
@@ -9,12 +9,12 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 1rem;
+  gap: var(--space-4);
 }
 
 .eyebrow {
-  margin: 0 0 0.25rem;
-  color: #2563eb;
+  margin: 0 0 var(--space-1);
+  color: var(--color-primary);
   font-size: 0.78rem;
   font-weight: 700;
   text-transform: uppercase;
@@ -22,22 +22,22 @@
 
 h1 {
   margin: 0;
-  color: #111827;
+  color: var(--color-text);
 }
 
 input,
 select {
-  border: 1px solid #d0d5dd;
-  border-radius: 6px;
-  padding: 0.65rem 0.75rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: var(--space-3);
 }
 
 .table-panel {
-  margin-top: 1.5rem;
-  border: 1px solid #e5e7eb;
-  border-radius: 8px;
+  margin-top: var(--space-6);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
   overflow: hidden;
-  background: #fff;
+  background: var(--color-white);
 }
 
 table {
@@ -48,13 +48,13 @@ table {
 th,
 td {
   padding: 0.9rem 1rem;
-  border-bottom: 1px solid #eef2f7;
+  border-bottom: 1px solid var(--color-border);
   text-align: left;
 }
 
 th {
-  color: #475467;
-  background: #f9fafb;
+  color: var(--color-text-muted);
+  background: var(--color-surface);
   font-size: 0.8rem;
   text-transform: uppercase;
 }
@@ -65,33 +65,33 @@ td:first-child {
 }
 
 td span {
-  color: #667085;
+  color: var(--color-text-muted);
 }
 
 .status-pill {
   display: inline-flex;
-  border-radius: 999px;
-  padding: 0.25rem 0.65rem;
-  color: #027a48;
-  background: #dcfae6;
+  border-radius: var(--radius-full);
+  padding: var(--space-1) var(--space-3);
+  color: var(--color-success);
+  background: color-mix(in srgb, var(--color-success) 16%, var(--color-white));
   font-weight: 700;
 }
 
 .status-pill.blocked {
-  color: #b42318;
-  background: #fee4e2;
+  color: var(--color-danger);
+  background: color-mix(in srgb, var(--color-danger) 14%, var(--color-white));
 }
 
 .link-button {
   border: 0;
-  color: #2563eb;
+  color: var(--color-primary);
   background: transparent;
   font-weight: 700;
   cursor: pointer;
 }
 
 .link-button.danger {
-  color: #d92d20;
+  color: var(--color-danger);
 }
 
 @media (max-width: 760px) {

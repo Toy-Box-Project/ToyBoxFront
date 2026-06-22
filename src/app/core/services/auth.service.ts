@@ -10,11 +10,19 @@ import { AuthResponse, LoginRequest, RegisterRequest, User } from '../../shared/
 export class AuthService {
   private readonly API = `${environment.apiUrl}/auth`;
   private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
-  currentUser = signal<User | null>(null);
+  private readonly _currentUser = signal<User | null>(null);
+  readonly currentUser = this._currentUser.asReadonly();
 
   constructor(private http: HttpClient, private router: Router) {
     const saved = this.isBrowser ? localStorage.getItem('user') : null;
-    if (saved) this.currentUser.set(JSON.parse(saved));
+
+    if (saved) {
+      try {
+        this._currentUser.set(JSON.parse(saved));
+      } catch {
+        localStorage.removeItem('user');
+      }
+    }
   }
 
   login(body: LoginRequest): Observable<AuthResponse> {
@@ -24,7 +32,7 @@ export class AuthService {
           localStorage.setItem('token', res.token);
           localStorage.setItem('user', JSON.stringify(res.user));
         }
-        this.currentUser.set(res.user);
+        this._currentUser.set(res.user);
       })
     );
   }
@@ -36,7 +44,7 @@ export class AuthService {
           localStorage.setItem('token', res.token);
           localStorage.setItem('user', JSON.stringify(res.user));
         }
-        this.currentUser.set(res.user);
+        this._currentUser.set(res.user);
       })
     );
   }
@@ -46,7 +54,7 @@ export class AuthService {
       localStorage.removeItem('token');
       localStorage.removeItem('user');
     }
-    this.currentUser.set(null);
+    this._currentUser.set(null);
     this.router.navigate(['/auth/login']);
   }
 

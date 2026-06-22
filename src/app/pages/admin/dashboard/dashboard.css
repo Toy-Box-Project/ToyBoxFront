@@ -1,7 +1,7 @@
 .admin-page {
   max-width: 1120px;
   margin: 0 auto;
-  padding: 2rem 1rem;
+  padding: var(--space-8) var(--space-4);
 }
 
 .page-header,
@@ -14,8 +14,8 @@
 }
 
 .eyebrow {
-  margin: 0 0 0.25rem;
-  color: #2563eb;
+  margin: 0 0 var(--space-1);
+  color: var(--color-primary);
   font-size: 0.78rem;
   font-weight: 700;
   text-transform: uppercase;
@@ -24,74 +24,74 @@
 h1,
 h2 {
   margin: 0;
-  color: #111827;
+  color: var(--color-text);
 }
 
 .date-label {
-  color: #475467;
+  color: var(--color-text-muted);
   font-weight: 600;
 }
 
 .metrics-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 1rem;
-  margin: 1.5rem 0;
+  gap: var(--space-4);
+  margin: var(--space-6) 0;
 }
 
 .metric-card,
 .panel {
-  border: 1px solid #e5e7eb;
-  border-radius: 8px;
-  background: #fff;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-white);
 }
 
 .metric-card {
   display: grid;
-  gap: 0.35rem;
-  padding: 1rem;
-  border-top: 4px solid #2563eb;
+  gap: var(--space-1);
+  padding: var(--space-4);
+  border-top: 4px solid var(--color-primary);
 }
 
 .metric-card.green {
-  border-top-color: #12b76a;
+  border-top-color: var(--color-success);
 }
 
 .metric-card.amber {
-  border-top-color: #f79009;
+  border-top-color: var(--color-warning);
 }
 
 .metric-card.red {
-  border-top-color: #f04438;
+  border-top-color: var(--color-danger);
 }
 
 .metric-card span,
 .metric-card small,
 .task-row span,
 .panel-heading span {
-  color: #667085;
+  color: var(--color-text-muted);
 }
 
 .metric-card strong {
-  color: #111827;
+  color: var(--color-text);
   font-size: 1.8rem;
 }
 
 .panel {
-  padding: 1rem;
+  padding: var(--space-4);
 }
 
 .task-list {
   display: grid;
-  gap: 0.75rem;
-  margin-top: 1rem;
+  gap: var(--space-3);
+  margin-top: var(--space-4);
 }
 
 .task-row {
-  padding: 0.85rem;
-  border: 1px solid #eef2f7;
-  border-radius: 8px;
-  background: #f9fafb;
+  padding: var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
 }
 
 .task-row div {
@@ -100,10 +100,10 @@ h2 {
 }
 
 .status-pill {
-  border-radius: 999px;
-  padding: 0.25rem 0.65rem;
-  background: #eff6ff;
-  color: #1d4ed8 !important;
+  border-radius: var(--radius-full);
+  padding: var(--space-1) var(--space-3);
+  background: color-mix(in srgb, var(--color-primary) 14%, var(--color-white));
+  color: var(--color-primary) !important;
   font-weight: 700;
 }
 
