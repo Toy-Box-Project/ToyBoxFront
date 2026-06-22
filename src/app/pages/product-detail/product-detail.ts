@@ -1,14 +1,23 @@
 import { Component } from '@angular/core';
 import { Product } from '../../shared/interfaces/product.interface';
+import { ImageGalleryComponent } from '../../shared/components/image-gallery/image-gallery';
+
 
 @Component({
   selector: 'app-product-detail',
   standalone: true,
-  imports: [],
+  imports: [ImageGalleryComponent],
   templateUrl: './product-detail.html',
   styleUrl: './product-detail.css'
 })
 export class ProductDetailComponent {
+
+    galleryImages: string[] = [
+    '/assets/images/Iconos%20categorias/icono_munecosycoches.svg',
+    '/assets/images/Iconos%20categorias/icono_construccion.svg',
+    '/assets/images/Iconos%20categorias/icono_juegosmesa.svg'
+  ];
+
   product: Product = {
     id: 1,
     title: 'Pack de coches y figuras',

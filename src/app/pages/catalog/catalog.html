@@ -15,13 +15,13 @@
     </div>
 
     <div class="catalog-hero__search card-toybox">
-  <app-search-bar
-    label="¿Qué juguete estás buscando?"
-    placeholder="Buscar juguetes, categorías o ciudad"
-    buttonText="Buscar"
-    (search)="onSearch($event)"
-  ></app-search-bar>
-</div>
+      <app-search-bar
+        label="¿Qué juguete estás buscando?"
+        placeholder="Buscar juguetes, categorías o ciudad"
+        buttonText="Buscar"
+        (search)="onSearch($event)"
+      ></app-search-bar>
+    </div>
   </section>
 
   <section class="catalog-categories">
@@ -48,56 +48,10 @@
   </section>
 
   <section class="catalog-layout">
-    <aside class="catalog-filters card-toybox">
-      <div class="catalog-filters__header">
-        <span class="material-symbols-outlined">tune</span>
-        <h2>Filtros</h2>
-      </div>
-
-      <div class="filter-group">
-        <label for="category">Categoría</label>
-        <select id="category" class="form-control">
-          @for (category of categories; track category.id) {
-            <option>{{ category.name }}</option>
-          }
-        </select>
-      </div>
-
-      <div class="filter-group">
-        <label for="price">Precio máximo</label>
-        <input
-          id="price"
-          class="form-control"
-          type="number"
-          placeholder="Ej. 30 €"
-        />
-      </div>
-
-      <div class="filter-group">
-        <label for="location">Ubicación</label>
-        <input
-          id="location"
-          class="form-control"
-          type="text"
-          placeholder="Ciudad o provincia"
-        />
-      </div>
-
-      <div class="filter-group">
-        <label for="status">Estado</label>
-        <select id="status" class="form-control">
-          <option>Todos</option>
-          <option>Como nuevo</option>
-          <option>Muy buen estado</option>
-          <option>Buen estado</option>
-          <option>Usado</option>
-        </select>
-      </div>
-
-      <button class="btn-toybox-secondary catalog-filters__button" type="button">
-        Aplicar filtros
-      </button>
-    </aside>
+    <app-filter-sidebar
+      [categories]="categories"
+      (filtersApplied)="onFiltersApplied($event)"
+    ></app-filter-sidebar>
 
     <section class="catalog-results">
       <div class="catalog-results__top">
@@ -115,11 +69,11 @@
         </select>
       </div>
 
-     <div class="products-grid">
-  @for (product of products; track product.id) {
-    <app-product-card [product]="product"></app-product-card>
-  }
-</div>
+      <div class="products-grid">
+        @for (product of products; track product.id) {
+          <app-product-card [product]="product"></app-product-card>
+        }
+      </div>
     </section>
   </section>
 </main>

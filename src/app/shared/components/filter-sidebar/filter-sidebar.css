@@ -1,0 +1,62 @@
+.filter-sidebar {
+  position: sticky;
+  top: 1rem;
+  padding: 1.5rem;
+}
+
+.filter-sidebar__header {
+  display: flex;
+  gap: .5rem;
+  align-items: center;
+  margin-bottom: 1.25rem;
+}
+
+.filter-sidebar__header h2 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.filter-sidebar__form {
+  display: grid;
+  gap: 1rem;
+}
+
+.filter-group {
+  display: grid;
+  gap: .45rem;
+}
+
+.filter-group label {
+  color: var(--on-surface);
+  font-size: 1.05rem;
+}
+
+.filter-sidebar__actions {
+  display: grid;
+  gap: .75rem;
+  margin-top: .5rem;
+}
+
+.filter-sidebar__actions button {
+  width: 100%;
+}
+
+.filter-sidebar__clear {
+  border: none;
+  background: transparent;
+  color: var(--primary-toybox);
+  cursor: pointer;
+  font-family: var(--font-title);
+  font-weight: 700;
+  padding: .65rem;
+}
+
+.filter-sidebar__clear:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 1024px) {
+  .filter-sidebar {
+    position: static;
+  }
+}

@@ -2,26 +2,11 @@
 
 <main class="product-detail-page relative-z-10">
   <section class="product-detail-layout">
-    <article class="product-gallery card-toybox">
-      <div class="product-gallery__main">
-        <img [src]="product.image" [alt]="product.title" />
-        <span class="product-gallery__badge">{{ product.badge }}</span>
-      </div>
-
-      <div class="product-gallery__thumbs">
-        <button type="button">
-          <img [src]="product.image" [alt]="product.title" />
-        </button>
-
-        <button type="button">
-          <img src="/assets/images/Iconos%20categorias/icono_construccion.svg" alt="Juguete relacionado" />
-        </button>
-
-        <button type="button">
-          <img src="/assets/images/Iconos%20categorias/icono_juegosmesa.svg" alt="Juguete relacionado" />
-        </button>
-      </div>
-    </article>
+    <app-image-gallery
+      [images]="galleryImages"
+      [badge]="product.badge"
+      [altText]="product.title"
+    ></app-image-gallery>
 
     <section class="product-info card-toybox">
       <span class="product-info__category">{{ product.category }}</span>
@@ -70,6 +55,7 @@
 
       <div>
         <span class="seller-card__label">Vendedor</span>
+
         <h2>{{ product.seller.name }}</h2>
 
         <p>
@@ -84,6 +70,7 @@
 
       <div>
         <h2>Compra con confianza</h2>
+
         <p>
           Usa la mensajería interna de Toybox para hablar con el vendedor
           sin compartir datos personales.
@@ -95,6 +82,7 @@
   <section class="related-section">
     <div class="related-section__heading">
       <h2>También te puede interesar</h2>
+
       <p class="text-on-surface-variant">
         Otros juguetes publicados recientemente.
       </p>
@@ -109,6 +97,7 @@
 
           <div class="related-card__content">
             <span>{{ item.category }}</span>
+
             <h3>{{ item.title }}</h3>
 
             <div class="related-card__footer">
