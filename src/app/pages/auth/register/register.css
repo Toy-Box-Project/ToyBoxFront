@@ -1,0 +1,85 @@
+:host {
+  display: block;
+  min-height: 100vh;
+  background-color: var(--background);
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* ========================================
+   REGISTER CARD
+======================================== */
+.register-card {
+  max-width: 800px;
+  width: 100%;
+  background: white;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--outline-variant);
+  padding: 2.5rem;
+  box-shadow: var(--shadow-card);
+}
+
+/* Success message */
+.success-message {
+  color: var(--success);
+  font-weight: 600;
+  text-align: center;
+}
+
+/* ========================================
+   INPUT GROUP
+======================================== */
+.input-group-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+/* Password toggle */
+.password-toggle {
+  position: absolute;
+  right: 10px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  color: var(--secondary-toybox);
+  transition: color .2s ease, opacity .2s ease;
+}
+
+.password-toggle:hover {
+  color: var(--primary-toybox);
+  opacity: 0.85;
+}
+
+/* ========================================
+   RESPONSIVE
+======================================== */
+@media (max-width: 768px) {
+  .register-card {
+    max-width: 90%;
+    padding: 1.8rem;
+    margin: 0 auto;
+  }
+}
+
+@media (max-width: 480px) {
+  .register-card {
+    max-width: 92%;
+    padding: 1.4rem;
+    border-radius: 0.8rem;
+  }
+
+  .row {
+    gap: .5rem;
+  }
+
+  label {
+    font-size: .9rem;
+  }
+
+  button.btn-toybox-primary {
+    font-size: 1.05rem;
+    padding: .85rem;
+  }
+}
