@@ -1,1 +1,34 @@
-<p>admin dashboard works!</p>
+<main class="admin-page">
+  <header class="page-header">
+    <div>
+      <p class="eyebrow">Administration</p>
+      <h1>Dashboard</h1>
+    </div>
+    <span class="date-label">Today overview</span>
+  </header>
+
+  <section class="metrics-grid" aria-label="Administration summary">
+    <article class="metric-card" *ngFor="let metric of metrics" [class]="metric.tone">
+      <span>{{ metric.label }}</span>
+      <strong>{{ metric.value }}</strong>
+      <small>{{ metric.detail }}</small>
+    </article>
+  </section>
+
+  <section class="panel">
+    <div class="panel-heading">
+      <h2>Priority tasks</h2>
+      <span>{{ tasks.length }} active</span>
+    </div>
+
+    <div class="task-list">
+      <article class="task-row" *ngFor="let task of tasks">
+        <div>
+          <strong>{{ task.title }}</strong>
+          <span>{{ task.owner }}</span>
+        </div>
+        <span class="status-pill">{{ task.status }}</span>
+      </article>
+    </div>
+  </section>
+</main>
