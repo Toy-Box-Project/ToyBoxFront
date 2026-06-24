@@ -1,0 +1,35 @@
+.search-bar {
+  width: 100%;
+}
+
+.search-bar__label {
+  display: block;
+  margin-bottom: .75rem;
+  color: var(--on-surface);
+  font-size: 1.2rem;
+}
+
+.search-bar__box {
+  display: flex;
+  gap: .75rem;
+  align-items: center;
+}
+
+.search-bar__input {
+  flex: 1;
+}
+
+.search-bar__button {
+  white-space: nowrap;
+}
+
+@media (max-width: 640px) {
+  .search-bar__box {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .search-bar__button {
+    width: 100%;
+  }
+}

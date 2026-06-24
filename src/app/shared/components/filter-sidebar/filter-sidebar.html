@@ -1,1 +1,74 @@
-<p>filter sidebar works!</p>
+<aside class="filter-sidebar card-toybox">
+  <div class="filter-sidebar__header">
+    <span class="material-symbols-outlined">tune</span>
+    <h2>Filtros</h2>
+  </div>
+
+  <form
+    class="filter-sidebar__form"
+    #filterForm
+    (submit)="$event.preventDefault(); onApplyFilters(category.value, price.value, location.value, status.value)"
+  >
+    <div class="filter-group">
+      <label for="filter-category">Categoría</label>
+
+      <select id="filter-category" class="form-control" #category>
+        @for (categoryItem of categories; track categoryItem.id) {
+          <option [value]="categoryItem.name">
+            {{ categoryItem.name }}
+          </option>
+        }
+      </select>
+    </div>
+
+    <div class="filter-group">
+      <label for="filter-price">Precio máximo</label>
+
+      <input
+        id="filter-price"
+        class="form-control"
+        type="number"
+        placeholder="Ej. 30 €"
+        #price
+      />
+    </div>
+
+    <div class="filter-group">
+      <label for="filter-location">Ubicación</label>
+
+      <input
+        id="filter-location"
+        class="form-control"
+        type="text"
+        placeholder="Ciudad o provincia"
+        #location
+      />
+    </div>
+
+    <div class="filter-group">
+      <label for="filter-status">Estado</label>
+
+      <select id="filter-status" class="form-control" #status>
+        <option value="">Todos</option>
+
+        @for (state of productStates; track state) {
+          <option [value]="state">{{ state }}</option>
+        }
+      </select>
+    </div>
+
+    <div class="filter-sidebar__actions">
+      <button class="btn-toybox-secondary" type="submit">
+        Aplicar filtros
+      </button>
+
+      <button
+        class="filter-sidebar__clear"
+        type="reset"
+        (click)="onClearFilters()"
+      >
+        Limpiar filtros
+      </button>
+    </div>
+  </form>
+</aside>
