@@ -1,5 +1,5 @@
-import { Component, Input } from '@angular/core';
-import { Product } from '../../interfaces/product.interface';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { ProductCardData } from '../../interfaces/product.interface';
 
 @Component({
   selector: 'app-product-card',
@@ -9,7 +9,9 @@ import { Product } from '../../interfaces/product.interface';
   styleUrl: './product-card.css'
 })
 export class ProductCardComponent {
-  @Input() product: Product = {
+  @Output() toggleFavorite = new EventEmitter<number>();
+
+  @Input() product: ProductCardData = {
     id: 0,
     title: 'Juguete Toybox',
     category: 'Categoría',

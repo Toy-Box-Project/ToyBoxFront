@@ -114,7 +114,7 @@
       </div>
 
       <div class="category-selector">
-        @for (category of categories; track category.id) {
+        @for (category of categories; track category.id_categories) {
           <button class="category-option" type="button">
             <img [src]="category.icon" [alt]="category.name" />
             <span>{{ category.name }}</span>

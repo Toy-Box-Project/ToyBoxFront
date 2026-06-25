@@ -33,7 +33,7 @@
     </div>
 
     <div class="category-grid">
-      @for (category of categories; track category.id) {
+      @for (category of categories; track category.id_categories) {
         <button class="category-card" type="button">
           @if (category.icon) {
             <img [src]="category.icon" [alt]="category.name" />

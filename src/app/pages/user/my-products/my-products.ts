@@ -6,7 +6,7 @@ import { NavbarComponent } from '../../../shared/components/navbar/navbar';
 import { FooterComponent } from '../../../shared/components/footer/footer';
 import { PaginationComponent } from '../../../shared/components/pagination/pagination';
 
-import { Product } from '../../../shared/interfaces/product.interface';
+import { MyProduct } from '../../../shared/interfaces/product.interface';
 
 @Component({
   selector: 'app-my-products',
@@ -23,8 +23,8 @@ import { Product } from '../../../shared/interfaces/product.interface';
 })
 export class MyProductsComponent implements OnInit {
 
-  products: Product[] = [];
-  productToDelete: Product | null = null;
+  products: MyProduct[] = [];
+  productToDelete: MyProduct | null = null;
   showDeleteModal: boolean = false;
 
   constructor(private router: Router) {}
@@ -71,7 +71,7 @@ export class MyProductsComponent implements OnInit {
     this.router.navigate(['/pages/product/edit-product', id]);
   }
 
-  confirmDelete(product: Product) {
+  confirmDelete(product: MyProduct) {
     this.productToDelete = product;
     this.showDeleteModal = true;
   }

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Product } from '../../shared/interfaces/product.interface';
+import { ProductCardData } from '../../shared/interfaces/product.interface';
 import { ImageGalleryComponent } from '../../shared/components/image-gallery/image-gallery';
 
 
@@ -18,7 +18,7 @@ export class ProductDetailComponent {
     '/assets/images/Iconos%20categorias/icono_juegosmesa.svg'
   ];
 
-  product: Product = {
+  product: ProductCardData = {
     id: 1,
     title: 'Pack de coches y figuras',
     category: 'Figuras, muñecos y vehículos',
@@ -37,7 +37,7 @@ export class ProductDetailComponent {
     }
   };
 
-  relatedProducts: Product[] = [
+  relatedProducts: ProductCardData[] = [
     {
       id: 2,
       title: 'Caja de bloques',
