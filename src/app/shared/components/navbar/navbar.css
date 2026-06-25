@@ -1,0 +1,153 @@
+@import url('https://fonts.googleapis.com/css2?family=Albert+Sans:wght@400;600;700&display=swap');
+
+:host {
+    --blue: #6188c1;
+    --pink: #d84565;
+    --white: #ffffff;
+    --black: #000000;
+    --grey-mid: #e0e0e0;
+    --grey-text: #666666;
+}
+
+.navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 48px;
+    height: 72px;
+    background: var(--white);
+    border-bottom: 1px solid var(--grey-mid);
+    font-family: 'Albert Sans', sans-serif;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+/* ── LOGO ── */
+.navbar-logo {
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+}
+
+.logo-img {
+    height: 40px;
+    width: auto;
+}
+
+/* ── SIN SESIÓN ── */
+.navbar-auth {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.btn-signin {
+    background: none;
+    border: 1.5px solid var(--grey-mid);
+    border-radius: 8px;
+    padding: 8px 20px;
+    font-family: 'Albert Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    color: var(--black);
+    transition: all 0.2s;
+}
+
+.btn-signin:hover {
+    border-color: var(--blue);
+    color: var(--blue);
+}
+
+.btn-register {
+    background: var(--black);
+    border: 1.5px solid var(--black);
+    border-radius: 8px;
+    padding: 8px 20px;
+    font-family: 'Albert Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    color: var(--white);
+    transition: all 0.2s;
+}
+
+.btn-register:hover {
+    background: var(--blue);
+    border-color: var(--blue);
+}
+
+/* ── CON SESIÓN ── */
+.navbar-actions {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+}
+
+.nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    text-decoration: none;
+    color: var(--black);
+    font-size: 11px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.nav-item:hover {
+    color: var(--blue);
+}
+
+.nav-item svg {
+    stroke: currentColor;
+}
+
+.profile-item .avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--grey-mid);
+}
+
+.profile-item:hover .avatar {
+    border-color: var(--blue);
+}
+
+/* ── BOTÓN VENDER ── */
+.btn-sell {
+    background: var(--black);
+    color: var(--white);
+    border: none;
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-family: 'Albert Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+}
+
+.btn-sell:hover {
+    background: var(--blue);
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 768px) {
+    .navbar {
+        padding: 0 20px;
+    }
+
+    .nav-item span {
+        display: none;
+    }
+
+    .navbar-actions {
+        gap: 16px;
+    }
+}

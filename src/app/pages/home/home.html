@@ -1,1 +1,175 @@
-<p>home works!</p>
+<!-- BARRA DE BÚSQUEDA Y FILTROS -->
+<section class="search-section">
+    <div class="search-bar-wrapper">
+        <div class="search-input-container">
+            <input type="text" class="search-input" placeholder="Búsqueda por texto libre" [value]="searchQuery"
+                (input)="searchQuery = $any($event.target).value" (keyup.enter)="onSearch()" />
+            <button class="search-btn" (click)="onSearch()">
+                <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <circle cx="11" cy="11" r="8" />
+                    <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                </svg>
+            </button>
+        </div>
+        <button class="filter-toggle-btn" (click)="toggleFilters()" [class.active]="showFilters">
+            <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3" />
+            </svg>
+        </button>
+    </div>
+
+    <!-- FILTROS EXPANDIBLES -->
+    <div class="filters-panel" [class.open]="showFilters">
+        <h2 class="filters-title">Filtros</h2>
+        <div class="filters-grid">
+            <div class="filter-group">
+                <label>Elige categoría</label>
+                <select [value]="filters.category" (change)="filters.category = $any($event.target).value">
+                    <option value="">Todas</option>
+                    @for (cat of categories; track cat.id) {
+                    <option [value]="cat.id">{{ cat.name }}</option>
+                    }
+                </select>
+            </div>
+            <div class="filter-group">
+                <label>Ubicación</label>
+                <select [value]="filters.location" (change)="filters.location = $any($event.target).value">
+                    <option value="">Cualquier lugar</option>
+                    <option value="madrid">Madrid</option>
+                    <option value="barcelona">Barcelona</option>
+                    <option value="valencia">Valencia</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label>Mínimo €{{ filters.minPrice }}</label>
+                <input type="range" min="0" max="1000" [value]="filters.minPrice"
+                    (input)="filters.minPrice = $any($event.target).value" />
+            </div>
+            <div class="filter-group">
+                <label>Máximo €{{ filters.maxPrice }}</label>
+                <input type="range" min="0" max="1000" [value]="filters.maxPrice"
+                    (input)="filters.maxPrice = $any($event.target).value" />
+            </div>
+            <div class="filter-group">
+                <label>Estado del artículo</label>
+                <select [value]="filters.condition" (change)="filters.condition = $any($event.target).value">
+                    <option value="">Cualquiera</option>
+                    <option value="new">Nuevo</option>
+                    <option value="like_new">Como nuevo</option>
+                    <option value="good">Bueno</option>
+                    <option value="acceptable">Aceptable</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label>Ordenar por</label>
+                <select [value]="filters.sortBy" (change)="filters.sortBy = $any($event.target).value">
+                    <option value="date_desc">Más reciente</option>
+                    <option value="price_asc">Precio: menor a mayor</option>
+                    <option value="price_desc">Precio: mayor a menor</option>
+                    <option value="views_desc">Más vistos</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <!-- CATEGORÍAS -->
+    <nav class="categories-nav">
+        <div class="sort-dropdown">
+            <select [value]="filters.sortBy" (change)="filters.sortBy = $any($event.target).value">
+                <option value="date_desc">Más reciente</option>
+                <option value="price_asc">Precio ↑</option>
+                <option value="price_desc">Precio ↓</option>
+                <option value="views_desc">Más vistos</option>
+            </select>
+        </div>
+        <ul class="categories-list">
+            @for (cat of categories; track cat.id) {
+            <li [class.active]="selectedCategory === cat.id" (click)="selectCategory(cat.id)">
+                {{ cat.name }}
+            </li>
+            }
+        </ul>
+    </nav>
+</section>
+
+<!-- ÚLTIMOS PRODUCTOS -->
+<section class="latest-section">
+    <h2 class="section-title">Últimos productos</h2>
+    <div class="latest-grid">
+
+        <!-- Producto destacado -->
+        @if (featuredProduct) {
+        <div class="featured-product">
+            <div class="featured-image">
+                <img [src]="featuredProduct.photo_url || 'assets/images/placeholder.png'"
+                    [alt]="featuredProduct.title" />
+                <button class="favorite-btn" (click)="toggleFavorite(featuredProduct)">
+                    <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path
+                            d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+        }
+
+        <!-- Cards laterales -->
+        <div class="side-cards">
+            @for (product of latestProducts.slice(1, 4); track product.id) {
+            <div class="product-card" (click)="goToProduct(product.id)">
+                <div class="card-image">
+                    <img [src]="product.photo_url || 'assets/images/placeholder.png'" [alt]="product.title" />
+                    <button class="favorite-btn" (click)="toggleFavorite(product); $event.stopPropagation()">
+                        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"
+                            viewBox="0 0 24 24">
+                            <path
+                                d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                        </svg>
+                    </button>
+                </div>
+                <div class="card-info">
+                    <h3>{{ product.title }}</h3>
+                    <p class="price">{{ product.price | currency:'EUR':'symbol':'1.2-2' }}</p>
+                    <p class="description">{{ product.description }}</p>
+                </div>
+            </div>
+            }
+        </div>
+    </div>
+</section>
+
+<!-- PRODUCTOS RELACIONADOS -->
+<section class="related-section">
+    <h2 class="section-title">Productos relacionados</h2>
+    <div class="products-grid">
+        @for (product of relatedProducts; track product.id) {
+        <div class="product-card" (click)="goToProduct(product.id)">
+            <div class="card-image">
+                <img [src]="product.photo_url || 'assets/images/placeholder.png'" [alt]="product.title" />
+                <button class="favorite-btn" (click)="toggleFavorite(product); $event.stopPropagation()">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path
+                            d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                    </svg>
+                </button>
+            </div>
+            <div class="card-info">
+                <h3>{{ product.title }}</h3>
+                <p class="price">{{ product.price | currency:'EUR':'symbol':'1.2-2' }}</p>
+                <p class="description">{{ product.description }}</p>
+            </div>
+        </div>
+        }
+    </div>
+
+    <!-- PAGINACIÓN -->
+    <div class="pagination">
+        <button class="page-btn" (click)="prevPage()" [disabled]="currentPage === 1">
+            ← Previous
+        </button>
+        <span class="page-info">Página {{ currentPage }}</span>
+        <button class="page-btn" (click)="nextPage()" [disabled]="!hasNextPage">
+            Next →
+        </button>
+    </div>
+</section>
