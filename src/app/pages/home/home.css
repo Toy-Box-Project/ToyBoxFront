@@ -1,23 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Albert+Sans:wght@400;600;700&family=Schoolbell&display=swap');
 
-:host {
-    --blue: #6188c1;
-    --pink: #d84565;
-    --white: #ffffff;
-    --black: #000000;
-    --grey-light: #f5f5f5;
-    --grey-mid: #e0e0e0;
-    --grey-text: #666666;
-    --radius: 12px;
-    --shadow: 0 2px 12px rgba(97, 136, 193, 0.12);
-    display: block;
-    font-family: 'Albert Sans', sans-serif;
-}
-
 /* ── BÚSQUEDA ── */
 .search-section {
     padding: 24px 48px 0;
-    background: var(--white);
+    background: var(--color-white);
 }
 
 .search-bar-wrapper {
@@ -32,24 +18,24 @@
     flex: 1;
     display: flex;
     align-items: center;
-    border: 1.5px solid var(--grey-mid);
+    border: 1.5px solid var(--outline-variant);
     border-radius: 50px;
     padding: 10px 20px;
-    background: var(--white);
+    background: var(--color-white);
     transition: border-color 0.2s;
 }
 
 .search-input-container:focus-within {
-    border-color: var(--blue);
+    border-color: var(--secondary-toybox);
 }
 
 .search-input {
     flex: 1;
     border: none;
     outline: none;
-    font-family: 'Albert Sans', sans-serif;
+    font-family: var(--font-title);
     font-size: 15px;
-    color: var(--black);
+    color: var(--on-surface);
     background: transparent;
 }
 
@@ -57,19 +43,19 @@
     background: none;
     border: none;
     cursor: pointer;
-    color: var(--grey-text);
+    color: var(--on-surface-variant);
     display: flex;
     align-items: center;
     transition: color 0.2s;
 }
 
 .search-btn:hover {
-    color: var(--blue);
+    color: var(--secondary-toybox);
 }
 
 .filter-toggle-btn {
     background: none;
-    border: 1.5px solid var(--grey-mid);
+    border: 1.5px solid var(--outline-variant);
     border-radius: 50%;
     width: 44px;
     height: 44px;
@@ -77,15 +63,15 @@
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    color: var(--grey-text);
+    color: var(--on-surface-variant);
     transition: all 0.2s;
     flex-shrink: 0;
 }
 
 .filter-toggle-btn:hover,
 .filter-toggle-btn.active {
-    border-color: var(--blue);
-    color: var(--blue);
+    border-color: var(--secondary-toybox);
+    color: var(--secondary-toybox);
     background: rgba(97, 136, 193, 0.08);
 }
 
@@ -94,8 +80,8 @@
     max-height: 0;
     overflow: hidden;
     transition: max-height 0.35s ease, padding 0.35s ease;
-    background: var(--grey-light);
-    border-radius: var(--radius);
+    background: var(--background);
+    border-radius: var(--radius-lg);
     margin-top: 16px;
 }
 
@@ -105,11 +91,11 @@
 }
 
 .filters-title {
-    font-family: 'Albert Sans', sans-serif;
+    font-family: var(--font-title);
     font-size: 24px;
     font-weight: 700;
     margin: 0 0 20px;
-    color: var(--black);
+    color: var(--primary-toybox);
 }
 
 .filters-grid {
@@ -126,31 +112,31 @@
 
 .filter-group label {
     font-size: 13px;
-    color: var(--grey-text);
+    color: var(--on-surface-variant);
     font-weight: 600;
 }
 
 .filter-group select,
 .filter-group input[type="range"] {
     padding: 8px 12px;
-    border: 1.5px solid var(--grey-mid);
-    border-radius: 8px;
-    font-family: 'Albert Sans', sans-serif;
+    border: 1.5px solid var(--outline-variant);
+    border-radius: var(--radius-sm);
+    font-family: var(--font-title);
     font-size: 14px;
-    background: var(--white);
+    background: var(--color-white);
     cursor: pointer;
     outline: none;
     transition: border-color 0.2s;
 }
 
 .filter-group select:focus {
-    border-color: var(--blue);
+    border-color: var(--secondary-toybox);
 }
 
 .filter-group input[type="range"] {
     padding: 0;
     border: none;
-    accent-color: var(--blue);
+    accent-color: var(--secondary-toybox);
 }
 
 /* ── CATEGORÍAS ── */
@@ -159,17 +145,17 @@
     align-items: center;
     gap: 24px;
     padding: 20px 0;
-    border-bottom: 1px solid var(--grey-mid);
+    border-bottom: 1px solid var(--outline-variant);
     overflow-x: auto;
 }
 
 .sort-dropdown select {
     padding: 6px 12px;
-    border: 1.5px solid var(--grey-mid);
-    border-radius: 8px;
-    font-family: 'Albert Sans', sans-serif;
+    border: 1.5px solid var(--outline-variant);
+    border-radius: var(--radius-sm);
+    font-family: var(--font-title);
     font-size: 13px;
-    background: var(--white);
+    background: var(--color-white);
     cursor: pointer;
     outline: none;
     flex-shrink: 0;
@@ -191,20 +177,20 @@
     font-weight: 500;
     cursor: pointer;
     white-space: nowrap;
-    color: var(--grey-text);
+    color: var(--on-surface-variant);
     transition: all 0.2s;
     border: 1.5px solid transparent;
 }
 
 .categories-list li:hover {
-    color: var(--blue);
-    border-color: var(--blue);
+    color: var(--secondary-toybox);
+    border-color: var(--secondary-toybox);
 }
 
 .categories-list li.active {
-    background: var(--blue);
-    color: var(--white);
-    border-color: var(--blue);
+    background: var(--secondary-toybox);
+    color: var(--color-white);
+    border-color: var(--secondary-toybox);
 }
 
 /* ── ÚLTIMOS PRODUCTOS ── */
@@ -213,11 +199,11 @@
 }
 
 .section-title {
-    font-family: 'Albert Sans', sans-serif;
+    font-family: var(--font-title);
     font-size: 32px;
     font-weight: 700;
     margin: 0 0 28px;
-    color: var(--black);
+    color: var(--primary-toybox);
 }
 
 .latest-grid {
@@ -227,9 +213,9 @@
 }
 
 .featured-product {
-    border-radius: var(--radius);
+    border-radius: var(--radius-lg);
     overflow: hidden;
-    background: var(--grey-light);
+    background: var(--background);
 }
 
 .featured-image {
@@ -242,7 +228,7 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
-    background: var(--grey-mid);
+    background: var(--outline-variant);
 }
 
 .side-cards {
@@ -253,16 +239,16 @@
 
 /* ── CARDS ── */
 .product-card {
-    border: 1.5px solid var(--grey-mid);
-    border-radius: var(--radius);
+    border: 1.5px solid var(--outline-variant);
+    border-radius: var(--radius-lg);
     overflow: hidden;
     cursor: pointer;
     transition: box-shadow 0.2s, transform 0.2s;
-    background: var(--white);
+    background: var(--color-white);
 }
 
 .product-card:hover {
-    box-shadow: var(--shadow);
+    box-shadow: var(--shadow-hover);
     transform: translateY(-2px);
 }
 
@@ -270,7 +256,7 @@
     position: relative;
     width: 100%;
     aspect-ratio: 4/3;
-    background: var(--grey-light);
+    background: var(--background);
     overflow: hidden;
 }
 
@@ -293,19 +279,18 @@
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    color: var(--grey-text);
+    color: var(--on-surface-variant);
     transition: all 0.2s;
     backdrop-filter: blur(4px);
 }
 
 .favorite-btn:hover {
-    color: var(--pink);
-    background: var(--white);
+    color: var(--primary-toybox);
+    background: var(--color-white);
 }
 
 .favorite-btn.active {
-    color: var(--pink);
-    fill: var(--pink);
+    color: var(--primary-toybox);
 }
 
 .card-info {
@@ -313,24 +298,24 @@
 }
 
 .card-info h3 {
-    font-family: 'Albert Sans', sans-serif;
+    font-family: var(--font-title);
     font-size: 15px;
     font-weight: 600;
     margin: 0 0 4px;
-    color: var(--black);
+    color: var(--on-surface);
 }
 
 .card-info .price {
     font-size: 15px;
     font-weight: 700;
-    color: var(--black);
+    color: var(--primary-toybox);
     margin: 0 0 4px;
 }
 
 .card-info .description {
-    font-family: 'Schoolbell', cursive;
+    font-family: var(--font-text);
     font-size: 13px;
-    color: var(--grey-text);
+    color: var(--on-surface-variant);
     margin: 0;
 }
 
@@ -352,35 +337,35 @@
     align-items: center;
     justify-content: space-between;
     padding: 20px 0;
-    border-top: 1px solid var(--grey-mid);
+    border-top: 1px solid var(--outline-variant);
 }
 
 .page-btn {
     background: none;
     border: none;
-    font-family: 'Albert Sans', sans-serif;
+    font-family: var(--font-title);
     font-size: 15px;
     font-weight: 600;
-    color: var(--black);
+    color: var(--on-surface);
     cursor: pointer;
     padding: 8px 16px;
-    border-radius: 8px;
+    border-radius: var(--radius-sm);
     transition: all 0.2s;
 }
 
 .page-btn:hover:not(:disabled) {
-    color: var(--blue);
+    color: var(--secondary-toybox);
     background: rgba(97, 136, 193, 0.08);
 }
 
 .page-btn:disabled {
-    color: var(--grey-mid);
+    color: var(--outline-variant);
     cursor: not-allowed;
 }
 
 .page-info {
     font-size: 14px;
-    color: var(--grey-text);
+    color: var(--on-surface-variant);
 }
 
 /* ── RESPONSIVE ── */

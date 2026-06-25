@@ -1,23 +1,14 @@
 @import url('https://fonts.googleapis.com/css2?family=Albert+Sans:wght@400;600;700&display=swap');
 
-:host {
-    --blue: #6188c1;
-    --pink: #d84565;
-    --white: #ffffff;
-    --black: #000000;
-    --grey-mid: #e0e0e0;
-    --grey-text: #666666;
-}
-
 .navbar {
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 0 48px;
     height: 72px;
-    background: var(--white);
-    border-bottom: 1px solid var(--grey-mid);
-    font-family: 'Albert Sans', sans-serif;
+    background: var(--color-white);
+    border-bottom: 1px solid var(--outline-variant);
+    font-family: var(--font-title);
     position: sticky;
     top: 0;
     z-index: 100;
@@ -44,38 +35,38 @@
 
 .btn-signin {
     background: none;
-    border: 1.5px solid var(--grey-mid);
-    border-radius: 8px;
+    border: 1.5px solid var(--outline-variant);
+    border-radius: var(--radius-sm);
     padding: 8px 20px;
-    font-family: 'Albert Sans', sans-serif;
+    font-family: var(--font-title);
     font-size: 14px;
     font-weight: 600;
     cursor: pointer;
-    color: var(--black);
+    color: var(--on-surface);
     transition: all 0.2s;
 }
 
 .btn-signin:hover {
-    border-color: var(--blue);
-    color: var(--blue);
+    border-color: var(--secondary-toybox);
+    color: var(--secondary-toybox);
 }
 
 .btn-register {
-    background: var(--black);
-    border: 1.5px solid var(--black);
-    border-radius: 8px;
+    background: var(--primary-toybox);
+    border: 1.5px solid var(--primary-toybox);
+    border-radius: var(--radius-sm);
     padding: 8px 20px;
-    font-family: 'Albert Sans', sans-serif;
+    font-family: var(--font-title);
     font-size: 14px;
     font-weight: 600;
     cursor: pointer;
-    color: var(--white);
+    color: var(--color-white);
     transition: all 0.2s;
 }
 
 .btn-register:hover {
-    background: var(--blue);
-    border-color: var(--blue);
+    background: var(--primary-toybox-dark);
+    border-color: var(--primary-toybox-dark);
 }
 
 /* ── CON SESIÓN ── */
@@ -91,7 +82,7 @@
     align-items: center;
     gap: 2px;
     text-decoration: none;
-    color: var(--black);
+    color: var(--on-surface);
     font-size: 11px;
     font-weight: 500;
     cursor: pointer;
@@ -99,7 +90,7 @@
 }
 
 .nav-item:hover {
-    color: var(--blue);
+    color: var(--primary-toybox);
 }
 
 .nav-item svg {
@@ -111,21 +102,21 @@
     height: 36px;
     border-radius: 50%;
     object-fit: cover;
-    border: 2px solid var(--grey-mid);
+    border: 2px solid var(--outline-variant);
 }
 
 .profile-item:hover .avatar {
-    border-color: var(--blue);
+    border-color: var(--primary-toybox);
 }
 
 /* ── BOTÓN VENDER ── */
 .btn-sell {
-    background: var(--black);
-    color: var(--white);
+    background: var(--primary-toybox);
+    color: var(--color-white);
     border: none;
-    border-radius: 8px;
+    border-radius: var(--radius-sm);
     padding: 10px 20px;
-    font-family: 'Albert Sans', sans-serif;
+    font-family: var(--font-title);
     font-size: 14px;
     font-weight: 700;
     cursor: pointer;
@@ -134,7 +125,7 @@
 }
 
 .btn-sell:hover {
-    background: var(--blue);
+    background: var(--primary-toybox-dark);
 }
 
 /* ── RESPONSIVE ── */
