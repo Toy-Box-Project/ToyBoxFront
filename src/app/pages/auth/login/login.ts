@@ -16,8 +16,6 @@ import {
 
 
 import { AuthService } from '../../../core/services/auth.service';
-import { FooterComponent } from '../../../shared/components/footer/footer';
-import { NavbarComponent } from '../../../shared/components/navbar/navbar';
 
 @Component({
   selector: 'app-login',
@@ -26,8 +24,6 @@ import { NavbarComponent } from '../../../shared/components/navbar/navbar';
     CommonModule,
     ReactiveFormsModule,
     RouterModule,
-    FooterComponent,
-    NavbarComponent
   ],
   templateUrl: './login.html',
   styleUrl: './login.css',

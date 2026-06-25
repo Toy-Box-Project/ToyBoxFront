@@ -6,7 +6,7 @@ export const routes: Routes = [
   // Public
   {
     path: '',
-    loadComponent: () => import('./pages/home/home').then(m => m.HomeComponent),
+    loadComponent: () => import('./pages/home/home').then(m => m.Home),
   },
   {
     path: 'catalog',
@@ -57,8 +57,8 @@ export const routes: Routes = [
     path: 'chat',
     canActivate: [authGuard],
     children: [
-      { path: '',    loadComponent: () => import('./pages/chat/chat-list/chat-list').then(m => m.ChatListComponent) },
-      { path: ':id', loadComponent: () => import('./pages/chat/chat-detail/chat-detail').then(m => m.ChatDetailComponent) },
+      { path: '',    loadComponent: () => import('./pages/chat/chat-list/chat-list').then(m => m.ChatList) },
+      { path: ':id', loadComponent: () => import('./pages/chat/chat-detail/chat-detail').then(m => m.ChatDetail) },
     ],
   },
 

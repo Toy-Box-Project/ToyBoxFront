@@ -9,7 +9,7 @@ import { RouterModule, Router } from '@angular/router';
   templateUrl: './navbar.html',
   styleUrls: ['./navbar.css']
 })
-export class Navbar implements OnInit {
+export class NavbarComponent implements OnInit {
 
   isLoggedIn: boolean = true;
   userAvatar: string = '';
