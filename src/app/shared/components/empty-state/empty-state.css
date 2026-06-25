@@ -1,55 +1,39 @@
-.empty-state{
+.empty-state {
 
-    width:100%;
+    text-align: center;
 
-    max-width:600px;
+    max-width: 600px;
 
-    margin:auto;
+    margin: auto;
 
-    text-align:center;
-
-    padding:48px 24px;
+    padding: 3rem 1rem;
 
 }
 
-.icon{
+.empty-icon {
 
-    font-size:64px;
+    font-size: 5rem;
 
-    margin-bottom:24px;
-
-}
-
-.empty-state h2{
-
-    font-family:'Schoolbell',cursive;
-
-    color:var(--color-primary);
-
-    margin-bottom:16px;
+    margin-bottom: 1rem;
 
 }
 
-.empty-state p{
+.empty-state h2 {
 
-    color:var(--color-text-secondary);
-
-    margin-bottom:32px;
-
-    line-height:1.6;
+    margin-bottom: 1rem;
 
 }
 
-.btn{
+.empty-state p {
 
-    text-decoration:none;
+    margin-bottom: 2rem;
 
-    display:inline-flex;
+}
 
-    justify-content:center;
+.empty-button {
 
-    align-items:center;
+    display: inline-flex;
 
-    min-width:180px;
+    text-decoration: none;
 
 }
