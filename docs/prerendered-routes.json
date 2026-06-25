@@ -1,0 +1,24 @@
+{
+  "routes": {
+    "/": {},
+    "/admin": {},
+    "/admin/categories": {},
+    "/admin/dashboard": {},
+    "/admin/users": {},
+    "/auth": {},
+    "/auth/forgot-password": {},
+    "/auth/login": {},
+    "/auth/register": {},
+    "/catalog": {},
+    "/chat": {},
+    "/moderator": {},
+    "/moderator/reports": {},
+    "/product": {},
+    "/user": {},
+    "/user/edit-profile": {},
+    "/user/favorites": {},
+    "/user/my-products": {},
+    "/user/my-purchases": {},
+    "/user/profile": {}
+  }
+}
