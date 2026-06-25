@@ -1,85 +1,77 @@
-.badge{
+.badge {
 
-    display:inline-flex;
+    display: inline-flex;
 
-    align-items:center;
+    align-items: center;
 
-    justify-content:center;
+    justify-content: center;
 
-    padding:6px 14px;
+    padding: .35rem .85rem;
 
-    border-radius:999px;
+    border-radius: 999px;
 
-    font-size:12px;
+    font-size: .85rem;
 
-    font-weight:600;
-
-    text-transform:capitalize;
-
-    white-space:nowrap;
+    font-weight: 600;
 
 }
 
 /* Disponible */
 
-.available{
+.available {
 
-    background:#E7F4EC;
+    background: rgba(46,125,50,.12);
 
-    color:#198754;
+    color: var(--success);
 
 }
 
 /* Reservado */
 
-.reserved{
+.reserved {
 
-    background:#FFF4D6;
+    background: rgba(255,193,7,.15);
 
-    color:#C28700;
+    color: #b8860b;
 
 }
 
 /* Vendido */
 
-.sold{
+.sold {
 
-    background:#FDE8EA;
+    background: rgba(216,69,101,.15);
 
-    color:#D84565;
+    color: var(--primary-toybox);
 
 }
 
 /* Como nuevo */
 
-.new{
+.new {
 
-    background:#EEF5FF;
+    background: rgba(97,136,193,.15);
 
-    color:#6188C1;
+    color: var(--secondary-toybox);
 
 }
 
 /* Usado */
 
-.used{
+.used {
 
-    background:#F3F4F6;
+    background: rgba(88,65,67,.12);
 
-    color:#4B5563;
+    color: var(--on-surface-variant);
 
 }
 
 /* Destacado */
 
-.featured{
+.featured {
 
-    background:linear-gradient(
-        135deg,
-        #6188C1,
-        #D84565
-    );
+    background: var(--primary-toybox);
 
-    color:white;
+    color: white;
 
 }
