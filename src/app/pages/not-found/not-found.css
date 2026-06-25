@@ -1,65 +1,65 @@
-.not-found-container{
+.not-found-container {
 
-    min-height:100vh;
+    position: relative;
 
-    display:flex;
+    width: 100%;
 
-    justify-content:center;
+    min-height: 100vh;
 
-    align-items:center;
+    display: flex;
 
-    padding:32px;
+    justify-content: center;
 
-}
+    align-items: center;
 
-.not-found-card{
+    background: #ffffff;
 
-    max-width:550px;
-
-    width:100%;
-
-    text-align:center;
-
-    padding:48px;
+    overflow: hidden;
 
 }
 
-.toy-icon{
+.not-found-image {
 
-    font-size:72px;
+    width: 100%;
 
-    margin-bottom:24px;
+    max-width: 1600px;
 
-}
+    height: auto;
 
-.not-found-card h1{
+    display: block;
 
-    margin-bottom:16px;
+    user-select: none;
 
-    color:var(--color-primary);
-
-}
-
-.not-found-card p{
-
-    color:var(--color-text-secondary);
-
-    line-height:1.7;
-
-    margin-bottom:32px;
+    pointer-events: none;
 
 }
 
-.btn{
+/*
+ * Ajusta estas medidas según veas
+ * dónde queda exactamente el texto
+ * "Vuelve al inicio" en tu pantalla.
+ */
+.home-link {
 
-    text-decoration:none;
+    position: absolute;
 
-    display:inline-flex;
+    left: 5%;
 
-    justify-content:center;
+    top: 61%;
 
-    align-items:center;
+    width: 23%;
 
-    min-width:220px;
+    height: 8%;
+
+    z-index: 10;
+
+    cursor: pointer;
+
+}
+
+/* Opcional para depurar */
+.home-link:hover {
+
+    background: rgba(216, 69, 101, 0.08);
 
 }
