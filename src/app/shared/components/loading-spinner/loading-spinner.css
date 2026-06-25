@@ -1,54 +1,44 @@
-.loading-container{
+.loading-container {
 
-    display:flex;
+    display: flex;
 
-    flex-direction:column;
+    flex-direction: column;
 
-    align-items:center;
+    align-items: center;
 
-    justify-content:center;
+    gap: 1rem;
 
-    gap:16px;
-
-    padding:32px;
+    padding: 2rem;
 
 }
 
-.spinner{
+.spinner {
 
-    width:56px;
+    width: 60px;
 
-    height:56px;
+    height: 60px;
 
-    border-radius:50%;
+    border-radius: 50%;
 
-    border:6px solid rgba(97,136,193,.15);
+    border: 5px solid rgba(97,136,193,.15);
 
-    border-top-color:var(--color-primary);
+    border-top-color: var(--secondary-toybox);
 
-    animation:spin .8s linear infinite;
-
-}
-
-.loading-container p{
-
-    color:var(--color-text-secondary);
-
-    font-size:14px;
+    animation: spin .8s linear infinite;
 
 }
 
-@keyframes spin{
+@keyframes spin {
 
-    from{
+    from {
 
-        transform:rotate(0deg);
+        transform: rotate(0deg);
 
     }
 
-    to{
+    to {
 
-        transform:rotate(360deg);
+        transform: rotate(360deg);
 
     }
 
