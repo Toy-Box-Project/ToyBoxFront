@@ -3,7 +3,7 @@
 <nav class="pagination">
 
     <button
-        class="page-btn"
+        class="btn-page"
         [disabled]="currentPage === 1"
         (click)="previous()">
 
@@ -13,22 +13,22 @@
 
     @for(page of pages; track page){
 
-        <button
+    <button
 
-            class="page-btn"
+        class="btn-page"
 
-            [class.active]="page === currentPage"
+        [class.active]="page === currentPage"
 
-            (click)="goTo(page)">
+        (click)="goTo(page)">
 
-            {{ page }}
+        {{ page }}
 
-        </button>
+    </button>
 
     }
 
     <button
-        class="page-btn"
+        class="btn-page"
         [disabled]="currentPage === totalPages"
         (click)="next()">
 
