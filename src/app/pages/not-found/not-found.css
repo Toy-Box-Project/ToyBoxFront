@@ -1,0 +1,65 @@
+.not-found-container {
+
+    position: relative;
+
+    width: 100%;
+
+    min-height: 100vh;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    background: #ffffff;
+
+    overflow: hidden;
+
+}
+
+.not-found-image {
+
+    width: 100%;
+
+    max-width: 1600px;
+
+    height: auto;
+
+    display: block;
+
+    user-select: none;
+
+    pointer-events: none;
+
+}
+
+/*
+ * Ajusta estas medidas según veas
+ * dónde queda exactamente el texto
+ * "Vuelve al inicio" en tu pantalla.
+ */
+.home-link {
+
+    position: absolute;
+
+    left: 5%;
+
+    top: 61%;
+
+    width: 23%;
+
+    height: 8%;
+
+    z-index: 10;
+
+    cursor: pointer;
+
+}
+
+/* Opcional para depurar */
+.home-link:hover {
+
+    background: rgba(216, 69, 101, 0.08);
+
+}
