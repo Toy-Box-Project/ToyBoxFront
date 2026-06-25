@@ -1,1 +1,25 @@
-<p>empty state works!</p>
+<div class="empty-state">
+
+    <div class="empty-icon">
+        {{ icon }}
+    </div>
+
+    <h2>{{ title }}</h2>
+
+    <p class="text-on-surface-variant">
+        {{ message }}
+    </p>
+
+    @if(buttonText){
+
+    <a
+        [routerLink]="buttonLink"
+        class="btn-toybox-primary empty-button">
+
+        {{ buttonText }}
+
+    </a>
+
+    }
+
+</div>
