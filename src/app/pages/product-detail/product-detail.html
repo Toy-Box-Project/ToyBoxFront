@@ -48,22 +48,24 @@
   </section>
 
   <section class="detail-extra-layout">
-    <article class="seller-card card-toybox">
-      <div class="seller-card__avatar">
-        {{ product.seller.name.charAt(0) }}
-      </div>
+    @if (product.seller) {
+      <article class="seller-card card-toybox">
+        <div class="seller-card__avatar">
+          {{ product.seller.name.charAt(0) }}
+        </div>
 
-      <div>
-        <span class="seller-card__label">Vendedor</span>
+        <div>
+          <span class="seller-card__label">Vendedor</span>
 
-        <h2>{{ product.seller.name }}</h2>
+          <h2>{{ product.seller.name }}</h2>
 
-        <p>
-          {{ product.seller.city }} · {{ product.seller.rating }} ★
-          · {{ product.seller.reviews }} valoraciones
-        </p>
-      </div>
-    </article>
+          <p>
+            {{ product.seller.city }} · {{ product.seller.rating }} ★
+            · {{ product.seller.reviews }} valoraciones
+          </p>
+        </div>
+      </article>
+    }
 
     <article class="safe-card card-toybox">
       <span class="material-symbols-outlined">shield</span>

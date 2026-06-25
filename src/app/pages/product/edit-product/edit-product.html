@@ -114,7 +114,7 @@
       </div>
 
       <div class="category-selector">
-        @for (category of categories; track category.id) {
+        @for (category of categories; track category.id_categories) {
           <button
             class="category-option"
             [class.category-option--active]="category.name === product.category"

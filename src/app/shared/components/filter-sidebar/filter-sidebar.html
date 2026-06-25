@@ -13,7 +13,7 @@
       <label for="filter-category">Categoría</label>
 
       <select id="filter-category" class="form-control" #category>
-        @for (categoryItem of categories; track categoryItem.id) {
+        @for (categoryItem of categories; track categoryItem.id_categories) {
           <option [value]="categoryItem.name">
             {{ categoryItem.name }}
           </option>
