@@ -1,0 +1,184 @@
+
+
+<div class="pattern-bg"></div>
+
+<div class="relative-z-10 flex-grow-1 d-flex align-items-center justify-content-center px-3 py-5">
+
+  <div class="register-card">
+
+    <div class="text-center mb-4">
+      <h1>Crear una Cuenta</h1>
+
+      <p class="text-on-surface-variant mb-0">
+        ¡Únete a la diversión y descubre un mundo de juguetes!
+      </p>
+    </div>
+
+    @if (backendError) {
+      <p class="error-message text-center mb-3">
+        {{ backendError }}
+      </p>
+    }
+
+    @if (backendSuccess) {
+      <p class="success-message text-center mb-3">
+        {{ backendSuccess }}
+      </p>
+    }
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+
+      <!-- First name + Last name -->
+      <div class="row">
+
+        <div class="col-md-6 mb-3">
+          <label>Nombre</label>
+          <input class="form-control" formControlName="firstName" />
+          @if (checkControl('firstName','required')) {
+            <p class="error-message">Campo requerido</p>
+          }
+        </div>
+
+        <div class="col-md-6 mb-3">
+          <label>Apellido</label>
+          <input class="form-control" formControlName="lastName" />
+          @if (checkControl('lastName','required')) {
+            <p class="error-message">Campo requerido</p>
+          }
+        </div>
+
+      </div>
+
+      <!-- Username -->
+      <div class="mb-3">
+        <label>Nombre de Usuario</label>
+        <input class="form-control" formControlName="username" />
+        @if (checkControl('username','required')) {
+          <p class="error-message">Campo requerido</p>
+        }
+        @if (checkControl('username','pattern')) {
+          <p class="error-message">Solo letras, números y guion bajo</p>
+        }
+      </div>
+
+      <!-- Email -->
+      <div class="mb-3">
+        <label>Email</label>
+        <input class="form-control" type="email" formControlName="email" />
+        @if (checkControl('email','required')) {
+          <p class="error-message">Campo requerido</p>
+        }
+        @if (checkControl('email','pattern')) {
+          <p class="error-message">Formato incorrecto</p>
+        }
+      </div>
+
+        <!-- Password -->
+        <div class="mb-3">
+        <label>Contraseña</label>
+
+        <div class="input-group-wrapper">
+
+            <input
+            class="form-control"
+            [type]="showPassword ? 'text' : 'password'"
+            placeholder="••••••••"
+            formControlName="password" />
+
+            <button
+            class="password-toggle"
+            type="button"
+            (click)="togglePassword()">
+
+            <span class="material-symbols-outlined">
+                {{ showPassword ? 'visibility_off' : 'visibility' }}
+            </span>
+
+            </button>
+
+        </div>
+
+        @if (checkControl('password','required')) {
+            <p class="error-message">Campo requerido</p>
+        }
+
+        @if (checkControl('password','minLength8')) {
+            <p class="error-message">Debe tener mínimo 8 caracteres</p>
+        }
+
+        @if (checkControl('password','uppercase')) {
+            <p class="error-message">Debe contener al menos una letra mayúscula</p>
+        }
+
+        @if (checkControl('password','special')) {
+            <p class="error-message">Debe contener un carácter especial</p>
+        }
+        </div>
+
+
+      <!-- Phone (optional) -->
+      <div class="mb-3">
+        <label>Teléfono (opcional)</label>
+        <input class="form-control" formControlName="phone" />
+        @if (checkControl('phone','pattern')) {
+          <p class="error-message">Introduce un teléfono válido</p>
+        }
+      </div>
+
+      <!-- Birthdate -->
+      <div class="mb-3">
+        <label>Fecha de nacimiento</label>
+        <input class="form-control" type="date" formControlName="birthdate" />
+        @if (checkControl('birthdate','required')) {
+          <p class="error-message">Campo requerido</p>
+        }
+      </div>
+
+      <!-- Province -->
+      <div class="mb-3">
+        <label>Provincia</label>
+        <input class="form-control" formControlName="province" />
+        @if (checkControl('province','required')) {
+          <p class="error-message">Campo requerido</p>
+        }
+      </div>
+
+      <!-- City -->
+      <div class="mb-3">
+        <label>Ciudad</label>
+        <input class="form-control" formControlName="city" />
+        @if (checkControl('city','required')) {
+          <p class="error-message">Campo requerido</p>
+        }
+      </div>
+
+      <!-- Postal Code -->
+      <div class="mb-4">
+        <label>Código Postal</label>
+        <input class="form-control" formControlName="postalCode" />
+        @if (checkControl('postalCode','required')) {
+          <p class="error-message">Campo requerido</p>
+        }
+        @if (checkControl('postalCode','pattern')) {
+          <p class="error-message">Debe contener 5 números</p>
+        }
+      </div>
+
+      <button class="btn-toybox-primary w-100" type="submit">
+        <span>Crear cuenta</span>
+        <span class="material-symbols-outlined">arrow_forward</span>
+      </button>
+
+    </form>
+
+    <div class="mt-4 pt-4 border-top text-center">
+      <p class="text-on-surface-variant mb-0">
+        ¿Ya tienes una cuenta?
+        <a class="signup-link" (click)="goToLogin()">Inicia sesión</a>
+      </p>
+    </div>
+
+  </div>
+
+</div>
+

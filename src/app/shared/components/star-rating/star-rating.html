@@ -1,0 +1,13 @@
+<div class="stars">
+  @for (star of stars; track star) {
+    <span
+      class="material-symbols-outlined star"
+      [class.clickable]="!readonly"
+      [style.fontSize.px]="size"
+      [style.color]="star <= roundedRating ? color : '#ccc'"
+      (click)="setRating(star)"
+    >
+      {{ star <= roundedRating ? 'star' : 'star_border' }}
+    </span>
+  }
+</div>

@@ -1,0 +1,23 @@
+.avatar {
+  background-color: var(--secondary-toybox); 
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  font-weight: bold;
+  text-transform: uppercase;
+  border: 2px solid var(--outline-variant);
+  transition: background-color .2s ease;
+}
+
+.avatar:hover {
+  background-color: var(--primary-toybox);
+}
+
+.avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}

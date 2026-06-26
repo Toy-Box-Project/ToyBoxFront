@@ -1,0 +1,196 @@
+<app-navbar></app-navbar>
+
+<div class="pattern-bg"></div>
+
+<div class="relative-z-10 flex-grow-1 px-3 py-5 d-flex justify-content-center">
+  <div class="profile-wrapper container">
+
+    @if (backendError) {
+      <p class="error-message text-center mb-3">{{ backendError }}</p>
+    }
+
+    @if (user) {
+      <div class="row g-4">
+
+        <!-- LEFT COLUMN -->
+        <div class="col-lg-7">
+
+          <!-- Header -->
+          <div class="d-flex justify-content-between align-items-end border-bottom pb-3 mb-4">
+            <div>
+              <h1 class="profile-title">Mi perfil</h1>
+
+              <div class="d-flex flex-column gap-2">
+                <span class="rating-label">VALORACIÓN</span>
+
+                <div class="d-flex align-items-center gap-3">
+                  <app-star-rating [rating]="rating" [size]="24"></app-star-rating>
+
+                  <span class="rating-pill">
+                    {{ rating }} / 5
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <button class="btn-icon" (click)="goToEditProfile()">
+              <span class="material-symbols-outlined">edit</span>
+            </button>
+          </div>
+
+          <!-- Profile card -->
+          <div class="profile-card position-relative overflow-hidden">
+            <div class="toy-pattern"></div>
+
+            <form class="row g-3 position-relative">
+
+              <div class="col-md-6">
+                <label class="small-label">NOMBRE</label>
+                <input class="form-control" type="text" [value]="user.firstName" disabled />
+              </div>
+
+              <div class="col-md-6">
+                <label class="small-label">APELLIDO</label>
+                <input class="form-control" type="text" [value]="user.lastName" disabled />
+              </div>
+
+              <div class="col-12">
+                <label class="small-label">NOMBRE DE USUARIO</label>
+                <input class="form-control" type="text" [value]="user.username" disabled />
+              </div>
+
+              <div class="col-12">
+                <label class="small-label">EMAIL</label>
+                <input class="form-control" type="email" [value]="user.email" disabled />
+              </div>
+
+              <div class="col-12">
+                <label class="small-label">CONTRASEÑA</label>
+                <input class="form-control" type="password" value="********" disabled />
+                <p class="help-text">Mínimo 8 caracteres, al menos una mayúscula y un número</p>
+              </div>
+
+              <div class="col-12">
+                <label class="small-label">TELÉFONO (OPCIONAL)</label>
+                <input class="form-control" type="tel" [value]="user.phone || ''" disabled />
+              </div>
+
+              <div class="col-12">
+                <label class="small-label">FECHA DE NACIMIENTO</label>
+                <input class="form-control" type="text" [value]="user.birthdate" disabled />
+              </div>
+
+              <div class="col-md-6">
+                <label class="small-label">PROVINCIA</label>
+                <input class="form-control" type="text" [value]="user.user_province" disabled />
+              </div>
+
+              <div class="col-md-6">
+                <label class="small-label">CÓDIGO POSTAL</label>
+                <input class="form-control" type="text" [value]="user.user_zipcode" disabled />
+              </div>
+
+            </form>
+          </div>
+
+        </div>
+
+        <!-- RIGHT COLUMN -->
+        <div class="col-lg-5 d-flex flex-column align-items-center gap-4">
+
+          <!-- Avatar -->
+          <div class="avatar-wrapper">
+            <div class="avatar-circle" (click)="openImageModal()">
+              <app-user-avatar
+                [name]="user.username"
+                [src]="user.profile_picture"
+                [size]="240">
+              </app-user-avatar>
+            </div>
+          </div>
+
+          <!-- Location -->
+          <div class="w-100">
+            <div class="d-flex align-items-center gap-2 mb-2">
+              <span class="material-symbols-outlined text-primary-toybox">location_on</span>
+              <h3 class="location-title">Ubicación</h3>
+            </div>
+
+            <div class="location-card" (click)="openMap()">
+              <div class="location-map"></div>
+              <div class="location-overlay"></div>
+              <div class="location-label">
+                {{ user.user_city }}, España
+              </div>
+            </div>
+          </div>
+
+          <!-- Logout -->
+          <button class="btn-logout w-100 mt-2" (click)="logout()">
+            <span class="material-symbols-outlined">logout</span>
+            Cerrar sesión
+          </button>
+
+        </div>
+      </div>
+    }
+
+    <!-- Ratings section -->
+    <section class="ratings-section mt-5 pt-4 border-top">
+      <h2 class="ratings-title text-center mb-4">Estado de las valoraciones</h2>
+
+      <div class="row g-4">
+
+        <!-- Read-only -->
+        <div class="col-md-6">
+          <div class="rating-card">
+            <span class="rating-state-label">ESTADO: SÓLO LECTURA</span>
+
+            <div class="d-flex justify-content-center gap-1 mb-2">
+              <app-star-rating [rating]="rating" [size]="24"></app-star-rating>
+            </div>
+
+            <p class="rating-text">
+              {{ rating }} estrellas basadas en {{ reviewsCount }} reseñas
+            </p>
+          </div>
+        </div>
+
+        <!-- Interactive -->
+        <div class="col-md-6">
+          <div class="rating-card">
+            <span class="rating-state-label">ESTADO: INTERACTIVO</span>
+
+            <div class="d-flex justify-content-center gap-2 mb-2">
+              <app-star-rating [rating]="rating" [size]="28" [readonly]="false"></app-star-rating>
+            </div>
+
+            <p class="rating-text">Haz clic para valorar tu experiencia</p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </div>
+</div>
+
+<!-- IMAGE MODAL -->
+@if (showImageModal) {
+  <div class="image-modal-backdrop" (click)="closeImageModal()">
+    <div class="image-modal" (click)="$event.stopPropagation()">
+
+      <button class="close-modal-btn" (click)="closeImageModal()">
+        <span class="material-symbols-outlined">close</span>
+      </button>
+
+      <img
+        class="modal-image"
+        [src]="user.profile_picture || '/assets/images/default-avatar.png'"
+        alt="Foto de perfil ampliada"
+      />
+    </div>
+  </div>
+}
+
+<app-footer></app-footer>

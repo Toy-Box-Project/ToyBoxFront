@@ -1,0 +1,317 @@
+/* ========================================
+   TOYBOX BRAND VARIABLES
+   (Primary Pink + Secondary Blue)
+======================================== */
+:root {
+
+  /* Brand colors */
+  --primary-toybox: #d84565;
+  --primary-toybox-dark: #b83a54;
+
+  --secondary-toybox: #6188c1;
+  --secondary-toybox-dark: #4f74a9;
+
+  /* Neutral colors */
+  --color-white: #ffffff;
+  --color-black: #000000;
+
+  /* Surfaces */
+  --background: #fff8f7;
+  --on-surface: #25181a;
+  --on-surface-variant: #584143;
+  --outline-variant: #dfbfc1;
+
+  /* Feedback */
+  --error: #d32f2f;
+  --success: #2e7d32;
+
+  /* Fonts */
+  --font-title: 'Albert Sans', sans-serif;
+  --font-text: 'Schoolbell', cursive;
+
+  /* Effects */
+  --shadow-card: 0 4px 16px rgba(0,0,0,.08);
+  --shadow-hover: 0 8px 24px rgba(0,0,0,.12);
+
+  --radius-lg: 1rem;
+  --radius-md: .75rem;
+  --radius-sm: .5rem;
+}
+
+/* ========================================
+   GLOBAL RESET
+======================================== */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-text);
+  color: var(--color-black);
+  background-color: var(--color-white);
+}
+
+/* ========================================
+   GLOBAL TYPOGRAPHY
+======================================== */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-title);
+  color: var(--primary-toybox);
+}
+
+p,
+span,
+li,
+label,
+input,
+textarea,
+button {
+  font-family: var(--font-text);
+}
+
+/* ========================================
+   MATERIAL SYMBOLS (GLOBAL ICON STYLE)
+======================================== */
+.material-symbols-outlined {
+  font-family: 'Material Symbols Outlined';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;
+  display: inline-block;
+  line-height: 1;
+  color: var(--secondary-toybox);
+  transition: color .2s ease;
+}
+
+/* Hover → Pink */
+.material-symbols-outlined:hover {
+  color: var(--primary-toybox);
+}
+
+/* ========================================
+   COMMON PAGE STRUCTURE
+======================================== */
+.pattern-bg {
+  position: fixed;
+  inset: 0;
+  background-image: url('/assets/images/Patrones/patronhorizontal_toybox.svg');
+  background-repeat: repeat;
+  background-size: 30%;
+  opacity: .08;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.relative-z-10 {
+  position: relative;
+  z-index: 10;
+}
+
+/* ========================================
+   FORMS (UNIFIED)
+======================================== */
+.form-control {
+  border: 1px solid var(--outline-variant);
+  border-radius: var(--radius-sm);
+  padding: .75rem 1rem;
+}
+
+.form-control:focus {
+  border-color: var(--primary-toybox);
+  box-shadow: 0 0 0 .2rem rgba(216,69,101,.2);
+}
+
+/* Wrapper for inputs with icons */
+.input-group-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+/* Right icon inside input */
+.input-icon-right {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--secondary-toybox);
+  pointer-events: none;
+  transition: color .2s ease;
+}
+
+.input-icon-right:hover {
+  color: var(--primary-toybox);
+}
+
+/* Password toggle */
+.password-toggle {
+  position: absolute;
+  right: 10px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  color: var(--secondary-toybox);
+  transition: color .2s ease, opacity .2s ease;
+}
+
+.password-toggle:hover {
+  color: var(--primary-toybox);
+  opacity: .85;
+}
+
+/* ========================================
+   BUTTONS (UNIFIED)
+======================================== */
+
+/* Pink primary */
+.btn-toybox-primary {
+  background-color: var(--primary-toybox);
+  color: white;
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: .85rem 1.25rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: .5rem;
+  transition: .2s ease;
+}
+
+.btn-toybox-primary:hover {
+  background-color: var(--primary-toybox-dark);
+}
+
+/* Blue secondary */
+.btn-toybox-secondary {
+  background-color: var(--secondary-toybox);
+  color: white;
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: .85rem 1.25rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: .5rem;
+  transition: .2s ease;
+}
+
+.btn-toybox-secondary:hover {
+  background-color: var(--primary-toybox);
+}
+
+/* Icon button */
+.btn-icon {
+  border: none;
+  background: transparent;
+  color: var(--secondary-toybox);
+  padding: .5rem;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: .2s ease;
+}
+
+.btn-icon:hover {
+  color: var(--primary-toybox);
+  background-color: rgba(0,0,0,.04);
+}
+
+/* ========================================
+   LINKS
+======================================== */
+.signup-link,
+.forgot-link {
+  color: var(--primary-toybox);
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.signup-link:hover,
+.forgot-link:hover {
+  text-decoration: underline;
+}
+
+/* ========================================
+   FEEDBACK
+======================================== */
+.error-message {
+  color: var(--error);
+  font-size: .875rem;
+  margin-top: .25rem;
+}
+
+.success-message {
+  color: var(--success);
+  font-size: .875rem;
+  margin-top: .25rem;
+}
+
+.text-on-surface-variant {
+  color: var(--on-surface-variant);
+}
+
+/* ========================================
+   CARDS (UNIFIED)
+======================================== */
+.card-toybox {
+  border: none;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  background: white;
+  padding: 2rem;
+}
+
+.card-toybox:hover {
+  box-shadow: var(--shadow-hover);
+}
+
+/* ========================================
+   MODALS (UNIFIED)
+======================================== */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0,0,0,.65);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.modal-box {
+  background: white;
+  padding: 2rem;
+  border-radius: var(--radius-lg);
+  max-width: 420px;
+  width: 90%;
+  text-align: center;
+  box-shadow: var(--shadow-hover);
+  animation: fadeInScale .25s ease-out;
+}
+
+@keyframes fadeInScale {
+  from { opacity: 0; transform: scale(.9); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+/* ========================================
+   RESPONSIVE
+======================================== */
+@media (max-width: 768px) {
+  h1 { font-size: 2rem; }
+  h2 { font-size: 1.7rem; }
+}

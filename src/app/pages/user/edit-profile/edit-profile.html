@@ -1,0 +1,246 @@
+<app-navbar></app-navbar>
+
+<div class="pattern-bg"></div>
+
+<div class="relative-z-10 flex-grow-1 px-3 py-5 d-flex justify-content-center">
+  <div class="profile-wrapper container">
+
+    <div class="row g-4">
+
+      <!-- Columna izquierda -->
+      <div class="col-lg-7">
+
+        <div class="d-flex justify-content-between align-items-end border-bottom pb-3 mb-4">
+          <h1 class="profile-title">Editar perfil</h1>
+
+          <button class="btn-icon" [routerLink]="['/user/profile']">
+            <span class="material-symbols-outlined">arrow_back</span>
+          </button>
+        </div>
+
+        @if (backendError) {
+          <p class="error-message text-center">{{ backendError }}</p>
+        }
+
+        @if (backendSuccess) {
+          <p class="success-message text-center">{{ backendSuccess }}</p>
+        }
+
+        @if (form) {
+          <div class="profile-card position-relative overflow-hidden">
+            <div class="toy-pattern"></div>
+
+            <form class="row g-3 position-relative" [formGroup]="form">
+
+              <!-- Nombre de usuario (NO editable) -->
+              <div class="col-12">
+                <label class="small-label">Nombre de usuario</label>
+                <input class="form-control" formControlName="username" />
+              </div>
+
+              <!-- Nombre -->
+              <div class="col-md-6">
+                <label class="small-label">Nombre</label>
+                <input class="form-control" formControlName="firstName" />
+                @if (checkControl('firstName','required')) {
+                  <p class="error-message">Campo requerido</p>
+                }
+              </div>
+
+              <!-- Apellido -->
+              <div class="col-md-6">
+                <label class="small-label">Apellido</label>
+                <input class="form-control" formControlName="lastName" />
+                @if (checkControl('lastName','required')) {
+                  <p class="error-message">Campo requerido</p>
+                }
+              </div>
+
+              <!-- Email -->
+              <div class="col-12">
+                <label class="small-label">Email</label>
+                <input class="form-control" formControlName="email" />
+                @if (checkControl('email','required')) {
+                  <p class="error-message">Campo requerido</p>
+                }
+                @if (checkControl('email','pattern')) {
+                  <p class="error-message">Formato incorrecto</p>
+                }
+              </div>
+
+              <!-- Contraseña -->
+              <div class="col-12">
+                <label class="small-label">Contraseña</label>
+
+                <div class="input-group-wrapper">
+                  <input
+                    class="form-control"
+                    [type]="showPassword ? 'text' : 'password'"
+                    formControlName="password"
+                    placeholder="••••••••"
+                  />
+
+                  <button class="password-toggle" type="button" (click)="togglePassword()">
+                    <span class="material-symbols-outlined">
+                      {{ showPassword ? 'visibility_off' : 'visibility' }}
+                    </span>
+                  </button>
+                </div>
+
+                <p class="help-text">Déjalo vacío si no quieres cambiarla</p>
+              </div>
+
+              <!-- Teléfono -->
+              <div class="col-12">
+                <label class="small-label">Teléfono (opcional)</label>
+                <input class="form-control" formControlName="phone" />
+                @if (checkControl('phone','pattern')) {
+                  <p class="error-message">Debe contener 9 números</p>
+                }
+              </div>
+
+              <!-- Fecha de nacimiento -->
+              <div class="col-12">
+                <label class="small-label">Fecha de nacimiento</label>
+                <div class="row g-2">
+                  <div class="col-4">
+                    <input class="form-control text-center" formControlName="day" placeholder="DD" />
+                  </div>
+                  <div class="col-4">
+                    <input class="form-control text-center" formControlName="month" placeholder="MM" />
+                  </div>
+                  <div class="col-4">
+                    <input class="form-control text-center" formControlName="year" placeholder="YYYY" />
+                  </div>
+                </div>
+              </div>
+
+              <!-- Provincia -->
+              <div class="col-md-6">
+                <label class="small-label">Provincia</label>
+                <input class="form-control" formControlName="user_province" />
+                @if (checkControl('user_province','required')) {
+                  <p class="error-message">Campo requerido</p>
+                }
+              </div>
+
+              <!-- Código postal -->
+              <div class="col-md-6">
+                <label class="small-label">Código postal</label>
+                <input class="form-control" formControlName="user_zipcode" />
+                @if (checkControl('user_zipcode','required')) {
+                  <p class="error-message">Campo requerido</p>
+                }
+                @if (checkControl('user_zipcode','pattern')) {
+                  <p class="error-message">Debe contener 5 números</p>
+                }
+              </div>
+
+              <!-- Ciudad -->
+              <div class="col-12">
+                <label class="small-label">Ciudad</label>
+                <input class="form-control" formControlName="user_city" />
+                @if (checkControl('user_city','required')) {
+                  <p class="error-message">Campo requerido</p>
+                }
+              </div>
+
+              <!-- Guardar -->
+              <div class="col-12 mt-4">
+                <button class="btn-save w-100" type="button" (click)="save()">
+                  Guardar cambios
+                </button>
+              </div>
+
+              <!-- Dar de baja -->
+              <div class="col-12 mt-2">
+                <button class="btn-delete-account w-100" type="button" (click)="openDeleteModal()">
+                  Dar de baja mi cuenta
+                </button>
+              </div>
+
+            </form>
+          </div>
+        }
+
+      </div>
+
+      <!-- Columna derecha -->
+      <div class="col-lg-5 d-flex flex-column align-items-center gap-4">
+
+        <!-- Avatar editable -->
+        <div class="avatar-wrapper">
+          <div class="avatar-circle" (click)="triggerFileInput()">
+            <app-user-avatar
+              [name]="user?.username ?? ''"
+              [src]="previewImage"
+              [size]="200">
+            </app-user-avatar>
+
+            <input
+              type="file"
+              #fileInput
+              accept="image/*"
+              class="d-none"
+              (change)="onFileSelected($event)"
+            />
+          </div>
+
+          <div class="d-flex justify-content-center gap-3 mt-3">
+            <button class="btn-round" type="button" (click)="triggerFileInput()">
+              <span class="material-symbols-outlined">photo_camera</span>
+            </button>
+
+            <button class="btn-round btn-round-danger" type="button" (click)="confirmDeletePhoto()">
+              <span class="material-symbols-outlined">delete</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Ubicación -->
+        <div class="w-100">
+          <div class="d-flex align-items-center gap-2 mb-2">
+            <span class="material-symbols-outlined text-primary-toybox">location_on</span>
+            <h3 class="location-title">Ubicación</h3>
+          </div>
+
+          <div class="location-card" (click)="openMap()">
+            <div
+              class="location-map"
+              [style.backgroundImage]="'url(' + mapUrl + ')'"
+            ></div>
+
+            <div class="location-overlay"></div>
+
+            <div class="location-label">
+              {{ form.value.user_city || 'Barcelona' }}, España
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Modal dar de baja -->
+@if (showDeleteModal) {
+  <div class="delete-modal-backdrop" (click)="closeDeleteModal()">
+    <div class="delete-modal" (click)="$event.stopPropagation()">
+
+      <h3 class="modal-title">¿Seguro que quieres dar de baja tu cuenta?</h3>
+      <p class="modal-text">
+        Esta acción eliminará todos tus datos de forma permanente.
+      </p>
+
+      <div class="modal-actions">
+        <button class="btn-cancel" type="button" (click)="closeDeleteModal()">Cancelar</button>
+        <button class="btn-confirm-delete" type="button" (click)="deleteAccount()">Sí, eliminar</button>
+      </div>
+
+    </div>
+  </div>
+}
+
+<app-footer></app-footer>

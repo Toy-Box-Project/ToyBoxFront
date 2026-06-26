@@ -1,0 +1,23 @@
+<div class="modal-backdrop" *ngIf="isOpen" (click)="onCancel()">
+  <section class="confirm-modal" role="dialog" aria-modal="true" [attr.aria-labelledby]="'modal-confirm-title'" (click)="$event.stopPropagation()">
+    <div class="modal-icon" [class]="variant">
+      <span *ngIf="variant === 'danger'">!</span>
+      <span *ngIf="variant === 'warning'">?</span>
+      <span *ngIf="variant === 'info'">i</span>
+    </div>
+
+    <div class="modal-content">
+      <h2 id="modal-confirm-title">{{ title }}</h2>
+      <p>{{ message }}</p>
+    </div>
+
+    <div class="modal-actions">
+      <button type="button" class="btn btn-secondary" (click)="onCancel()">
+        {{ cancelText }}
+      </button>
+      <button type="button" class="btn btn-primary" [class.btn-danger]="variant === 'danger'" (click)="onConfirm()">
+        {{ confirmText }}
+      </button>
+    </div>
+  </section>
+</div>

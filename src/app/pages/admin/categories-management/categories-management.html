@@ -1,0 +1,68 @@
+<main class="management-page">
+  <header class="page-header">
+    <div>
+      <p class="eyebrow">Administration</p>
+      <h1>Categories management</h1>
+    </div>
+    <input type="search" placeholder="Search categories" [(ngModel)]="searchTerm" />
+  </header>
+
+  <section class="form-panel" aria-label="Category form">
+    <h2>{{ editingId ? 'Edit category' : 'New category' }}</h2>
+    <form (ngSubmit)="saveCategory()">
+      <label>
+        Name
+        <input type="text" name="name" [(ngModel)]="form.name" />
+      </label>
+      <label>
+        Description
+        <input type="text" name="description" [(ngModel)]="form.description" />
+      </label>
+      <div class="form-actions">
+        <button type="button" class="btn secondary" *ngIf="editingId" (click)="resetForm()">Cancel</button>
+        <button type="submit" class="btn primary">{{ editingId ? 'Save changes' : 'Create category' }}</button>
+      </div>
+    </form>
+  </section>
+
+  <section class="table-panel">
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Description</th>
+          <th>Items</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let category of filteredCategories">
+          <td>{{ category.name }}</td>
+          <td>{{ category.description }}</td>
+          <td>{{ category.items }}</td>
+          <td class="actions">
+            <button type="button" class="link-button" (click)="editCategory(category)">Edit</button>
+            <button type="button" class="link-button danger" (click)="askDelete(category)">Delete</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+</main>
+
+<app-modal-confirm
+  [isOpen]="!!categoryToDelete"
+  title="Delete category"
+  [message]="'Delete ' + categoryToDelete?.name + '? This action cannot be undone.'"
+  confirmText="Delete"
+  (confirmed)="confirmDelete()"
+  (cancelled)="categoryToDelete = null"
+/>
+
+<app-toast
+  [visible]="toast.visible"
+  [type]="toast.type"
+  [title]="toast.title"
+  [message]="toast.message"
+  (dismissed)="toast.visible = false"
+/>

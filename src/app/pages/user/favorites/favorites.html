@@ -1,0 +1,65 @@
+<app-navbar></app-navbar>
+
+<div class="pattern-bg"></div>
+
+<div class="relative-z-10 container py-5">
+
+  <!-- HEADER -->
+  <header class="d-flex justify-content-between align-items-end mb-4">
+    <div>
+      <h1 class="favorites-title">Mis favoritos</h1>
+      <p class="favorites-subtitle">Todos los tesoros que has guardado en tu ToyBox.</p>
+    </div>
+
+    <span class="favorites-count">
+      {{ totalFavorites }} juguetes guardados
+    </span>
+  </header>
+
+  <!-- GRID -->
+  @if (totalFavorites > 0) {
+    <div class="favorites-grid">
+      @for (item of paginatedFavorites; track item.id) {
+        <app-product-card
+          [product]="item"
+          (toggleFavorite)="requestRemoveFavorite($event)">
+        </app-product-card>
+      }
+    </div>
+
+    <!-- PAGINATION -->
+    <div class="mt-4">
+      <app-pagination
+        [currentPage]="currentPage"
+        [totalPages]="totalPages"
+        (pageChange)="onPageChange($event)">
+      </app-pagination>
+    </div>
+  } @else {
+    <p class="favorites-empty text-on-surface-variant text-center mt-5">
+      Aún no tienes juguetes guardados en favoritos.
+    </p>
+  }
+
+</div>
+
+<!-- MODAL CONFIRMACIÓN -->
+@if (showConfirmModal) {
+  <div class="confirm-modal-backdrop" (click)="cancelRemove()">
+    <div class="confirm-modal" (click)="$event.stopPropagation()">
+
+      <h3 class="modal-title">¿Quitar de favoritos?</h3>
+      <p class="modal-text">
+        Este juguete desaparecerá de tu lista de favoritos.
+      </p>
+
+      <div class="modal-actions">
+        <button class="btn-cancel" type="button" (click)="cancelRemove()">Cancelar</button>
+        <button class="btn-confirm-delete" type="button" (click)="confirmRemove()">Sí, quitar</button>
+      </div>
+
+    </div>
+  </div>
+}
+
+<app-footer></app-footer>

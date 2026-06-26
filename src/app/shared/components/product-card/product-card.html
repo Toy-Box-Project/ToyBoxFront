@@ -1,0 +1,34 @@
+<article class="product-card card-toybox">
+  <div class="product-card__image">
+    <img [src]="product.image" [alt]="product.title" />
+
+    <span class="product-card__badge">
+      {{ product.badge }}
+    </span>
+  </div>
+
+  <div class="product-card__content">
+    <span class="product-card__category">
+      {{ product.category }}
+    </span>
+
+    <h3>{{ product.title }}</h3>
+
+    <p class="product-card__status">
+      {{ product.status }}
+    </p>
+
+    <div class="product-card__footer">
+      <strong>{{ product.price }} €</strong>
+
+      <span class="product-card__location">
+        <span class="material-symbols-outlined">location_on</span>
+        {{ product.location }}
+      </span>
+    </div>
+
+    <a class="btn-toybox-primary product-card__button" [href]="'/product/' + product.id">
+      Ver detalle
+    </a>
+  </div>
+</article>

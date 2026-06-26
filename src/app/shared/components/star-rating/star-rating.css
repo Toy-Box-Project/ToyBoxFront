@@ -1,0 +1,22 @@
+.stars {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+
+.star {
+  color: var(--secondary-toybox); 
+  transition: color .2s ease, transform .15s ease;
+  cursor: default;
+}
+
+.star.clickable {
+  cursor: pointer;
+}
+
+
+.star.clickable:hover {
+  color: var(--primary-toybox); 
+  transform: scale(1.1);
+}

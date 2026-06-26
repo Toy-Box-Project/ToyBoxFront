@@ -1,0 +1,104 @@
+:host {
+  display: block;
+  min-height: 100vh;
+  background-color: var(--background);
+  overflow-x: hidden;
+}
+
+/* ========================================
+   LOGIN CARD
+   (Uses unified card styles from styles.css)
+======================================== */
+.login-card {
+  max-width: 500px;
+  width: 100%;
+  margin: auto;
+  padding: 2.5rem;
+  background: white;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--outline-variant);
+  box-shadow: var(--shadow-card);
+}
+
+/* Logo */
+.logo {
+  width: 120px;
+}
+
+/* Titles */
+.login-title {
+  font-size: 2rem;
+}
+
+.login-subtitle {
+  color: var(--on-surface-variant);
+}
+
+/* ========================================
+   INPUT GROUP (EMAIL + PASSWORD)
+======================================== */
+.input-group-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+/* Right icon inside input */
+.input-icon-right {
+  position: absolute;
+  right: 12px;
+  font-size: 22px;
+  color: var(--secondary-toybox);
+  pointer-events: none;
+  transition: color .2s ease;
+}
+
+.input-icon-right:hover {
+  color: var(--primary-toybox);
+}
+
+/* Input with space for right icon */
+.with-icon-right {
+  padding-right: 42px;
+}
+
+/* Placeholder style */
+input::placeholder {
+  color: #aaa;
+  letter-spacing: 2px;
+}
+
+/* ========================================
+   PASSWORD TOGGLE (EYE ICON)
+======================================== */
+.password-toggle {
+  position: absolute;
+  right: 10px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  color: var(--secondary-toybox);
+  transition: color .2s ease, opacity .2s ease;
+}
+
+.password-toggle:hover {
+  color: var(--primary-toybox);
+  opacity: 0.85;
+}
+
+/* ========================================
+   RESPONSIVE
+======================================== */
+@media (max-width: 768px) {
+  .login-card {
+    padding: 2rem;
+    margin: 0 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .login-card {
+    padding: 1.5rem;
+  }
+}

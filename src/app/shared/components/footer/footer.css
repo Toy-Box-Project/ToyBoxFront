@@ -1,0 +1,118 @@
+@import url('https://fonts.googleapis.com/css2?family=Albert+Sans:wght@400;600;700&display=swap');
+
+:host {
+    --blue: #6188c1;
+    --pink: #d84565;
+    --white: #ffffff;
+    --black: #000000;
+    --grey-light: #f5f5f5;
+    --grey-mid: #e0e0e0;
+    --grey-text: #666666;
+}
+
+.footer {
+    background: var(--grey-light);
+    border-top: 1px solid var(--grey-mid);
+    font-family: 'Albert Sans', sans-serif;
+    padding: 48px 48px 0;
+}
+
+.footer-content {
+    display: flex;
+    justify-content: space-between;
+    gap: 40px;
+    padding-bottom: 40px;
+}
+
+/* ── MARCA ── */
+.footer-brand {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.footer-logo {
+    text-decoration: none;
+}
+
+.logo-img {
+    height: 36px;
+    width: auto;
+}
+
+.footer-social {
+    display: flex;
+    gap: 16px;
+}
+
+.footer-social a {
+    color: var(--grey-text);
+    transition: color 0.2s;
+    display: flex;
+    align-items: center;
+}
+
+.footer-social a:hover {
+    color: var(--blue);
+}
+
+/* ── LINKS ── */
+.footer-links {
+    display: flex;
+    gap: 60px;
+}
+
+.footer-col {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.footer-col h4 {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--black);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin: 0 0 4px;
+}
+
+.footer-col a {
+    font-size: 14px;
+    color: var(--grey-text);
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.footer-col a:hover {
+    color: var(--blue);
+}
+
+/* ── COPYRIGHT ── */
+.footer-bottom {
+    border-top: 1px solid var(--grey-mid);
+    padding: 20px 0;
+    text-align: center;
+}
+
+.footer-bottom p {
+    font-size: 13px;
+    color: var(--grey-text);
+    margin: 0;
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 768px) {
+    .footer {
+        padding: 32px 20px 0;
+    }
+
+    .footer-content {
+        flex-direction: column;
+    }
+
+    .footer-links {
+        gap: 32px;
+        flex-wrap: wrap;
+    }
+}

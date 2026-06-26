@@ -1,0 +1,79 @@
+<div class="pattern-bg"></div>
+
+<main class="catalog-page relative-z-10">
+  <section class="catalog-hero">
+    <div class="catalog-hero__text">
+      <span class="catalog-hero__eyebrow">Catálogo Toybox</span>
+
+      <h1>Encuentra juguetes con una segunda vida</h1>
+
+      <p>
+        Explora juguetes de segunda mano publicados por otras familias.
+        Busca por categoría, precio, ubicación o estado y descubre nuevas
+        oportunidades para seguir jugando.
+      </p>
+    </div>
+
+    <div class="catalog-hero__search card-toybox">
+      <app-search-bar
+        label="¿Qué juguete estás buscando?"
+        placeholder="Buscar juguetes, categorías o ciudad"
+        buttonText="Buscar"
+        (search)="onSearch($event)"
+      ></app-search-bar>
+    </div>
+  </section>
+
+  <section class="catalog-categories">
+    <div class="catalog-section-heading">
+      <h2>Categorías</h2>
+      <p class="text-on-surface-variant">
+        Elige el tipo de juguete que quieres encontrar.
+      </p>
+    </div>
+
+    <div class="category-grid">
+      @for (category of categories; track category.id_categories) {
+        <button class="category-card" type="button">
+          @if (category.icon) {
+            <img [src]="category.icon" [alt]="category.name" />
+          } @else {
+            <span class="category-card__all">Todo</span>
+          }
+
+          <span>{{ category.name }}</span>
+        </button>
+      }
+    </div>
+  </section>
+
+  <section class="catalog-layout">
+    <app-filter-sidebar
+      [categories]="categories"
+      (filtersApplied)="onFiltersApplied($event)"
+    ></app-filter-sidebar>
+
+    <section class="catalog-results">
+      <div class="catalog-results__top">
+        <div>
+          <h2>Juguetes disponibles</h2>
+          <p class="text-on-surface-variant">
+            Mostrando productos publicados recientemente.
+          </p>
+        </div>
+
+        <select class="form-control catalog-sort">
+          <option>Más recientes</option>
+          <option>Precio: menor a mayor</option>
+          <option>Precio: mayor a menor</option>
+        </select>
+      </div>
+
+      <div class="products-grid">
+        @for (product of products; track product.id) {
+          <app-product-card [product]="product"></app-product-card>
+        }
+      </div>
+    </section>
+  </section>
+</main>
