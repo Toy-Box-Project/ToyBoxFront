@@ -18,9 +18,6 @@ export class RegisterComponent {
   backendError = '';
   backendSuccess = '';
 
-  // ---------------------------------------------------------
-  // Custom password validators
-  // ---------------------------------------------------------
 
   private minLength8(control: FormControl): ValidationErrors | null {
     return control.value && control.value.length >= 8 ? null : { minLength8: true };
@@ -36,9 +33,6 @@ export class RegisterComponent {
       : { special: true };
   }
 
-  // ---------------------------------------------------------
-  // Reactive form with validators
-  // ---------------------------------------------------------
   form: FormGroup = new FormGroup({
     firstName: new FormControl('', [
       Validators.required,
@@ -89,17 +83,12 @@ export class RegisterComponent {
     this.showPassword = !this.showPassword;
   }
 
-  // ---------------------------------------------------------
-  // Shows validation errors only when touched + invalid
-  // ---------------------------------------------------------
+
   checkControl(control: string, error: string): boolean {
     const c = this.form.get(control);
     return !!(c && c.touched && c.hasError(error));
   }
 
-  // ---------------------------------------------------------
-  // Submit handler
-  // ---------------------------------------------------------
   onSubmit() {
     this.backendError = '';
     this.backendSuccess = '';
@@ -113,7 +102,7 @@ export class RegisterComponent {
 
     /*
     ============================================================
-    REAL BACKEND — Node.js + Express + MySQL (db_toybox1)
+    REAL BACKEND — Node.js + Express + MySQL (db_toybox
     ============================================================
 
     this.authService.register(newUser).subscribe({
@@ -135,10 +124,8 @@ export class RegisterComponent {
     });
     */
 
-    // ============================================================
-    // TEMPORARY DEMO (remove when backend is ready)
-    // ============================================================
-
+    
+    // demo
     if (newUser.email === 'existe@ejemplo.com') {
       this.backendError = 'Este email ya está registrado.';
       return;

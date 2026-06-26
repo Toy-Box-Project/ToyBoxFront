@@ -8,26 +8,21 @@ import {
 } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
-import { FooterComponent } from '../../../shared/components/footer/footer';
-import { NavbarComponent } from '../../../shared/components/navbar/navbar';
 
 @Component({
   selector: 'app-forgot-password',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterModule, FooterComponent, NavbarComponent],
+  imports: [CommonModule, ReactiveFormsModule, RouterModule],
   templateUrl: './forgot-password.html',
   styleUrl: './forgot-password.css'
 })
 export class ForgotPasswordComponent {
-  //NECESARIO PARA SSR (no toca tu AuthService)
   isBrowser = typeof window !== 'undefined';
 
   backendError = '';
   backendSuccess = '';
 
-  // ---------------------------------------------------------
-  // Reactive form with validators
-  // ---------------------------------------------------------
+
   form: FormGroup = new FormGroup({
     email: new FormControl('', [
       Validators.required,
@@ -35,25 +30,16 @@ export class ForgotPasswordComponent {
     ])
   });
 
-  //Comentado para que no me de error
 //   constructor(private authService: AuthService) {}
 
-  // ---------------------------------------------------------
-  // Shows validation errors only when touched + invalid
-  // ---------------------------------------------------------
   checkControl(control: string, error: string): boolean {
     const c = this.form.get(control);
     return !!(c && c.touched && c.hasError(error));
   }
 
-  // ---------------------------------------------------------
-  // Submit handler
-  // ---------------------------------------------------------
   onSubmit() {
     this.backendError = '';
     this.backendSuccess = '';
-
-    // Evita que SSR ejecute este código
     if (!this.isBrowser) return;
 
     if (this.form.invalid) {
@@ -65,7 +51,7 @@ export class ForgotPasswordComponent {
 
     /*
     =====================================================
-    REAL BACKEND (Node.js + Express + MySQL db_toybox1)
+    REAL BACKEND (Node.js + Express + MySQL db_toybox
     =====================================================
 
     this.authService.forgotPassword({ email }).subscribe({
@@ -84,9 +70,7 @@ export class ForgotPasswordComponent {
 
     */
 
-    // =====================================================
-    // TEMPORARY DEMO (remove when backend is ready)
-    // =====================================================
+    //DEMO
     if (email === 'noexiste@ejemplo.com') {
       this.backendError = 'Este email no está registrado.';
       return;

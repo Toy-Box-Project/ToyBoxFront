@@ -5,13 +5,11 @@
   overflow-x: hidden;
 }
 
-/* Title */
 .page-title {
   font-weight: 700;
   color: var(--primary-toybox);
 }
 
-/* List */
 .product-list {
   display: flex;
   flex-direction: column;
@@ -45,7 +43,6 @@
   font-family: var(--font-title);
 }
 
-/* Actions */
 .product-actions {
   margin-left: auto;
   display: flex;
@@ -73,7 +70,6 @@
   color: var(--color-white);
 }
 
-/* Delete */
 .icon-btn.delete {
   background-color: #d9534f;
 }
@@ -82,7 +78,6 @@
   background-color: #c9302c;
 }
 
-/* Modal */
 .modal-overlay {
   position: fixed;
   inset: 0;

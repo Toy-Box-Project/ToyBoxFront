@@ -11,14 +11,7 @@ import { StarRatingComponent } from '../../../shared/components/star-rating/star
 @Component({
   selector: 'app-my-purchases',
   standalone: true,
-  imports: [
-    CommonModule,
-    RouterModule,
-    NavbarComponent,
-    FooterComponent,
-    PaginationComponent,
-    StarRatingComponent
-  ],
+  imports: [ CommonModule, RouterModule, NavbarComponent, FooterComponent, PaginationComponent, StarRatingComponent ],
   templateUrl: './my-purchases.html',
   styleUrl: './my-purchases.css',
 })
@@ -36,7 +29,7 @@ export class MyPurchasesComponent implements OnInit {
 
     /*
     ============================================================
-    BACKEND REAL (Node + Express + MySQL - db_toybox1)
+    BACKEND REAL (Node + Express + MySQL - db_toybox
     ============================================================
 
     this.reviewService.getMyPurchaseReviews(userId).subscribe(res => {
@@ -48,7 +41,7 @@ export class MyPurchasesComponent implements OnInit {
     });
     */
 
-    // MOCK TEMPORAL — 7 reseñas de compras
+    // DEMO— 7 reseñas de compras
     this.myPurchaseReviews = [
       { id: 1, product_title: 'Robot educativo', rating: 5, comment: 'Muy buen vendedor.', date: '2026-05-12', product_image: '/assets/images/demo6.jpg' },
       { id: 2, product_title: 'Puzzle 500 piezas', rating: 4, comment: 'Llegó rápido.', date: '2026-04-20', product_image: '/assets/images/demo3.jpg' },
@@ -59,7 +52,7 @@ export class MyPurchasesComponent implements OnInit {
       { id: 7, product_title: 'Juego de mesa', rating: 5, comment: 'Muy divertido.', date: '2025-11-05', product_image: '/assets/images/demo9.jpg' }
     ];
 
-    // MOCK TEMPORAL — 7 reseñas de ventas
+    // DEMO — 7 reseñas de ventas
     this.mySalesReviews = [
       { id: 10, product_title: 'Coche teledirigido', rating: 5, comment: 'Mi hijo encantado.', date: '2026-05-14', product_image: '/assets/images/demo1.jpg' },
       { id: 11, product_title: 'Set de pinturas', rating: 4, comment: 'Todo correcto.', date: '2026-02-16', product_image: '/assets/images/demo5.jpg' },

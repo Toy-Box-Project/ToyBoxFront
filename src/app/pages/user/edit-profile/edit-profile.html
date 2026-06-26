@@ -7,7 +7,6 @@
 
     <div class="row g-4">
 
-      <!-- Columna izquierda -->
       <div class="col-lg-7">
 
         <div class="d-flex justify-content-between align-items-end border-bottom pb-3 mb-4">
@@ -32,13 +31,11 @@
 
             <form class="row g-3 position-relative" [formGroup]="form">
 
-              <!-- Nombre de usuario (NO editable) -->
               <div class="col-12">
                 <label class="small-label">Nombre de usuario</label>
                 <input class="form-control" formControlName="username" />
               </div>
 
-              <!-- Nombre -->
               <div class="col-md-6">
                 <label class="small-label">Nombre</label>
                 <input class="form-control" formControlName="firstName" />
@@ -47,7 +44,6 @@
                 }
               </div>
 
-              <!-- Apellido -->
               <div class="col-md-6">
                 <label class="small-label">Apellido</label>
                 <input class="form-control" formControlName="lastName" />
@@ -56,7 +52,6 @@
                 }
               </div>
 
-              <!-- Email -->
               <div class="col-12">
                 <label class="small-label">Email</label>
                 <input class="form-control" formControlName="email" />
@@ -68,7 +63,6 @@
                 }
               </div>
 
-              <!-- Contraseña -->
               <div class="col-12">
                 <label class="small-label">Contraseña</label>
 
@@ -90,7 +84,6 @@
                 <p class="help-text">Déjalo vacío si no quieres cambiarla</p>
               </div>
 
-              <!-- Teléfono -->
               <div class="col-12">
                 <label class="small-label">Teléfono (opcional)</label>
                 <input class="form-control" formControlName="phone" />
@@ -99,7 +92,6 @@
                 }
               </div>
 
-              <!-- Fecha de nacimiento -->
               <div class="col-12">
                 <label class="small-label">Fecha de nacimiento</label>
                 <div class="row g-2">
@@ -115,7 +107,6 @@
                 </div>
               </div>
 
-              <!-- Provincia -->
               <div class="col-md-6">
                 <label class="small-label">Provincia</label>
                 <input class="form-control" formControlName="user_province" />
@@ -124,7 +115,6 @@
                 }
               </div>
 
-              <!-- Código postal -->
               <div class="col-md-6">
                 <label class="small-label">Código postal</label>
                 <input class="form-control" formControlName="user_zipcode" />
@@ -136,7 +126,6 @@
                 }
               </div>
 
-              <!-- Ciudad -->
               <div class="col-12">
                 <label class="small-label">Ciudad</label>
                 <input class="form-control" formControlName="user_city" />
@@ -145,14 +134,12 @@
                 }
               </div>
 
-              <!-- Guardar -->
               <div class="col-12 mt-4">
                 <button class="btn-save w-100" type="button" (click)="save()">
                   Guardar cambios
                 </button>
               </div>
 
-              <!-- Dar de baja -->
               <div class="col-12 mt-2">
                 <button class="btn-delete-account w-100" type="button" (click)="openDeleteModal()">
                   Dar de baja mi cuenta
@@ -165,10 +152,8 @@
 
       </div>
 
-      <!-- Columna derecha -->
       <div class="col-lg-5 d-flex flex-column align-items-center gap-4">
 
-        <!-- Avatar editable -->
         <div class="avatar-wrapper">
           <div class="avatar-circle" (click)="triggerFileInput()">
             <app-user-avatar
@@ -197,7 +182,6 @@
           </div>
         </div>
 
-        <!-- Ubicación -->
         <div class="w-100">
           <div class="d-flex align-items-center gap-2 mb-2">
             <span class="material-symbols-outlined text-primary-toybox">location_on</span>
@@ -224,7 +208,6 @@
   </div>
 </div>
 
-<!-- Modal dar de baja -->
 @if (showDeleteModal) {
   <div class="delete-modal-backdrop" (click)="closeDeleteModal()">
     <div class="delete-modal" (click)="$event.stopPropagation()">
