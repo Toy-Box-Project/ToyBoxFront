@@ -5,10 +5,6 @@
   overflow-x: hidden;
 }
 
-/* ========================================
-   LOGIN CARD
-   (Uses unified card styles from styles.css)
-======================================== */
 .login-card {
   max-width: 500px;
   width: 100%;
@@ -20,12 +16,10 @@
   box-shadow: var(--shadow-card);
 }
 
-/* Logo */
 .logo {
   width: 120px;
 }
 
-/* Titles */
 .login-title {
   font-size: 2rem;
 }
@@ -34,16 +28,12 @@
   color: var(--on-surface-variant);
 }
 
-/* ========================================
-   INPUT GROUP (EMAIL + PASSWORD)
-======================================== */
 .input-group-wrapper {
   position: relative;
   display: flex;
   align-items: center;
 }
 
-/* Right icon inside input */
 .input-icon-right {
   position: absolute;
   right: 12px;
@@ -57,20 +47,15 @@
   color: var(--primary-toybox);
 }
 
-/* Input with space for right icon */
 .with-icon-right {
   padding-right: 42px;
 }
 
-/* Placeholder style */
 input::placeholder {
   color: #aaa;
   letter-spacing: 2px;
 }
 
-/* ========================================
-   PASSWORD TOGGLE (EYE ICON)
-======================================== */
 .password-toggle {
   position: absolute;
   right: 10px;
@@ -87,9 +72,6 @@ input::placeholder {
   opacity: 0.85;
 }
 
-/* ========================================
-   RESPONSIVE
-======================================== */
 @media (max-width: 768px) {
   .login-card {
     padding: 2rem;

@@ -12,10 +12,8 @@
     @if (user) {
       <div class="row g-4">
 
-        <!-- LEFT COLUMN -->
         <div class="col-lg-7">
 
-          <!-- Header -->
           <div class="d-flex justify-content-between align-items-end border-bottom pb-3 mb-4">
             <div>
               <h1 class="profile-title">Mi perfil</h1>
@@ -38,7 +36,6 @@
             </button>
           </div>
 
-          <!-- Profile card -->
           <div class="profile-card position-relative overflow-hidden">
             <div class="toy-pattern"></div>
 
@@ -95,10 +92,8 @@
 
         </div>
 
-        <!-- RIGHT COLUMN -->
         <div class="col-lg-5 d-flex flex-column align-items-center gap-4">
 
-          <!-- Avatar -->
           <div class="avatar-wrapper">
             <div class="avatar-circle" (click)="openImageModal()">
               <app-user-avatar
@@ -109,7 +104,6 @@
             </div>
           </div>
 
-          <!-- Location -->
           <div class="w-100">
             <div class="d-flex align-items-center gap-2 mb-2">
               <span class="material-symbols-outlined text-primary-toybox">location_on</span>
@@ -125,7 +119,6 @@
             </div>
           </div>
 
-          <!-- Logout -->
           <button class="btn-logout w-100 mt-2" (click)="logout()">
             <span class="material-symbols-outlined">logout</span>
             Cerrar sesión
@@ -135,13 +128,11 @@
       </div>
     }
 
-    <!-- Ratings section -->
     <section class="ratings-section mt-5 pt-4 border-top">
       <h2 class="ratings-title text-center mb-4">Estado de las valoraciones</h2>
 
       <div class="row g-4">
 
-        <!-- Read-only -->
         <div class="col-md-6">
           <div class="rating-card">
             <span class="rating-state-label">ESTADO: SÓLO LECTURA</span>
@@ -156,7 +147,6 @@
           </div>
         </div>
 
-        <!-- Interactive -->
         <div class="col-md-6">
           <div class="rating-card">
             <span class="rating-state-label">ESTADO: INTERACTIVO</span>
@@ -175,7 +165,6 @@
   </div>
 </div>
 
-<!-- IMAGE MODAL -->
 @if (showImageModal) {
   <div class="image-modal-backdrop" (click)="closeImageModal()">
     <div class="image-modal" (click)="$event.stopPropagation()">

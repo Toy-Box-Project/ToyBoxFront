@@ -4,7 +4,6 @@
 
 <div class="container py-5 position-relative" style="z-index: 2;">
 
-  <!-- NAV TABS -->
   <div class="tabs-wrapper mb-4">
     <button
       class="tab-btn"
@@ -21,12 +20,10 @@
     </button>
   </div>
 
-  <!-- TÍTULO -->
   <h2 class="page-title mb-3">
     {{ activeTab === 'purchases' ? 'Reseñas que yo hice' : 'Reseñas sobre mis productos' }}
   </h2>
 
-  <!-- LISTA DE RESEÑAS -->
   <div class="review-list">
     @for (review of paginatedReviews; track review.id) {
       <div class="review-item shadow-sm">
@@ -37,7 +34,6 @@
           <h5>{{ review.product_title }}</h5>
           <p class="small text-muted">{{ review.date | date:'dd/MM/yyyy' }}</p>
 
-          <!-- ⭐ NUEVA FILA COMPACTA -->
           <div class="rating-row">
             <app-star-rating [rating]="review.rating"></app-star-rating>
             <p class="review-comment">{{ review.comment }}</p>
@@ -49,7 +45,6 @@
     }
   </div>
 
-  <!-- PAGINACIÓN -->
   <div class="mt-4">
     <app-pagination
       [currentPage]="currentPage"

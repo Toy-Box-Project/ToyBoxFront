@@ -10,14 +10,8 @@ import { PaginationComponent } from '../../../shared/components/pagination/pagin
 @Component({
   selector: 'app-favorites',
   standalone: true,
-  imports: [
-    CommonModule,
-    RouterModule,
-    NavbarComponent,
-    FooterComponent,
-    ProductCardComponent,
-    PaginationComponent
-  ],
+  imports: [CommonModule, RouterModule, NavbarComponent, FooterComponent, ProductCardComponent,
+    PaginationComponent ],
   templateUrl: './favorites.html',
   styleUrl: './favorites.css',
 })
@@ -34,7 +28,7 @@ export class FavoritesComponent implements OnInit {
   ngOnInit() {
     /*
     ============================================================
-    BACKEND REAL (Node + Express + MySQL - db_toybox1)
+    BACKEND REAL (Node + Express + MySQL - db_toybox
     ============================================================
 
     this.favoritesService.getFavoritesByUser(userId).subscribe({
@@ -45,7 +39,7 @@ export class FavoritesComponent implements OnInit {
     });
     */
 
-    // MOCK TEMPORAL — 16 juguetes
+    // DEMO
     this.favorites = [
       { id: 1, title: 'Oso de Peluche', price: 24.99, imageUrl: '/assets/images/toys/teddy.jpg', isFavorite: true },
       { id: 2, title: 'Bloques de Construcción', price: 35.00, imageUrl: '/assets/images/toys/blocks.jpg', isFavorite: true },
@@ -82,7 +76,6 @@ export class FavoritesComponent implements OnInit {
     if (this.currentPage > this.totalPages) this.currentPage = this.totalPages;
   }
 
-  // Cuando se pulsa el corazón → abrir modal
   requestRemoveFavorite(id: number) {
     this.selectedFavoriteId = id;
     this.showConfirmModal = true;

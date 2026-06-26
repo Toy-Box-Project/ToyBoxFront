@@ -10,27 +10,22 @@ import { CommonModule } from '@angular/common';
 })
 export class UserAvatarComponent {
 
-  @Input() src: string | null = null;   // URL Cloudinary o null
+  @Input() src: string | null = null;   
   @Input() name: string = '';           
   @Input() size: number = 48;           
 
-  defaultAvatar: string = '../assets/images/default-avatar.png';
+    get finalSrc(): string | null {
+        if (this.src && this.src.trim() !== '') return this.src;
+        return null; // ← null active @else { <span>{{ initials }}</span> }
+    }
 
-  get finalSrc(): string | null {
-    // Si hay foto → Cloudinary
-    if (this.src && this.src.trim() !== '') return this.src;
-
-    // Si NO hay foto → imagen por defecto
-    return this.defaultAvatar;
-  }
-
-  get initials(): string {
-    if (!this.name) return '?';
-    return this.name
-      .split(' ')
-      .map(n => n[0])
-      .join('')
-      .toUpperCase()
-      .slice(0, 2);
-  }
+    get initials(): string {
+        if (!this.name) return '?';
+        return this.name
+        .split(' ')
+        .map(n => n[0])
+        .join('')
+        .toUpperCase()
+        .slice(0, 2);
+    }
 }
