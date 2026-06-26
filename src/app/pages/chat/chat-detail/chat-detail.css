@@ -22,7 +22,6 @@
     overflow: hidden;
 }
 
-/* ── SIDEBAR ── */
 .sidebar {
     border-right: 1px solid var(--grey-mid);
     display: flex;
@@ -127,14 +126,12 @@
     flex-shrink: 0;
 }
 
-/* ── CHAT MAIN ── */
 .chat-main {
     display: flex;
     flex-direction: column;
     overflow: hidden;
 }
 
-/* ── CABECERA ── */
 .chat-header {
     padding: 16px 24px;
     border-bottom: 1px solid var(--grey-mid);
@@ -168,7 +165,6 @@
     margin: 0;
 }
 
-/* ── MENSAJES ── */
 .messages-container {
     flex: 1;
     overflow-y: auto;
@@ -224,7 +220,6 @@
     text-align: right;
 }
 
-/* ── INPUT ── */
 .chat-input-bar {
     display: flex;
     align-items: center;
@@ -273,7 +268,6 @@
     cursor: not-allowed;
 }
 
-/* ── SIN CONVERSACIÓN ── */
 .no-conversation {
     flex: 1;
     display: flex;
@@ -290,7 +284,6 @@
     margin: 0;
 }
 
-/* ── RESPONSIVE ── */
 @media (max-width: 768px) {
     .chat-detail-page {
         grid-template-columns: 1fr;

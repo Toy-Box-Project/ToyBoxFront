@@ -18,7 +18,6 @@ export class RegisterComponent {
   backendError = '';
   backendSuccess = '';
 
-
   private minLength8(control: FormControl): ValidationErrors | null {
     return control.value && control.value.length >= 8 ? null : { minLength8: true };
   }
@@ -83,7 +82,6 @@ export class RegisterComponent {
     this.showPassword = !this.showPassword;
   }
 
-
   checkControl(control: string, error: string): boolean {
     const c = this.form.get(control);
     return !!(c && c.touched && c.hasError(error));
@@ -124,7 +122,6 @@ export class RegisterComponent {
     });
     */
 
-    
     // demo
     if (newUser.email === 'existe@ejemplo.com') {
       this.backendError = 'Este email ya está registrado.';

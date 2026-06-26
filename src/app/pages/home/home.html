@@ -1,4 +1,3 @@
-<!-- BARRA DE BÚSQUEDA Y FILTROS -->
 <section class="search-section">
     <div class="search-bar-wrapper">
         <div class="search-input-container">
@@ -18,7 +17,6 @@
         </button>
     </div>
 
-    <!-- FILTROS EXPANDIBLES -->
     <div class="filters-panel" [class.open]="showFilters">
         <h2 class="filters-title">Filtros</h2>
         <div class="filters-grid">
@@ -72,7 +70,6 @@
         </div>
     </div>
 
-    <!-- CATEGORÍAS -->
     <nav class="categories-nav">
         <div class="sort-dropdown">
             <select [value]="filters.sortBy" (change)="filters.sortBy = $any($event.target).value">
@@ -92,12 +89,10 @@
     </nav>
 </section>
 
-<!-- ÚLTIMOS PRODUCTOS -->
 <section class="latest-section">
     <h2 class="section-title">Últimos productos</h2>
     <div class="latest-grid">
 
-        <!-- Producto destacado -->
         @if (featuredProduct) {
         <div class="featured-product">
             <div class="featured-image">
@@ -113,7 +108,6 @@
         </div>
         }
 
-        <!-- Cards laterales -->
         <div class="side-cards">
             @for (product of latestProducts.slice(1, 4); track product.id) {
             <div class="product-card" (click)="goToProduct(product.id)">
@@ -138,7 +132,6 @@
     </div>
 </section>
 
-<!-- PRODUCTOS RELACIONADOS -->
 <section class="related-section">
     <h2 class="section-title">Productos relacionados</h2>
     <div class="products-grid">
@@ -162,7 +155,6 @@
         }
     </div>
 
-    <!-- PAGINACIÓN -->
     <div class="pagination">
         <button class="page-btn" (click)="prevPage()" [disabled]="currentPage === 1">
             ← Previous

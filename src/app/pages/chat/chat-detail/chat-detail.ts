@@ -85,7 +85,7 @@ export class ChatDetail implements OnInit, AfterViewChecked {
   }
 
   loadMessages(conversationId: number): void {
-    // TODO: conectar con el servicio real
+    // DEMO
     this.messages = [
       { id: 1, content: '¡Hola! ¿Sigue disponible el juguete?', isSent: false, time: '10:20' },
       { id: 2, content: 'Sí, está disponible. ¿Te interesa?', isSent: true, time: '10:22' },
@@ -107,7 +107,7 @@ export class ChatDetail implements OnInit, AfterViewChecked {
 
     this.messages.push(msg);
     this.newMessage = '';
-    // TODO: conectar con el servicio real
+    // DEMO
   }
 
   scrollToBottom(): void {

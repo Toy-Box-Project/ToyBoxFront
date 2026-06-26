@@ -23,7 +23,6 @@
     z-index: 100;
 }
 
-/* ── LOGO ── */
 .navbar-logo {
     text-decoration: none;
     display: flex;
@@ -35,7 +34,6 @@
     width: auto;
 }
 
-/* ── SIN SESIÓN ── */
 .navbar-auth {
     display: flex;
     gap: 12px;
@@ -78,7 +76,6 @@
     border-color: var(--blue);
 }
 
-/* ── CON SESIÓN ── */
 .navbar-actions {
     display: flex;
     align-items: center;
@@ -118,7 +115,6 @@
     border-color: var(--blue);
 }
 
-/* ── BOTÓN VENDER ── */
 .btn-sell {
     background: var(--black);
     color: var(--white);
@@ -137,7 +133,6 @@
     background: var(--blue);
 }
 
-/* ── RESPONSIVE ── */
 @media (max-width: 768px) {
     .navbar {
         padding: 0 20px;

@@ -157,7 +157,7 @@ export class EditProfileComponent implements OnInit {
       return;
     }
 
-    const f = this.form.getRawValue(); // incluye username aunque esté disabled
+    const f = this.form.getRawValue();
 
     const birthday =
       f.day && f.month && f.year
