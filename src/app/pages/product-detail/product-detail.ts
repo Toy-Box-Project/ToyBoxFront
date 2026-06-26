@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { ProductCardData } from '../../shared/interfaces/product.interface';
 import { ImageGalleryComponent } from '../../shared/components/image-gallery/image-gallery';
 
-
 @Component({
   selector: 'app-product-detail',
   standalone: true,

@@ -14,7 +14,6 @@
     font-family: 'Albert Sans', sans-serif;
 }
 
-/* ── BÚSQUEDA ── */
 .search-section {
     padding: 24px 48px 0;
     background: var(--white);
@@ -89,7 +88,6 @@
     background: rgba(97, 136, 193, 0.08);
 }
 
-/* ── PANEL DE FILTROS ── */
 .filters-panel {
     max-height: 0;
     overflow: hidden;
@@ -153,7 +151,6 @@
     accent-color: var(--blue);
 }
 
-/* ── CATEGORÍAS ── */
 .categories-nav {
     display: flex;
     align-items: center;
@@ -207,7 +204,6 @@
     border-color: var(--blue);
 }
 
-/* ── ÚLTIMOS PRODUCTOS ── */
 .latest-section {
     padding: 40px 48px;
 }
@@ -251,7 +247,6 @@
     gap: 16px;
 }
 
-/* ── CARDS ── */
 .product-card {
     border: 1.5px solid var(--grey-mid);
     border-radius: var(--radius);
@@ -334,7 +329,6 @@
     margin: 0;
 }
 
-/* ── PRODUCTOS RELACIONADOS ── */
 .related-section {
     padding: 0 48px 40px;
 }
@@ -346,7 +340,6 @@
     margin-bottom: 40px;
 }
 
-/* ── PAGINACIÓN ── */
 .pagination {
     display: flex;
     align-items: center;
@@ -383,7 +376,6 @@
     color: var(--grey-text);
 }
 
-/* ── RESPONSIVE ── */
 @media (max-width: 1024px) {
     .products-grid {
         grid-template-columns: repeat(3, 1fr);

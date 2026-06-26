@@ -44,7 +44,7 @@ export class ChatList implements OnInit {
   }
 
   loadConversations(): void {
-    // TODO: conectar con el servicio real
+    // DEMO
     this.conversations = [
       {
         id: 1,

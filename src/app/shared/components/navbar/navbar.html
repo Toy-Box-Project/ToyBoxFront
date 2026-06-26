@@ -1,10 +1,9 @@
 <nav class="navbar">
-    <!-- LOGO -->
+
     <a class="navbar-logo" routerLink="/">
         <img src="assets/images/logo.png" alt="Toybox" class="logo-img" />
     </a>
 
-    <!-- SIN SESIÓN -->
     @if (!isLoggedIn) {
     <div class="navbar-auth">
         <button class="btn-signin" (click)="goToLogin()">Sign in</button>
@@ -12,7 +11,6 @@
     </div>
     }
 
-    <!-- CON SESIÓN -->
     @if (isLoggedIn) {
     <div class="navbar-actions">
         <a class="nav-item" routerLink="/notifications">

@@ -6,8 +6,6 @@ import { FooterComponent } from '../../../shared/components/footer/footer';
 import { PaginationComponent } from '../../../shared/components/pagination/pagination';
 import { StarRatingComponent } from '../../../shared/components/star-rating/star-rating';
 
-
-
 @Component({
   selector: 'app-my-purchases',
   standalone: true,

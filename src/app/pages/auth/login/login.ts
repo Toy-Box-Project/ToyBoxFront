@@ -5,7 +5,6 @@ import { Router, RouterModule } from '@angular/router';
 
 import { AuthService } from '../../../core/services/auth.service';
 
-
 @Component({
     selector: 'app-login',
     standalone: true,
@@ -70,50 +69,36 @@ export class LoginComponent {
 
         this.authService.login(credentials).subscribe({
         next: (res) => {
-
             switch (res.user.role) {
-
             case 'administrador':
                 this.router.navigate(['/admin']);
                 break;
-
             case 'moderador':
                 this.router.navigate(['/moderator']);
                 break;
-
             default:
                 this.router.navigate(['/user/profile']);
             }
         },
-
         error: (err) => {
-
             if (err.error?.message === 'INVALID_CREDENTIALS') {
-
             this.loginError =
-                'Email o contraseña incorrectos';
-
+                'Email o contraseña incorrectos'
             } else {
-
             this.loginError =
                 'Se ha producido un error al iniciar sesión';
             }
         }
         });
-
         */
 
         /* demo */
-
         if (
         credentials.email === 'toybox@ejemplo.com' &&
         credentials.password === '123456'
         ) {
-
         this.router.navigate(['/user/profile']);
-
         } else {
-
         this.loginError =
             'Email o contraseña incorrectos.';
         }

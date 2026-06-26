@@ -19,7 +19,6 @@
     padding: 40px 24px;
 }
 
-/* ── HEADER ── */
 .chat-list-header {
     display: flex;
     align-items: baseline;
@@ -39,7 +38,6 @@
     color: var(--grey-text);
 }
 
-/* ── BUSCADOR ── */
 .chat-search {
     display: flex;
     align-items: center;
@@ -65,14 +63,12 @@
     color: var(--grey-text);
 }
 
-/* ── LISTA ── */
 .conversations-list {
     display: flex;
     flex-direction: column;
     gap: 2px;
 }
 
-/* ── ITEM ── */
 .conversation-item {
     display: flex;
     align-items: center;
@@ -98,7 +94,6 @@
     color: var(--black);
 }
 
-/* ── IMAGEN PRODUCTO ── */
 .conv-product-img {
     width: 60px;
     height: 60px;
@@ -114,7 +109,6 @@
     object-fit: cover;
 }
 
-/* ── INFO ── */
 .conv-info {
     flex: 1;
     min-width: 0;
@@ -163,7 +157,6 @@
     color: var(--black);
 }
 
-/* ── BADGE ── */
 .unread-badge {
     background: var(--pink);
     color: var(--white);
@@ -178,7 +171,6 @@
     flex-shrink: 0;
 }
 
-/* ── EMPTY STATE ── */
 .empty-state {
     display: flex;
     flex-direction: column;
@@ -193,7 +185,6 @@
     margin: 0;
 }
 
-/* ── RESPONSIVE ── */
 @media (max-width: 768px) {
     .chat-list-page {
         padding: 24px 16px;

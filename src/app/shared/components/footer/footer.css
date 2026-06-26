@@ -24,7 +24,6 @@
     padding-bottom: 40px;
 }
 
-/* ── MARCA ── */
 .footer-brand {
     display: flex;
     flex-direction: column;
@@ -56,7 +55,6 @@
     color: var(--blue);
 }
 
-/* ── LINKS ── */
 .footer-links {
     display: flex;
     gap: 60px;
@@ -88,7 +86,6 @@
     color: var(--blue);
 }
 
-/* ── COPYRIGHT ── */
 .footer-bottom {
     border-top: 1px solid var(--grey-mid);
     padding: 20px 0;
@@ -101,7 +98,6 @@
     margin: 0;
 }
 
-/* ── RESPONSIVE ── */
 @media (max-width: 768px) {
     .footer {
         padding: 32px 20px 0;

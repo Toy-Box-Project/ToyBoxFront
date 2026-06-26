@@ -1,6 +1,5 @@
 <div class="chat-detail-page">
 
-    <!-- PANEL IZQUIERDO: lista conversaciones -->
     <div class="sidebar">
         <div class="sidebar-header">
             <h2 class="sidebar-title">Buzón</h2>
@@ -26,11 +25,8 @@
         </div>
     </div>
 
-    <!-- PANEL DERECHO: mensajes -->
     <div class="chat-main">
         @if (selectedConversation) {
-
-        <!-- CABECERA -->
         <div class="chat-header">
             <div class="chat-header-product">
                 <img [src]="selectedConversation.productImage || 'assets/images/placeholder.png'"
@@ -42,7 +38,6 @@
             </div>
         </div>
 
-        <!-- MENSAJES -->
         <div class="messages-container" #messagesContainer>
             @for (msg of messages; track msg.id) {
             <div class="message-wrapper" [class.sent]="msg.isSent" [class.received]="!msg.isSent">
@@ -54,7 +49,6 @@
             }
         </div>
 
-        <!-- INPUT -->
         <div class="chat-input-bar">
             <input type="text" class="chat-input" placeholder="Escribe un mensaje..." [value]="newMessage"
                 (input)="newMessage = $any($event.target).value" (keyup.enter)="sendMessage()" />
@@ -67,7 +61,6 @@
         </div>
 
         } @else {
-        <!-- SIN CONVERSACIÓN SELECCIONADA -->
         <div class="no-conversation">
             <svg width="56" height="56" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
                 <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />

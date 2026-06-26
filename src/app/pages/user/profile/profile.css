@@ -102,7 +102,6 @@
   color: var(--primary-toybox);
 }
 
-/* Logout */
 .btn-logout {
   border-radius: .75rem;
   border: 2px solid var(--error);
@@ -139,7 +138,6 @@
   font-size: .9rem;
 }
 
-/* Modal */
 .image-modal-backdrop {
   position: fixed;
   inset: 0;
