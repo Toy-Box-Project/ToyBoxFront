@@ -1,0 +1,29 @@
+
+<div class="location-card" (click)="openModal()">
+  <div
+    class="location-map"
+    [style.backgroundImage]="'url(' + (mapUrl || '/assets/images/map-placeholder.jpg') + ')'"
+  ></div>
+
+  <div class="location-overlay"></div>
+
+  <div class="location-label">
+    {{ location || 'Ubicación desconocida' }}
+  </div>
+</div>
+
+
+@if (showModal) {
+  <div class="map-modal-overlay" (click)="closeModal()">
+    <div class="map-modal" (click)="$event.stopPropagation()">
+
+      <button class="close-btn" type="button" (click)="closeModal()">✕</button>
+
+      <img
+        [src]="mapUrl || '/assets/images/map-placeholder.jpg'"
+        class="map-modal-img"
+        alt="Mapa ampliado"
+      />
+    </div>
+  </div>
+}
