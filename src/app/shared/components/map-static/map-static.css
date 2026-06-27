@@ -1,6 +1,4 @@
 
-
-/* location */
 .location-card {
   position: relative;
   height: 220px;
@@ -35,8 +33,6 @@
   color: var(--primary-toybox);
 }
 
-
-/* Modal */
 .map-modal-overlay {
   position: fixed;
   top: 0;

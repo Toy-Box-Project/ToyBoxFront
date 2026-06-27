@@ -47,7 +47,7 @@ export class MapStaticComponent implements OnChanges {
 
   async getCoordinates(location: string): Promise<{ lat: number, lon: number } | null> {
     try {
-      const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(location + ', España')}`;
+      const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(location + ', España ')}`;
 
       const res = await fetch(url, {
         headers: {
