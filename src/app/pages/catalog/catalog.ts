@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ProductCardData, ProductFilters } from '../../shared/interfaces/product.interface';
+import { ProductCardData, ProductFilters } from '../../shared/interfaces/items.interface';
 import { Category } from '../../shared/interfaces/category.interface';
 import { ProductCardComponent } from '../../shared/components/product-card/product-card';
 import { SearchBarComponent } from '../../shared/components/search-bar/search-bar';

@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Category } from '../../interfaces/category.interface';
-import { ProductFilters } from '../../interfaces/product.interface';
+import { ProductFilters } from '../../interfaces/items.interface';
 
 @Component({
   selector: 'app-filter-sidebar',

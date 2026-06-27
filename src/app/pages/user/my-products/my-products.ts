@@ -6,7 +6,7 @@ import { NavbarComponent } from '../../../shared/components/navbar/navbar';
 import { FooterComponent } from '../../../shared/components/footer/footer';
 import { PaginationComponent } from '../../../shared/components/pagination/pagination';
 
-import { MyProduct } from '../../../shared/interfaces/product.interface';
+import { MyProduct } from '../../../shared/interfaces/items.interface';
 
 @Component({
   selector: 'app-my-products',
