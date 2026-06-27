@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Category } from '../../../shared/interfaces/category.interface';
-import { ProductCardData } from '../../../shared/interfaces/items.interface';
+import { ProductCardData } from '../../../shared/interfaces/item.interface';
 
 @Component({
   selector: 'app-edit-product',

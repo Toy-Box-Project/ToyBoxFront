@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ProductCardData } from '../../shared/interfaces/items.interface';
+import { ProductCardData } from '../../shared/interfaces/item.interface';
 import { ImageGalleryComponent } from '../../shared/components/image-gallery/image-gallery';
 
 @Component({

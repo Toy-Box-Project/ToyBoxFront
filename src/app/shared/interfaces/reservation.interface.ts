@@ -1,9 +1,6 @@
 import { DateString } from './user.interface';
 
-export type ReservationStatus =
-  | 'pending'
-  | 'completed'
-  | 'cancelled';
+export type ReservationStatus = 'pending' | 'completed' | 'cancelled';
 
 export interface Reservation {
   id_reservation: number;

@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import {
   CreateProductRequest, PaginatedProducts, Product, ProductFilters
-} from '../../shared/interfaces/items.interface';
+} from '../../shared/interfaces/item.interface';
 
 @Injectable({ providedIn: 'root' })
 export class ProductsService {

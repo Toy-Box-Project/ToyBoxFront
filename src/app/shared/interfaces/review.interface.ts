@@ -1,4 +1,4 @@
-import { DateString } from './user.interface';
+import { DateString, UserSummary } from './user.interface';
 
 export interface Review {
   id_reviews: number;
@@ -8,6 +8,10 @@ export interface Review {
   fk_items_id: number;
   fk_reviewer_id: number;
   fk_reviewed_id: number;
+
+  // optionals
+  reviewer?: UserSummary;
+  reviewed?: UserSummary;
 }
 
 export interface CreateReviewRequest {

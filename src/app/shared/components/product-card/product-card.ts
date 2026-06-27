@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { ProductCardData } from '../../interfaces/items.interface';
+import { ProductCardData } from '../../interfaces/item.interface';
 
 @Component({
   selector: 'app-product-card',
