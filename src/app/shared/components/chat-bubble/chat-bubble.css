@@ -30,6 +30,10 @@
   transition: background-color .2s ease;
 }
 
+.tb-bubble__avatar:hover {
+  background-color: var(--primary-toybox);
+}
+
 .tb-bubble__avatar-img {
   width: 100%;
   height: 100%;
@@ -41,16 +45,15 @@
   font-size: .85rem;
   font-weight: 700;
   color: var(--color-white);
+  user-select: none;
 }
 
-/* CONTENT */
 .tb-bubble__content {
   display: flex;
   flex-direction: column;
   gap: .2rem;
 }
 
-/* SENDER */
 .tb-bubble__sender {
   font-family: var(--font-title);
   font-size: .75rem;
@@ -60,7 +63,6 @@
   transition: color .2s ease;
 }
 
-/* TEXT BUBBLE */
 .tb-bubble__text {
   font-family: var(--font-text);
   font-size: .92rem;
@@ -100,9 +102,9 @@
   font-family: var(--font-title);
   font-size: .72rem;
   color: var(--on-surface-variant);
+  white-space: nowrap;
 }
 
-/* STATUS ICON */
 .tb-bubble__status {
   font-family: 'Material Symbols Outlined';
   font-weight: normal;
@@ -118,13 +120,12 @@
   color: var(--secondary-toybox);
 }
 
-/* ✅ RESPONSIVE BREAKPOINTS (Alineado con Bootstrap) */
 
-/* Extra small devices (portrait phones, less than 576px) */
 @media (max-width: 575.98px) {
   .tb-bubble {
-    max-width: 90%;  /* Más espacio en móvil */
+    max-width: 90%;
     gap: .3rem;
+    margin-bottom: .5rem;
   }
 
   .tb-bubble__avatar {
@@ -133,18 +134,22 @@
     min-width: 28px;
   }
 
+  .tb-bubble__avatar-initial {
+    font-size: .75rem;
+  }
+
   .tb-bubble__text {
     font-size: .85rem;
     padding: .5rem .7rem;
   }
 
   .tb-bubble__sender {
-    font-size: .7rem;
+    font-size: .65rem;
     padding: 0 .4rem;
   }
 
   .tb-bubble__time {
-    font-size: .65rem;
+    font-size: .6rem;
   }
 
   .tb-bubble__status {
@@ -152,10 +157,9 @@
   }
 }
 
-/* Small devices (landscape phones, 576px and up) */
 @media (min-width: 576px) and (max-width: 767.98px) {
   .tb-bubble {
-    max-width: 80%;
+    max-width: 85%;
   }
 
   .tb-bubble__avatar {
@@ -170,7 +174,7 @@
   }
 
   .tb-bubble__time {
-    font-size: .68rem;
+    font-size: .65rem;
   }
 
   .tb-bubble__status {
@@ -178,7 +182,6 @@
   }
 }
 
-/* Medium devices (tablets, 768px and up) */
 @media (min-width: 768px) and (max-width: 991.98px) {
   .tb-bubble {
     max-width: 75%;
@@ -188,19 +191,21 @@
     width: 30px;
     height: 30px;
   }
+
+  .tb-bubble__text {
+    font-size: .9rem;
+  }
 }
 
-/* Large devices (desktops, 992px and up) */
-@media (min-width: 992px) {
+@media (min-width: 992px) and (max-width: 1199.98px)  {
   .tb-bubble {
     max-width: 72%;
   }
 }
 
-/* Extra large devices (large desktops, 1200px and up) */
-@media (min-width: 1200px) {
+@media (min-width: 1200px) and (max-width: 1399.98px) {
   .tb-bubble {
-    max-width: 68%;
+    max-width: 70%;
   }
 
   .tb-bubble__text {
@@ -208,9 +213,14 @@
   }
 }
 
-/* XXL devices (1400px and up) */
 @media (min-width: 1400px) {
   .tb-bubble {
     max-width: 65%;
   }
+}
+
+.tb-bubble:focus-within {
+  outline: 2px solid var(--outline-variant);
+  outline-offset: 2px;
+  border-radius: var(--radius-md);
 }

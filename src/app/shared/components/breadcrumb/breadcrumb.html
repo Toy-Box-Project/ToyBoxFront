@@ -1,7 +1,3 @@
-<!-- BREADCRUMB
-     Uso: <app-breadcrumb [items]="[{ label:'Inicio', route:'/' }, { label:'Productos', route:'/products' }, { label:'LEGO City' }]">
-     El último item (sin route) es la página actual.
--->
 @if (items.length > 0) {
   <nav class="tb-breadcrumb" aria-label="Ruta de navegación">
     <ol class="tb-breadcrumb__list">
@@ -13,16 +9,35 @@
             <a
               [routerLink]="item.route"
               class="tb-breadcrumb__link"
-            >{{ item.label }}</a>
-          } @else {
+            >
+              @if (item.icon) {
+                <span class="material-symbols-outlined tb-breadcrumb__link-icon">
+                  {{ item.icon }}
+                </span>
+              }
+              {{ item.label }}
+            </a>
+          }
+
+          @else {
             <span
               class="tb-breadcrumb__current"
               [attr.aria-current]="last ? 'page' : null"
-            >{{ item.label }}</span>
+            >
+              @if (item.icon) {
+                <span class="material-symbols-outlined tb-breadcrumb__current-icon">
+                  {{ item.icon }}
+                </span>
+              }
+              {{ item.label }}
+            </span>
           }
 
           @if (!last) {
-            <span class="tb-breadcrumb__separator material-symbols-outlined" aria-hidden="true">
+            <span
+              class="tb-breadcrumb__separator material-symbols-outlined"
+              aria-hidden="true"
+            >
               chevron_right
             </span>
           }
