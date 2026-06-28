@@ -5,7 +5,6 @@
   overflow-x: hidden;
 }
 
-/* Tabs */
 .tabs-wrapper {
   display: flex;
   gap: 1rem;
@@ -32,13 +31,11 @@
   color: white;
 }
 
-/* Title */
 .page-title {
   font-weight: 700;
   color: var(--primary-toybox);
 }
 
-/* Review list */
 .review-list {
   display: flex;
   flex-direction: column;
@@ -71,7 +68,6 @@
   font-weight: 600;
 }
 
-/* Rating row */
 .rating-row {
   display: flex;
   align-items: center;

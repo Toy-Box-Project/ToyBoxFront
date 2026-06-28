@@ -4,7 +4,6 @@
   gap: 4px;
 }
 
-
 .star {
   color: var(--secondary-toybox); 
   transition: color .2s ease, transform .15s ease;
@@ -14,7 +13,6 @@
 .star.clickable {
   cursor: pointer;
 }
-
 
 .star.clickable:hover {
   color: var(--primary-toybox); 

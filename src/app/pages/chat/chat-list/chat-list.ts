@@ -1,17 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-
-interface Conversation {
-  id: number;
-  otherUsername: string;
-  otherAvatar: string;
-  productTitle: string;
-  productImage: string;
-  lastMessage: string;
-  lastMessageTime: string;
-  unreadCount: number;
-}
+import { ChatItem } from '../../../shared/interfaces/chat.interface';
 
 @Component({
   selector: 'app-chat-list',
@@ -25,15 +15,15 @@ export class ChatList implements OnInit {
   searchQuery: string = '';
   selectedConversationId: number | null = null;
 
-  conversations: Conversation[] = [];
+  conversations: ChatItem[] = [];
 
-  get filteredConversations(): Conversation[] {
+  get filteredConversations(): ChatItem[] {
     if (!this.searchQuery) return this.conversations;
     const q = this.searchQuery.toLowerCase();
     return this.conversations.filter(c =>
-      c.otherUsername.toLowerCase().includes(q) ||
-      c.productTitle.toLowerCase().includes(q) ||
-      c.lastMessage.toLowerCase().includes(q)
+      c.otherUserName.toLowerCase().includes(q) ||
+      c.itemTitle.toLowerCase().includes(q) ||
+      c.lastMessage?.toLowerCase().includes(q)
     );
   }
 
@@ -44,36 +34,36 @@ export class ChatList implements OnInit {
   }
 
   loadConversations(): void {
-    // TODO: conectar con el servicio real
+    // DEMO
     this.conversations = [
       {
-        id: 1,
-        otherUsername: 'María García',
-        otherAvatar: '',
-        productTitle: 'Osito de peluche',
-        productImage: '',
+        id_conversations: 1,
+        otherUserName: 'María García',
+        otherUserImage: '',
+        itemTitle: 'Osito de peluche',
+        itemImage: '',
         lastMessage: '¿Sigue disponible?',
-        lastMessageTime: '10:30',
+        lastMessageAt: '10:30',
         unreadCount: 2
       },
       {
-        id: 2,
-        otherUsername: 'Carlos López',
-        otherAvatar: '',
-        productTitle: 'Coche teledirigido',
-        productImage: '',
+        id_conversations: 2,
+        otherUserName: 'Carlos López',
+        otherUserImage: '',
+        itemTitle: 'Coche teledirigido',
+        itemImage: '',
         lastMessage: 'Perfecto, nos vemos el lunes',
-        lastMessageTime: 'Ayer',
+        lastMessageAt: 'Ayer',
         unreadCount: 0
       },
       {
-        id: 3,
-        otherUsername: 'Ana Martínez',
-        otherAvatar: '',
-        productTitle: 'Puzzle 500 piezas',
-        productImage: '',
+        id_conversations: 3,
+        otherUserName: 'Ana Martínez',
+        otherUserImage: '',
+        itemTitle: 'Puzzle 500 piezas',
+        itemImage: '',
         lastMessage: '¿Puedes bajar el precio?',
-        lastMessageTime: 'Lun',
+        lastMessageAt: 'Lun',
         unreadCount: 1
       }
     ];

@@ -11,14 +11,10 @@ import { RouterLink } from '@angular/router';
 export class EmptyStateComponent {
 
   @Input() icon = '🧸';
-
   @Input() title = 'Nada por aquí';
-
   @Input() message =
     'Todavía no hay contenido disponible.';
-
   @Input() buttonText = '';
-
   @Input() buttonLink = '/';
 
 }

@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Category } from '../../interfaces/category.interface';
-import { ProductFilters } from '../../interfaces/product.interface';
+import { Itemfilters } from '../../interfaces/item.interface';
 
 @Component({
   selector: 'app-filter-sidebar',
@@ -12,7 +12,7 @@ import { ProductFilters } from '../../interfaces/product.interface';
 export class FilterSidebarComponent {
   @Input() categories: Category[] = [];
 
-  @Output() filtersApplied = new EventEmitter<ProductFilters>();
+  @Output() filtersApplied = new EventEmitter<Itemfilters>();
 
   productStates: string[] = [
     'Como nuevo',
@@ -31,7 +31,7 @@ export class FilterSidebarComponent {
       category,
       maxPrice,
       location,
-      status
+      // status
     });
   }
 

@@ -5,23 +5,14 @@
   overflow-x: hidden;
 }
 
-/* ========================================
-   WRAPPER
-======================================== */
 .profile-wrapper {
   max-width: 1200px;
 }
 
-/* ========================================
-   TITLE
-======================================== */
 .profile-title {
   font-size: 2.2rem;
 }
 
-/* ========================================
-   CARD
-======================================== */
 .profile-card {
   background-color: white;
   border-radius: var(--radius-lg);
@@ -31,7 +22,6 @@
   position: relative;
 }
 
-/* Pattern overlay */
 .toy-pattern {
   position: absolute;
   inset: 0;
@@ -40,9 +30,6 @@
   background-repeat: repeat;
 }
 
-/* ========================================
-   LABELS
-======================================== */
 .small-label {
   font-size: .75rem;
   letter-spacing: .08em;
@@ -54,9 +41,6 @@
   margin-top: .25rem;
 }
 
-/* ========================================
-   AVATAR
-======================================== */
 .avatar-circle {
   width: 200px;
   height: 200px;
@@ -67,7 +51,6 @@
   cursor: pointer;
 }
 
-/* Round icon buttons */
 .btn-round {
   width: 48px;
   height: 48px;
@@ -89,9 +72,6 @@
   color: var(--error);
 }
 
-/* ========================================
-   SAVE BUTTON
-======================================== */
 .btn-save {
   background-color: var(--primary-toybox);
   color: white;
@@ -100,9 +80,6 @@
   font-weight: 600;
 }
 
-/* ========================================
-   DELETE ACCOUNT BUTTON
-======================================== */
 .btn-delete-account {
   background-color: transparent;
   border: 2px solid var(--error);
@@ -118,9 +95,6 @@
   color: white;
 }
 
-/* ========================================
-   LOCATION CARD
-======================================== */
 .location-card {
   position: relative;
   height: 220px;
@@ -155,9 +129,6 @@
   color: var(--primary-toybox);
 }
 
-/* ========================================
-   DELETE MODAL
-======================================== */
 .delete-modal-backdrop {
   position: fixed;
   inset: 0;
@@ -211,15 +182,11 @@
   cursor: pointer;
 }
 
-/* Animation */
 @keyframes fadeInScale {
   from { opacity: 0; transform: scale(.9); }
   to { opacity: 1; transform: scale(1); }
 }
 
-/* ========================================
-   RESPONSIVE
-======================================== */
 @media (max-width: 768px) {
   .profile-card {
     padding: 1.5rem;

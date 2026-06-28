@@ -1,7 +1,21 @@
 import { Component } from '@angular/core';
 import { Category } from '../../../shared/interfaces/category.interface';
-import { ProductCardData } from '../../../shared/interfaces/product.interface';
 
+// DEMO - use interface ItemFormData
+interface EditProductData {
+  id?: number;
+  title: string;
+  description?: string | null;
+  price: number;
+  location: string;
+  province: string;
+  city: string;
+  status: string;
+  category: string;
+  image: string;
+  badge: string;
+  fk_categories_id: number;
+}
 @Component({
   selector: 'app-edit-product',
   standalone: true,
@@ -28,18 +42,18 @@ export class EditProductComponent {
     'Usado'
   ];
 
-  product: ProductCardData = {
+  product: EditProductData = {
     id: 1,
     title: 'Pack de coches y figuras',
-    category: 'Figuras, muñecos y vehículos',
+    description: 'Pack de juguetes infantiles compuesto por coches, pequeñas figuras y accesorios. Está en muy buen estado y listo para que otro niño pueda seguir jugando.',
     price: 18,
     location: 'Madrid',
     province: 'Madrid',
     city: 'Madrid',
     status: 'Muy buen estado',
+    category: 'Figuras, muñecos y vehículos',
     image: '/assets/images/Iconos%20categorias/icono_munecosycoches.svg',
     badge: 'Publicado',
-    description:
-      'Pack de juguetes infantiles compuesto por coches, pequeñas figuras y accesorios. Está en muy buen estado y listo para que otro niño pueda seguir jugando.'
+    fk_categories_id: 1
   };
 }

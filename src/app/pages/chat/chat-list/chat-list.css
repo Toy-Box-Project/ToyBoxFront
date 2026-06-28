@@ -1,4 +1,15 @@
-@import url('https://fonts.googleapis.com/css2?family=Albert+Sans:wght@400;600;700&family=Schoolbell&display=swap');
+:host {
+    --blue: #6188c1;
+    --pink: #d84565;
+    --white: #ffffff;
+    --black: #000000;
+    --grey-light: #f5f5f5;
+    --grey-mid: #e0e0e0;
+    --grey-text: #666666;
+    --radius: 12px;
+    display: block;
+    font-family: 'Albert Sans', sans-serif;
+}
 
 .chat-list-page {
     max-width: 680px;
@@ -7,7 +18,6 @@
     font-family: var(--font-title);
 }
 
-/* ── HEADER ── */
 .chat-list-header {
     display: flex;
     align-items: baseline;
@@ -27,7 +37,6 @@
     color: var(--on-surface-variant);
 }
 
-/* ── BUSCADOR ── */
 .chat-search {
     display: flex;
     align-items: center;
@@ -53,14 +62,12 @@
     color: var(--on-surface-variant);
 }
 
-/* ── LISTA ── */
 .conversations-list {
     display: flex;
     flex-direction: column;
     gap: 2px;
 }
 
-/* ── ITEM ── */
 .conversation-item {
     display: flex;
     align-items: center;
@@ -86,7 +93,6 @@
     color: var(--on-surface);
 }
 
-/* ── IMAGEN PRODUCTO ── */
 .conv-product-img {
     width: 60px;
     height: 60px;
@@ -102,7 +108,6 @@
     object-fit: cover;
 }
 
-/* ── INFO ── */
 .conv-info {
     flex: 1;
     min-width: 0;
@@ -152,7 +157,6 @@
     color: var(--on-surface);
 }
 
-/* ── BADGE ── */
 .unread-badge {
     background: var(--primary-toybox);
     color: var(--color-white);
@@ -167,7 +171,6 @@
     flex-shrink: 0;
 }
 
-/* ── EMPTY STATE ── */
 .empty-state {
     display: flex;
     flex-direction: column;
@@ -183,7 +186,6 @@
     font-family: var(--font-text);
 }
 
-/* ── RESPONSIVE ── */
 @media (max-width: 768px) {
     .chat-list-page {
         padding: 24px 16px;

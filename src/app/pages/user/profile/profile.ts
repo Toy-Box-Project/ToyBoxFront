@@ -10,22 +10,14 @@ import { UserAvatarComponent } from '../../../shared/components/user-avatar/user
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [
-    CommonModule,
-    RouterModule,
-    NavbarComponent,
-    FooterComponent,
-    StarRatingComponent,
-    UserAvatarComponent
-  ],
+  imports: [ CommonModule, RouterModule, NavbarComponent, FooterComponent, StarRatingComponent,
+    UserAvatarComponent ],
   templateUrl: './profile.html',
   styleUrl: './profile.css'
 })
 export class ProfileComponent implements OnInit {
 
   user: any = null;
-
-  // ⭐ Estos valores vienen del backend
   rating: number = 0;
   reviewsCount: number = 0;
 
@@ -41,14 +33,14 @@ export class ProfileComponent implements OnInit {
 
     /*
     ============================================================
-    REAL BACKEND — Node.js + Express + MySQL (db_toybox1)
+    REAL BACKEND — Node.js + Express + MySQL (db_toybox
     ============================================================
 
     this.authService.getProfile().subscribe({
       next: (res) => {
         this.user = res.user;
-        this.rating = res.user.rating;          // ⭐ Valoración media real
-        this.reviewsCount = res.user.reviews;   // ⭐ Número real de reseñas
+        this.rating = res.user.rating;          
+        this.reviewsCount = res.user.reviews;   
       },
       error: () => {
         this.backendError = 'Error al cargar el perfil';
@@ -57,9 +49,7 @@ export class ProfileComponent implements OnInit {
 
     */
 
-    // ============================================================
-    // TEMPORARY DEMO (remove when backend is ready)
-    // ============================================================
+    // DEMO
     this.user = {
       firstName: 'Luna',
       lastName: 'García',
@@ -73,15 +63,14 @@ export class ProfileComponent implements OnInit {
       profile_picture: '/assets/images/default-avatar.png'
     };
 
-    this.rating = 4.5;       // ⭐ Mock temporal
-    this.reviewsCount = 82;  // ⭐ Mock temporal
+    // DEMO
+    this.rating = 4.5;       
+    this.reviewsCount = 82;  
   }
 
-  // Modal
   openImageModal() { this.showImageModal = true; }
   closeImageModal() { this.showImageModal = false; }
 
-  // Mapa
   openMap() {
     /*
     TODO: Replace with real map navigation
@@ -90,7 +79,6 @@ export class ProfileComponent implements OnInit {
     */
   }
 
-  // Logout
   logout() {
     /*
     REAL BACKEND LOGOUT

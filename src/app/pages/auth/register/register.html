@@ -1,7 +1,4 @@
-
-
 <div class="pattern-bg"></div>
-
 <div class="relative-z-10 flex-grow-1 d-flex align-items-center justify-content-center px-3 py-5">
 
   <div class="register-card">
@@ -28,7 +25,6 @@
 
     <form [formGroup]="form" (ngSubmit)="onSubmit()">
 
-      <!-- First name + Last name -->
       <div class="row">
 
         <div class="col-md-6 mb-3">
@@ -49,7 +45,6 @@
 
       </div>
 
-      <!-- Username -->
       <div class="mb-3">
         <label>Nombre de Usuario</label>
         <input class="form-control" formControlName="username" />
@@ -61,7 +56,6 @@
         }
       </div>
 
-      <!-- Email -->
       <div class="mb-3">
         <label>Email</label>
         <input class="form-control" type="email" formControlName="email" />
@@ -73,7 +67,6 @@
         }
       </div>
 
-        <!-- Password -->
         <div class="mb-3">
         <label>Contraseña</label>
 
@@ -116,7 +109,6 @@
         </div>
 
 
-      <!-- Phone (optional) -->
       <div class="mb-3">
         <label>Teléfono (opcional)</label>
         <input class="form-control" formControlName="phone" />
@@ -125,7 +117,6 @@
         }
       </div>
 
-      <!-- Birthdate -->
       <div class="mb-3">
         <label>Fecha de nacimiento</label>
         <input class="form-control" type="date" formControlName="birthdate" />
@@ -134,7 +125,6 @@
         }
       </div>
 
-      <!-- Province -->
       <div class="mb-3">
         <label>Provincia</label>
         <input class="form-control" formControlName="province" />
@@ -143,7 +133,6 @@
         }
       </div>
 
-      <!-- City -->
       <div class="mb-3">
         <label>Ciudad</label>
         <input class="form-control" formControlName="city" />
@@ -152,7 +141,6 @@
         }
       </div>
 
-      <!-- Postal Code -->
       <div class="mb-4">
         <label>Código Postal</label>
         <input class="form-control" formControlName="postalCode" />

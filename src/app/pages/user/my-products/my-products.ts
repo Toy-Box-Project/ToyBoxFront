@@ -6,18 +6,12 @@ import { NavbarComponent } from '../../../shared/components/navbar/navbar';
 import { FooterComponent } from '../../../shared/components/footer/footer';
 import { PaginationComponent } from '../../../shared/components/pagination/pagination';
 
-import { MyProduct } from '../../../shared/interfaces/product.interface';
+import { MyProduct } from '../../../shared/interfaces/item.interface';
 
 @Component({
   selector: 'app-my-products',
   standalone: true,
-  imports: [
-    CommonModule,
-    RouterModule,
-    NavbarComponent,
-    FooterComponent,
-    PaginationComponent
-  ],
+  imports: [ CommonModule, RouterModule, NavbarComponent, FooterComponent, PaginationComponent ],
   templateUrl: './my-products.html',
   styleUrl: './my-products.css',
 })
@@ -33,7 +27,7 @@ export class MyProductsComponent implements OnInit {
 
     /*
     ============================================================
-    BACKEND REAL (Node + Express + MySQL - db_toybox1)
+    BACKEND REAL (Node + Express + MySQL - db_toybox
     ============================================================
 
     this.productService.getMyProducts(userId).subscribe({
@@ -42,7 +36,7 @@ export class MyProductsComponent implements OnInit {
     });
     */
 
-    // DEMO DATA — luego lo reemplazas con datos reales de la BBDD
+    // DEMO 
     this.products = [
       { id_products: 1, id_user: 10, product_title: 'Coche teledirigido', product_description: '', product_price: 25, product_category: 'juguetes', product_condition: 'nuevo', product_status: 'en_venta', product_created_at: '2026-05-12', product_updated_at: '2026-05-14', product_main_image: '/assets/images/demo1.jpg' },
       { id_products: 2, id_user: 10, product_title: 'Muñeca articulada', product_description: '', product_price: 12, product_category: 'juguetes', product_condition: 'usado', product_status: 'en_venta', product_created_at: '2026-06-01', product_updated_at: '2026-06-02', product_main_image: '/assets/images/demo2.jpg' },
@@ -62,13 +56,11 @@ export class MyProductsComponent implements OnInit {
   }
 
   markAsPurchased(id: number) {
-    this.router.navigate(['/chat-list'], {
-      queryParams: { productId: id }
-    });
+    this.router.navigate(['/chat']); 
   }
 
   editProduct(id: number) {
-    this.router.navigate(['/pages/product/edit-product', id]);
+    this.router.navigate(['/product/edit', id]);
   }
 
   confirmDelete(product: MyProduct) {

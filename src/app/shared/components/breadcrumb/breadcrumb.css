@@ -1,0 +1,161 @@
+.tb-breadcrumb {
+  padding: .5rem 0;
+}
+
+.tb-breadcrumb__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0;
+}
+
+.tb-breadcrumb__item {
+  display: flex;
+  align-items: center;
+  gap: 0;
+}
+
+.tb-breadcrumb__link {
+  font-family: var(--font-title);
+  font-size: .85rem;
+  font-weight: 600;
+  color: var(--secondary-toybox);
+  text-decoration: none;
+  transition: color .2s ease;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: .25rem;
+}
+
+.tb-breadcrumb__link:hover { 
+  color: var(--primary-toybox); 
+  text-decoration: underline; }
+
+.tb-breadcrumb__link:focus {
+  outline: 2px solid var(--primary-toybox);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+
+.tb-breadcrumb__link-icon {
+  font-size: 18px;
+}
+
+
+.tb-breadcrumb__current {
+  font-family: var(--font-title);
+  font-size: .85rem;
+  font-weight: 600;
+  color: var(--on-surface-variant);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 200px;
+  display: flex;
+  align-items: center;
+  gap: .25rem;
+}
+
+.tb-breadcrumb__current-icon {
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.tb-breadcrumb__separator {
+  font-family: 'Material Symbols Outlined';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;
+  display: inline-block;
+  line-height: 1;
+  color: var(--secondary-toybox);
+  margin: 0 .2rem;
+  flex-shrink: 0;
+  transition: color .2s ease;
+}
+
+.tb-breadcrumb__separator:hover {
+  color: var(--primary-toybox);
+}
+
+@media (max-width: 575.98px) {
+  .tb-breadcrumb {
+    padding: .3rem 0;
+  }
+
+  .tb-breadcrumb__link {
+    font-size: .75rem;
+  }
+
+  .tb-breadcrumb__link-icon {
+    font-size: 16px;
+  }
+
+  .tb-breadcrumb__current {
+    font-size: .75rem;
+    max-width: 120px;
+  }
+
+  .tb-breadcrumb__current-icon {
+    font-size: 16px;
+  }
+
+  .tb-breadcrumb__separator {
+    font-size: 18px;
+    margin: 0 .1rem;
+  }
+}
+
+@media (min-width: 576px) and (max-width: 767.98px) {
+  .tb-breadcrumb__link {
+    font-size: .8rem;
+  }
+
+  .tb-breadcrumb__current {
+    font-size: .8rem;
+    max-width: 150px;
+  }
+
+  .tb-breadcrumb__separator {
+    font-size: 20px;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 991.98px) {
+  .tb-breadcrumb__current {
+    max-width: 180px;
+  }
+
+  .tb-breadcrumb__separator {
+    font-size: 22px;
+  }
+}
+
+@media (min-width: 992px) and (max-width: 1199.98px) {
+  .tb-breadcrumb__current {
+    max-width: 220px;
+  }
+}
+
+@media (min-width: 1200px) and (max-width: 1399.98px) {
+  .tb-breadcrumb__separator {
+    font-size: 24px;
+  }
+}
+
+@media (min-width: 1400px) {
+  .tb-breadcrumb__current {
+    max-width: 300px;
+  }
+}
+
+.tb-breadcrumb__item:focus-within {
+  outline: 1px solid var(--outline-variant);
+  border-radius: var(--radius-sm);
+  padding: 0 .25rem;
+}

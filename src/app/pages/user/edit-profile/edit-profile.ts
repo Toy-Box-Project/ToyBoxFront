@@ -17,15 +17,7 @@ import { AuthService } from '../../../core/services/auth.service';
 @Component({
   selector: 'app-edit-profile',
   standalone: true,
-  imports: [
-    CommonModule,
-    RouterModule,
-    FormsModule,
-    ReactiveFormsModule,
-    NavbarComponent,
-    FooterComponent,
-    UserAvatarComponent
-  ],
+  imports: [ CommonModule, RouterModule, FormsModule, ReactiveFormsModule, NavbarComponent, FooterComponent, UserAvatarComponent ],
   templateUrl: './edit-profile.html',
   styleUrl: './edit-profile.css',
 })
@@ -53,7 +45,7 @@ export class EditProfileComponent implements OnInit {
   ngOnInit() {
     /*
     ============================================================
-    REAL BACKEND — Cargar datos del usuario desde db_toybox1
+    REAL BACKEND — Cargar datos del usuario desde db_toybox
     ============================================================
 
     this.authService.getProfile().subscribe({
@@ -87,9 +79,9 @@ export class EditProfileComponent implements OnInit {
     const date = u.user_birthday ? new Date(u.user_birthday) : null;
 
     this.form = this.fb.group({
-      username: [{ value: u.username, disabled: true }],   // nombre de usuario NO editable
-      firstName: [u.firstName, Validators.required],       // nombre editable
-      lastName: [u.lastName, Validators.required],         // apellido editable
+      username: [{ value: u.username, disabled: true }],   
+      firstName: [u.firstName, Validators.required],      
+      lastName: [u.lastName, Validators.required],         
       email: [u.email, [Validators.required, Validators.pattern(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)]],
       password: [''],
       phone: [u.phone, [Validators.pattern(/^\d{9}$/)]],
@@ -145,7 +137,7 @@ export class EditProfileComponent implements OnInit {
   }
 
   openMap() {
-    // cuando tengas mapa real, puedes navegar con parámetros
+    //pending
     this.router.navigate(['/user/map'], {
       queryParams: { zip: this.form.value.user_zipcode }
     });
@@ -165,7 +157,7 @@ export class EditProfileComponent implements OnInit {
       return;
     }
 
-    const f = this.form.getRawValue(); // incluye username aunque esté disabled
+    const f = this.form.getRawValue();
 
     const birthday =
       f.day && f.month && f.year

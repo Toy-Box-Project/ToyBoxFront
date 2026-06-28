@@ -5,7 +5,6 @@
   overflow-x: hidden;
 }
 
-/* Header */
 .favorites-title {
   font-size: 2rem;
   font-weight: 700;
@@ -24,19 +23,16 @@
   color: var(--on-surface-variant);
 }
 
-/* Grid */
 .favorites-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
   gap: 1.5rem;
 }
 
-/* Empty state */
 .favorites-empty {
   font-size: .95rem;
 }
 
-/* Modal */
 .confirm-modal-backdrop {
   position: fixed;
   inset: 0;
@@ -90,13 +86,11 @@
   cursor: pointer;
 }
 
-/* Animation */
 @keyframes fadeInScale {
   from { opacity: 0; transform: scale(.9); }
   to { opacity: 1; transform: scale(1); }
 }
 
-/* Responsive */
 @media (max-width: 768px) {
   .favorites-title {
     font-size: 1.6rem;

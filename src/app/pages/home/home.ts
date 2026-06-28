@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 
+// DEMO - use interface ItemCard o Item
 interface Product {
   id: number;
   title: string;
@@ -11,12 +12,12 @@ interface Product {
   photo_url: string;
   isFavorite?: boolean;
 }
-
+// INTERFACE LOCAL
 interface Category {
   id: number;
   name: string;
 }
-
+// INTERFACE LOCAL
 interface Filters {
   category: string;
   location: string;
@@ -72,7 +73,7 @@ export class Home implements OnInit {
   }
 
   loadLatestProducts(): void {
-    // TODO: conectar con el servicio real
+    // DEMO
     this.latestProducts = [
       { id: 1, title: 'Osito de peluche', price: 10.99, description: 'En perfecto estado', photo_url: '' },
       { id: 2, title: 'Coche teledirigido', price: 25.00, description: 'Como nuevo', photo_url: '' },
@@ -82,7 +83,7 @@ export class Home implements OnInit {
   }
 
   loadRelatedProducts(): void {
-    // TODO: conectar con el servicio real
+    // DEMO
     this.relatedProducts = Array(12).fill(null).map((_, i) => ({
       id: i + 10,
       title: 'Juguete ' + (i + 1),

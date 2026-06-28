@@ -1,0 +1,11 @@
+{
+  "$schema": "https://railway.com/railway.schema.json",
+  "build": {},
+  "deploy": {
+    "startCommand": "node dist/ToyBoxFront/server/server.mjs",
+    "variables": {
+      "RAILPACK_NO_SPA": "1"
+    }
+  }
+}
+
