@@ -16,6 +16,7 @@ interface Product {
 interface Category {
   id: number;
   name: string;
+  icon: string;
 }
 // INTERFACE LOCAL
 interface Filters {
@@ -53,12 +54,14 @@ export class Home implements OnInit {
   };
 
   categories: Category[] = [
-    { id: 1, name: 'Muñecas' },
-    { id: 2, name: 'Coches' },
-    { id: 3, name: 'Puzzles' },
-    { id: 4, name: 'Juegos de mesa' },
-    { id: 5, name: 'Electrónica' },
-    { id: 6, name: 'Exterior' }
+    { id: 1, name: 'Videojuegos y consolas', icon: 'assets/images/Iconos categorias/icono_videojuegos.svg' },
+    { id: 2, name: 'Construcciones y bloques', icon: 'assets/images/Iconos categorias/icono_construccion.svg' },
+    { id: 3, name: 'Muñecos y figuras', icon: 'assets/images/Iconos categorias/icono_munecosycoches.svg' },
+    { id: 4, name: 'Puzzles y rompecabezas', icon: 'assets/images/Iconos categorias/icono_juegosmesa.svg' },
+    { id: 5, name: 'Juegos de mesa y cartas', icon: 'assets/images/Iconos categorias/icono_imaginacion.svg' },
+    { id: 6, name: 'Educativos y preescolar', icon: 'assets/images/Iconos categorias/icono_educativo.svg' },
+    { id: 7, name: 'Vehículos y circuitos', icon: 'assets/images/Iconos categorias/icono_airelibre.svg' },
+    { id: 8, name: 'Arte y manualidades', icon: 'assets/images/Iconos categorias/icono_bebes.svg' }
   ];
 
   featuredProduct: Product | null = null;
