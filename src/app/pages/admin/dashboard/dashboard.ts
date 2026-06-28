@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 
+// interface LOCAL
 interface DashboardMetric {
   label: string;
   value: number;
@@ -8,6 +9,7 @@ interface DashboardMetric {
   tone: 'blue' | 'green' | 'amber' | 'red';
 }
 
+// interface LOCAL
 interface AdminTask {
   title: string;
   owner: string;

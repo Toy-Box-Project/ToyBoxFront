@@ -36,11 +36,10 @@
     <div class="tb-bubble__meta">
       <time
         class="tb-bubble__time"
-        [attr.datetime]="message.sent_date.toISOString()"
+        [attr.datetime]="message.sent_date"
       >
         {{ message.sent_date | date:'HH:mm' }}
       </time>
-
       @if (isOwn) {
         <span
           class="material-symbols-outlined tb-bubble__status"

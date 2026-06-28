@@ -23,20 +23,20 @@
         </div>
         }
 
-        @for (conv of filteredConversations; track conv.id) {
-        <div class="conversation-item" [class.active]="selectedConversationId === conv.id"
-            [class.unread]="conv.unreadCount > 0" (click)="openConversation(conv.id)">
+        @for (conv of filteredConversations; track conv.id_conversations) {
+        <div class="conversation-item" [class.active]="selectedConversationId === conv.id_conversations"
+            [class.unread]="conv.unreadCount > 0" (click)="openConversation(conv.id_conversations)">
 
             <div class="conv-product-img">
-                <img [src]="conv.productImage || 'assets/images/placeholder.png'" [alt]="conv.productTitle" />
+                <img [src]="conv.itemImage || 'assets/images/placeholder.png'" [alt]="conv.itemTitle" />
             </div>
 
             <div class="conv-info">
                 <div class="conv-top">
-                    <span class="conv-username">{{ conv.otherUsername }}</span>
-                    <span class="conv-time">{{ conv.lastMessageTime }}</span>
+                    <span class="conv-username">{{ conv.otherUserName }}</span>
+                    <span class="conv-time">{{ conv.lastMessageAt }}</span>
                 </div>
-                <p class="conv-product-title">{{ conv.productTitle }}</p>
+                <p class="conv-product-title">{{ conv.itemTitle }}</p>
                 <p class="conv-last-message" [class.bold]="conv.unreadCount > 0">
                     {{ conv.lastMessage }}
                 </p>

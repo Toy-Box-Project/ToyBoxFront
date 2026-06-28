@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { ModalConfirmComponent } from '../../../shared/components/modal-confirm/modal-confirm';
 import { ToastComponent, ToastType } from '../../../shared/components/toast/toast';
 
+// DEMO -> use interface Category
 interface CategoryRow {
   id: number;
   name: string;

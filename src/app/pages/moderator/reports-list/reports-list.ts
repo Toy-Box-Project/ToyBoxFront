@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 
+// DEMO - use interface ReportItem
 interface ReportRow {
   id: number;
   itemTitle: string;

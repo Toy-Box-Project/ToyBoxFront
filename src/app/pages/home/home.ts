@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 
+// DEMO - use interface ItemCard o Item
 interface Product {
   id: number;
   title: string;
@@ -11,12 +12,12 @@ interface Product {
   photo_url: string;
   isFavorite?: boolean;
 }
-
+// INTERFACE LOCAL
 interface Category {
   id: number;
   name: string;
 }
-
+// INTERFACE LOCAL
 interface Filters {
   category: string;
   location: string;

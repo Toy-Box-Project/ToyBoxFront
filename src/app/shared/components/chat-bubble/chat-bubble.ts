@@ -2,15 +2,6 @@ import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import { ChatMessageWithSender } from '../../interfaces/message.interface';
 
-export interface ChatMessage {
-  id: number;
-  text: string;
-  senderId: number;
-  senderAvatar: string | null;
-  senderName: string;
-  sentAt: Date;
-  read: boolean;
-}
 @Component({
   selector: 'app-chat-bubble',
   standalone: true,

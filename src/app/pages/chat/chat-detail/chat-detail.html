@@ -6,15 +6,15 @@
         </div>
 
         <div class="sidebar-list">
-            @for (conv of conversations; track conv.id) {
-            <div class="sidebar-item" [class.active]="selectedConversationId === conv.id"
-                (click)="selectConversation(conv.id)">
+            @for (conv of conversations; track conv.id_conversations) {
+            <div class="sidebar-item" [class.active]="selectedConversationId === conv.id_conversations"
+                (click)="selectConversation(conv.id_conversations)">
                 <div class="sidebar-img">
-                    <img [src]="conv.productImage || 'assets/images/placeholder.png'" [alt]="conv.productTitle" />
+                    <img [src]="conv.itemImage || 'assets/images/placeholder.png'" [alt]="conv.itemTitle" />
                 </div>
                 <div class="sidebar-info">
-                    <span class="sidebar-username">{{ conv.otherUsername }}</span>
-                    <span class="sidebar-product">{{ conv.productTitle }}</span>
+                    <span class="sidebar-username">{{ conv.otherUserName }}</span>
+                    <span class="sidebar-product">{{ conv.itemTitle }}</span>
                     <span class="sidebar-preview">{{ conv.lastMessage }}</span>
                 </div>
                 @if (conv.unreadCount > 0) {
@@ -29,21 +29,21 @@
         @if (selectedConversation) {
         <div class="chat-header">
             <div class="chat-header-product">
-                <img [src]="selectedConversation.productImage || 'assets/images/placeholder.png'"
-                    [alt]="selectedConversation.productTitle" class="header-product-img" />
+                <img [src]="selectedConversation.itemImage || 'assets/images/placeholder.png'"
+                    [alt]="selectedConversation.itemTitle" class="header-product-img" />
                 <div>
-                    <p class="header-product-title">{{ selectedConversation.productTitle }}</p>
-                    <p class="header-username">{{ selectedConversation.otherUsername }}</p>
+                    <p class="header-product-title">{{ selectedConversation.itemTitle }}</p>
+                    <p class="header-username">{{ selectedConversation.otherUserName }}</p>
                 </div>
             </div>
         </div>
 
         <div class="messages-container" #messagesContainer>
-            @for (msg of messages; track msg.id) {
-            <div class="message-wrapper" [class.sent]="msg.isSent" [class.received]="!msg.isSent">
-                <div class="message-bubble" [class.sent]="msg.isSent" [class.received]="!msg.isSent">
+            @for (msg of messages; track msg.id_messages) {
+            <div class="message-wrapper" [class.sent]="msg.fk_users_id_sent" [class.received]="!msg.fk_users_id_sent">
+                <div class="message-bubble" [class.sent]="msg.fk_users_id_sent" [class.received]="!msg.fk_users_id_sent">
                     <p class="message-text">{{ msg.content }}</p>
-                    <span class="message-time">{{ msg.time }}</span>
+                    <span class="message-time">{{ msg.sent_date }}</span>
                 </div>
             </div>
             }

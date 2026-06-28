@@ -1,6 +1,16 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { ProductCardData } from '../../interfaces/item.interface';
 
+// DEMO - use interface ItemCard
+interface DemoProduct {
+  id: number;
+  title: string;
+  category: string;
+  price: number;
+  location: string;
+  status: string;
+  image: string;
+  badge: string;
+}
 @Component({
   selector: 'app-product-card',
   standalone: true,
@@ -11,7 +21,8 @@ import { ProductCardData } from '../../interfaces/item.interface';
 export class ProductCardComponent {
   @Output() toggleFavorite = new EventEmitter<number>();
 
-  @Input() product: ProductCardData = {
+  //demo
+  @Input() product: DemoProduct = {
     id: 0,
     title: 'Juguete Toybox',
     category: 'Categoría',

@@ -31,6 +31,7 @@ export interface ItemCard {
   title: string;
   price: number;
   location: string;
+  category: Category; 
   conservation_status: ConservationStatus;
   item_status: ItemStatus;
   publication_date: DateString;
