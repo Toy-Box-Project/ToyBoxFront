@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
+// INTERFACE LOCAL
 export interface BreadcrumbItem {
   label: string;
   route?: string | string[];

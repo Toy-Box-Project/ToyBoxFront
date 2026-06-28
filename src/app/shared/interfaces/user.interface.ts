@@ -1,13 +1,6 @@
 export type DateString = string;
-
-export type UserRole =
-  | 'user'
-  | 'moderator'
-  | 'administrator';
-
-export type UserStatus =
-  | 'active'
-  | 'blocked';
+import { UserRole } from "../enums/user-role.enum";
+import { UserStatus } from "../enums/user-status.enum";
 
 export interface User {
   id_users: number;
@@ -25,6 +18,27 @@ export interface User {
   first_name: string;
   last_name: string;
   phone_number: string | null;
+}
+
+export interface UserSummary {
+  id_users: number;
+  username: string;
+  profile_picture: string | null;
+  role: UserRole;
+  first_name: string;
+  last_name: string;
+}
+
+export interface UserPublic {
+  id_users: number;
+  username: string;
+  profile_picture: string | null;
+  first_name: string;
+  last_name: string;
+  user_city: string;
+  user_province: string;
+  registration_date: DateString;
+  role: UserRole;
 }
 
 export interface LoginRequest {
@@ -48,4 +62,18 @@ export interface RegisterRequest {
 export interface AuthResponse {
   token: string;
   user: User;
+}
+
+export interface UpdateUserProfileRequest {
+  username?: string;
+  email?: string;
+  password?: string; // Si viene, actualizar contraseña
+  profile_picture?: string | null;
+  first_name?: string;
+  last_name?: string;
+  user_birthday?: DateString;
+  user_city?: string;
+  user_province?: string;
+  user_zipcode?: string;
+  phone_number?: string | null;
 }

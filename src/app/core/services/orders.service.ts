@@ -2,23 +2,22 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { Order } from '../../shared/interfaces/order.interface';
-
+import { Purchase } from '../../shared/interfaces/item-history.interface';
 @Injectable({ providedIn: 'root' })
 export class OrdersService {
   private readonly API = `${environment.apiUrl}/orders`;
 
   constructor(private http: HttpClient) {}
 
-  getMyPurchases(): Observable<Order[]> {
-    return this.http.get<Order[]>(`${this.API}/purchases`);
+  getMyPurchases(): Observable<Purchase[]> {
+    return this.http.get<Purchase[]>(`${this.API}/purchases`);
   }
 
-  getMySales(): Observable<Order[]> {
-    return this.http.get<Order[]>(`${this.API}/sales`);
+  getMySales(): Observable<Purchase[]> {
+    return this.http.get<Purchase[]>(`${this.API}/sales`);
   }
 
-  getById(id: number): Observable<Order> {
-    return this.http.get<Order>(`${this.API}/${id}`);
+  getById(id: number): Observable<Purchase> {
+    return this.http.get<Purchase>(`${this.API}/${id}`);
   }
 }

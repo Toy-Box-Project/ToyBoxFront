@@ -6,6 +6,7 @@ import { ToastComponent, ToastType } from '../../../shared/components/toast/toas
 
 type ReportAction = 'resolve' | 'withdraw' | 'reactivate';
 
+// DEMO - use interface ReportDetail
 interface ReportDetail {
   id: number;
   itemTitle: string;

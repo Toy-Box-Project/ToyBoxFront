@@ -1,9 +1,21 @@
 import { Component } from '@angular/core';
-import { ProductCardData, ProductFilters } from '../../shared/interfaces/product.interface';
 import { Category } from '../../shared/interfaces/category.interface';
 import { ProductCardComponent } from '../../shared/components/product-card/product-card';
 import { SearchBarComponent } from '../../shared/components/search-bar/search-bar';
 import { FilterSidebarComponent } from '../../shared/components/filter-sidebar/filter-sidebar';
+import { Itemfilters } from '../../shared/interfaces/item.interface';
+
+// DEMO - use interface ItemCard
+interface CatalogProduct {
+  id: number;
+  title: string;
+  category: string;
+  price: number;
+  location: string;
+  status: string;
+  image: string;
+  badge: string;
+}
 
 @Component({
   selector: 'app-catalog',
@@ -14,7 +26,7 @@ import { FilterSidebarComponent } from '../../shared/components/filter-sidebar/f
 })
 export class CatalogComponent {
   searchTerm = '';
-  activeFilters: ProductFilters = {};
+  activeFilters: Itemfilters = {};
 
   categories: Category[] = [
     {
@@ -72,7 +84,8 @@ export class CatalogComponent {
     }
   ];
 
-  products: ProductCardData[] = [
+  
+  products: CatalogProduct[] = [
     {
       id: 1,
       title: 'Pack de coches y figuras',
@@ -158,7 +171,7 @@ export class CatalogComponent {
   onSearch(term: string): void {
     this.searchTerm = term;
   }
-   onFiltersApplied(filters: ProductFilters): void {
+   onFiltersApplied(filters: Itemfilters): void {
     this.activeFilters = filters;
   }
 }
