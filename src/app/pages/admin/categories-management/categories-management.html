@@ -40,10 +40,10 @@
       <tbody>
         @for (category of filteredCategories; track category.id) {
           <tr>
-            <td>{{ category.name }}</td>
-            <td>{{ category.description }}</td>
-            <td>{{ category.items }}</td>
-            <td class="actions">
+            <td data-label="Name">{{ category.name }}</td>
+            <td data-label="Description">{{ category.description }}</td>
+            <td data-label="Items">{{ category.items }}</td>
+            <td data-label="Actions" class="actions">
               <button type="button" class="link-button" (click)="editCategory(category)">Edit</button>
               <button type="button" class="link-button danger" (click)="askDelete(category)">Delete</button>
             </td>
