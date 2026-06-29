@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ModalConfirmComponent } from '../../../shared/components/modal-confirm/modal-confirm';
@@ -15,7 +14,7 @@ interface CategoryRow {
 @Component({
   selector: 'app-categories-management',
   standalone: true,
-  imports: [CommonModule, FormsModule, ModalConfirmComponent, ToastComponent],
+  imports: [FormsModule, ModalConfirmComponent, ToastComponent],
   templateUrl: './categories-management.html',
   styleUrl: './categories-management.css'
 })

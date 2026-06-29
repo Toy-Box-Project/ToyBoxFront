@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ModalConfirmComponent } from '../../../shared/components/modal-confirm/modal-confirm';
@@ -17,7 +16,7 @@ interface UserRow {
 @Component({
   selector: 'app-users-management',
   standalone: true,
-  imports: [CommonModule, FormsModule, ModalConfirmComponent, ToastComponent],
+  imports: [FormsModule, ModalConfirmComponent, ToastComponent],
   templateUrl: './users-management.html',
   styleUrl: './users-management.css'
 })

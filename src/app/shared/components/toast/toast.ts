@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 // INTERFACE LOCAL
@@ -7,7 +6,6 @@ export type ToastType = 'success' | 'error' | 'warning' | 'info';
 @Component({
   selector: 'app-toast',
   standalone: true,
-  imports: [CommonModule],
   templateUrl: './toast.html',
   styleUrl: './toast.css'
 })

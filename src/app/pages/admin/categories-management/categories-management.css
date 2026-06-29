@@ -71,25 +71,6 @@ label {
   gap: var(--space-2);
 }
 
-.btn {
-  border: 1px solid transparent;
-  border-radius: var(--radius-sm);
-  padding: 0.65rem 0.9rem;
-  font-weight: 700;
-  cursor: pointer;
-}
-
-.primary {
-  color: var(--color-white);
-  background: var(--color-primary);
-}
-
-.secondary {
-  color: var(--color-text);
-  border-color: var(--color-border);
-  background: var(--color-white);
-}
-
 table {
   width: 100%;
   border-collapse: collapse;
