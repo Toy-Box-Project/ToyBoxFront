@@ -61,9 +61,9 @@ export class EditProfileComponent implements OnInit, OnDestroy {
   }
 
   checkAuthentication(): void {
-    if (!this.authService.isLoggedIn()) {
-      this.router.navigate(['/login']);
-    }
+    // if (!this.authService.isLoggedIn()) {
+    //   this.router.navigate(['/login']);
+    // }
   }
 
   async loadLocationData(): Promise<void> {

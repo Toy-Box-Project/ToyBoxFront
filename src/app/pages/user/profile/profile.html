@@ -17,230 +17,185 @@
     }
 
     @if (user && !isLoading) {
-      <div class="profile-card">
-        <div class="profile-header">
-          <div class="profile-avatar-wrapper">
-            <button
-              class="profile-avatar-btn"
-              (click)="toggleAvatarModal()"
-              [style.background-image]="'url(' + user.profile_picture + ')'"
-              aria-label="Ver foto de perfil"
-            >
-              @if (!user.profile_picture) {
-                <span class="avatar-initials">{{ getInitials() }}</span>
+      <div class="profile-layout">
+        <!-- LEFT COLUMN -->
+        <div class="profile-left-column">
+          <!-- Card 1: User Header & Rating -->
+          <div class="profile-card">
+            <div class="profile-header">
+              <h1 class="profile-name">{{ getFullName() }}</h1>
+              <p class="profile-username">@{{ user.username }}</p>
+
+              @if (user.user_city && user.user_province) {
+                <p class="profile-location">
+                  <i class="fas fa-map-marker-alt"></i>
+                  {{ user.user_city }}, {{ user.user_province }}
+                </p>
               }
+            </div>
+
+            <!-- Rating Section -->
+            <div class="profile-rating">
+              @if (reviews.length > 0) {
+                <div class="rating-content">
+                  <app-star-rating
+                    [rating]="getAverageRating()"
+                    [readonly]="true"
+                    [size]="24"
+                    [color]="'#d84565'">
+                  </app-star-rating>
+                  <span class="rating-text">({{ reviews.length }} reseña{{ reviews.length !== 1 ? 's' : '' }})</span>
+                </div>
+              } @else {
+                <div class="no-reviews-section">
+                  <span class="star-empty">☆☆☆☆☆</span>
+                  <p class="no-reviews-text">Sin reseñas aún</p>
+                </div>
+              }
+            </div>
+          </div>
+
+          <!-- Card 2: Información Personal -->
+          <div class="profile-card">
+            <h2 class="section-title">Información Personal</h2>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label class="small-label">Nombre</label>
+                <input type="text" class="form-control" [value]="user.first_name" disabled />
+              </div>
+              <div class="form-group">
+                <label class="small-label">Apellido</label>
+                <input type="text" class="form-control" [value]="user.last_name" disabled />
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label class="small-label">Email</label>
+                <input type="email" class="form-control" [value]="user.email" disabled />
+              </div>
+              <div class="form-group">
+                <label class="small-label">Teléfono</label>
+                <input type="tel" class="form-control" [value]="user.phone_number" disabled />
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label class="small-label">Fecha de Nacimiento</label>
+                <input type="date" class="form-control" [value]="user.user_birthday" disabled />
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label class="small-label">Provincia</label>
+                <input type="text" class="form-control" [value]="user.user_province" disabled />
+              </div>
+              <div class="form-group">
+                <label class="small-label">Ciudad</label>
+                <input type="text" class="form-control" [value]="user.user_city" disabled />
+              </div>
+              <div class="form-group">
+                <label class="small-label">Código Postal</label>
+                <input type="text" class="form-control" [value]="user.user_zipcode" disabled />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- RIGHT COLUMN -->
+        <div class="profile-right-column">
+          <!-- Card 3: Avatar -->
+          <div class="profile-card">
+            <div style="text-align: center;">
+              <app-user-avatar
+                [user]="user"
+                size="large"
+                (click)="toggleAvatarModal()"
+                style="cursor: pointer;">
+              </app-user-avatar>
+            </div>
+          </div>
+
+          <!-- Card 4: Map -->
+          @if (user.user_city && user.user_province) {
+            <div class="profile-card">
+              <h2 class="section-title">Ubicación</h2>
+              @if (userLatitude !== null && userLongitude !== null) {
+                <button
+                  class="map-container-btn"
+                  (click)="toggleMapModal()"
+                >
+                  <app-map-static
+                    [latitude]="userLatitude"
+                    [longitude]="userLongitude"
+                    [zoom]="12"
+                  ></app-map-static>
+                </button>
+              } @else {
+                <div class="map-loading-placeholder">
+                  <p>Cargando ubicación...</p>
+                  <small>{{ user.user_city }}, {{ user.user_province }}</small>
+                </div>
+              }
+            </div>
+          }
+
+          <!-- Card 5: Action Buttons -->
+          <div class="profile-card">
+            <button class="btn btn-primary mb-2 w-100" (click)="goToEditProfile()">
+              <i class="fas fa-edit"></i>
+              Editar Perfil
+            </button>
+            <button class="btn btn-outline-danger mb-2 w-100" (click)="openDeleteModal()">
+              <i class="fas fa-trash-alt"></i>
+              Dar de Baja
+            </button>
+            <button class="btn btn-outline-danger w-100" (click)="logout()">
+              <i class="fas fa-sign-out-alt"></i>
+              Cerrar Sesión
             </button>
           </div>
 
-          <h1 class="profile-name">{{ getFullName() }}</h1>
-          <p class="profile-username">@{{ user.username }}</p>
-
-          @if (user.user_city && user.user_province) {
-            <div class="profile-location">
-              <i class="fas fa-map-marker-alt"></i>
-              <span>{{ user.user_city }}, {{ user.user_province }}</span>
-            </div>
-          }
-
-          @if (isCurrentUser) {
-            <div class="profile-actions">
-              <button
-                class="btn btn-primary"
-                (click)="goToEditProfile()"
-                aria-label="Editar perfil"
-              >
-                <i class="fas fa-edit"></i>
-                Editar Perfil
+          <!-- Admin Panel -->
+          @if (isAdmin) {
+            <div class="profile-card">
+              <h3 style="font-size: 16px; font-weight: 700; color: var(--primary-toybox); margin: 0 0 1rem 0;">Panel Admin</h3>
+              <button class="btn btn-warning mb-2 w-100" (click)="goToDashboard()">
+                <i class="fas fa-chart-bar"></i> Dashboard
               </button>
-              <button
-                class="btn btn-outline-danger"
-                (click)="openDeleteModal()"
-                aria-label="Eliminar cuenta"
-              >
-                <i class="fas fa-trash-alt"></i>
-                Dar de Baja
+              <button class="btn btn-warning mb-2 w-100" (click)="goToUsersManagement()">
+                <i class="fas fa-users"></i> Usuarios
               </button>
-              <button
-                class="btn btn-outline-danger"
-                (click)="logout()"
-                aria-label="Cerrar sesión"
-              >
-                <i class="fas fa-sign-out-alt"></i>
-                Logout
+              <button class="btn btn-warning w-100" (click)="goToCategoriesManagement()">
+                <i class="fas fa-list"></i> Categorías
               </button>
-            </div>
-          } @else if (isAdmin && !isCurrentUser) {
-            <div class="profile-actions">
-              <button
-                class="btn btn-warning"
-                (click)="silenceUser()"
-                aria-label="Silenciar usuario"
-              >
-                <i class="fas fa-volume-mute"></i>
-                Silenciar
-              </button>
-            </div>
-          }
-        </div>
-
-        <div class="profile-rating">
-          @if (reviews.length > 0) {
-            <div class="rating-content">
-              <app-star-rating
-                [rating]="getAverageRating()"
-                [reviewCount]="0"
-                [readonly]="true"
-                [size]="24"
-                [color]="'#d84565'">
-              </app-star-rating>
-              <span class="rating-info">(tiene {{ reviews.length }} reseña{{ reviews.length !== 1 ? 's' : '' }})</span>
-            </div>
-          } @else {
-            <div class="no-reviews-section">
-              <div class="stars-placeholder">
-                <span class="star-empty">☆☆☆☆☆</span>
-              </div>
-              <p class="no-reviews-text">Sin reseñas aún</p>
             </div>
           }
         </div>
       </div>
 
-                    @if (isCurrentUser) {
-        <div class="profile-data-section">
-          <h2 class="section-title">Información Personal</h2>
-
-          <div class="form-row">
-            <div class="form-group">
-              <label class="small-label">Nombre</label>
-              <input
-                type="text"
-                class="form-control"
-                [value]="user.first_name"
-                disabled
-              />
-            </div>
-            <div class="form-group">
-              <label class="small-label">Apellido</label>
-              <input
-                type="text"
-                class="form-control"
-                [value]="user.last_name"
-                disabled
-              />
-            </div>
-          </div>
-
-          <div class="form-row">
-            <div class="form-group">
-              <label class="small-label">Email</label>
-              <input
-                type="email"
-                class="form-control"
-                [value]="user.email"
-                disabled
-              />
-            </div>
-            <div class="form-group">
-              <label class="small-label">Teléfono</label>
-              <input
-                type="tel"
-                class="form-control"
-                [value]="user.phone_number"
-                disabled
-              />
-            </div>
-          </div>
-
-          <div class="form-row">
-            <div class="form-group">
-              <label class="small-label">Fecha de Nacimiento</label>
-              <input
-                type="date"
-                class="form-control"
-                [value]="user.user_birthday"
-                disabled
-              />
-            </div>
-          </div>
-
-          <div class="form-row">
-            <div class="form-group">
-              <label class="small-label">Provincia</label>
-              <input
-                type="text"
-                class="form-control"
-                [value]="user.user_province"
-                disabled
-              />
-            </div>
-            <div class="form-group">
-              <label class="small-label">Ciudad</label>
-              <input
-                type="text"
-                class="form-control"
-                [value]="user.user_city"
-                disabled
-              />
-            </div>
-            <div class="form-group">
-              <label class="small-label">Código Postal</label>
-              <input
-                type="text"
-                class="form-control"
-                [value]="user.user_zipcode"
-                disabled
-              />
-            </div>
-          </div>
-        </div>
-      }
-
-      @if (user.user_city && user.user_province) {
-        <div class="profile-map-section">
-          <h2 class="section-title">Ubicación</h2>
-          @if (userLatitude !== null && userLongitude !== null) {
-            <button
-              class="map-container-btn"
-              (click)="toggleMapModal()"
-              aria-label="Ver mapa ampliado"
-            >
-              <app-map-static
-                [latitude]="userLatitude"
-                [longitude]="userLongitude"
-                [zoom]="12"
-              ></app-map-static>
-            </button>
-          } @else {
-            <div class="map-loading-placeholder">
-              <p>Cargando ubicación...</p>
-              <small>{{ user.user_city }}, {{ user.user_province }}</small>
-            </div>
-          }
-        </div>
-      }
-
+      <!-- Reviews Section (Full Width) -->
       @if (reviews.length > 0) {
-        <div class="profile-reviews-section">
+        <div class="profile-card">
           <h2 class="section-title">Valoraciones ({{ reviews.length }})</h2>
           <div class="reviews-list">
             @for (review of reviews; track review.id_reviews) {
               <div class="review-card">
                 <div class="review-header">
-                  <div class="review-author">
-                    <strong>{{ review.reviewer?.first_name }} {{ review.reviewer?.last_name }}</strong>
-                  </div>
+                  <strong class="review-author">{{ review.reviewer?.first_name }} {{ review.reviewer?.last_name }}</strong>
                   <div class="review-rating">
                     <app-star-rating
                       [rating]="review.rating"
                       [readonly]="true"
+                      [size]="16"
                     ></app-star-rating>
                   </div>
                 </div>
                 <p class="review-comment">{{ review.comment }}</p>
-                <small class="review-date">
-                  {{ review.review_date | date: 'dd/MM/yyyy' }}
-                </small>
+                <small class="review-date">{{ review.review_date | date: 'dd/MM/yyyy' }}</small>
               </div>
             }
           </div>
@@ -250,46 +205,32 @@
   </div>
 </div>
 
+<!-- MODALS -->
+
+<!-- Avatar Modal -->
 @if (showAvatarModal && user?.profile_picture) {
   <div class="modal-backdrop" (click)="toggleAvatarModal()"></div>
   <div class="modal-dialog modal-avatar">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title">Foto de Perfil</h5>
-        <button
-          type="button"
-          class="btn-close"
-          (click)="toggleAvatarModal()"
-          aria-label="Cerrar"
-        >
-          ✕
-        </button>
+        <button class="btn-close" (click)="toggleAvatarModal()"></button>
       </div>
       <div class="modal-body">
-        <img
-          [src]="user?.profile_picture || ''"
-          [alt]="getFullName()"
-          class="img-fluid"
-        />
+        <img [src]="user?.profile_picture" [alt]="getFullName()" style="width: 100%; border-radius: 6px;" />
       </div>
     </div>
   </div>
 }
 
+<!-- Map Modal -->
 @if (showMapModal && user && userLatitude !== null && userLongitude !== null) {
   <div class="modal-backdrop" (click)="toggleMapModal()"></div>
   <div class="modal-dialog modal-map">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title">Ubicación: {{ user.user_city }}, {{ user.user_province }}</h5>
-        <button
-          type="button"
-          class="btn-close"
-          (click)="toggleMapModal()"
-          aria-label="Cerrar"
-        >
-          ✕
-        </button>
+        <button class="btn-close" (click)="toggleMapModal()"></button>
       </div>
       <div class="modal-body">
         <app-map-static
@@ -302,20 +243,14 @@
   </div>
 }
 
+<!-- Delete Modal -->
 @if (showDeleteModal) {
   <div class="modal-backdrop" (click)="closeDeleteModal()"></div>
   <div class="modal-dialog modal-confirm">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title">Eliminar Cuenta</h5>
-        <button
-          type="button"
-          class="btn-close"
-          (click)="closeDeleteModal()"
-          aria-label="Cerrar"
-        >
-          ✕
-        </button>
+        <button class="btn-close" (click)="closeDeleteModal()"></button>
       </div>
       <div class="modal-body">
         <p class="text-danger">
@@ -332,18 +267,10 @@
         </p>
       </div>
       <div class="modal-footer">
-        <button
-          type="button"
-          class="btn btn-secondary"
-          (click)="closeDeleteModal()"
-        >
+        <button type="button" class="btn btn-secondary" (click)="closeDeleteModal()">
           Cancelar
         </button>
-        <button
-          type="button"
-          class="btn btn-danger"
-          (click)="deleteAccount()"
-        >
+        <button type="button" class="btn btn-danger" (click)="deleteAccount()">
           Sí, Dar de Baja
         </button>
       </div>
