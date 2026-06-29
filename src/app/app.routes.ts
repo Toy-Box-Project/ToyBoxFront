@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { NotificationsComponent } from './pages/notifications/notifications';
 // NOTE: Guards desactivados temporalmente durante el desarrollo de las páginas.
 // import { authGuard } from './core/guards/auth.guard';
 // import { roleGuard } from './core/guards/role.guard';
@@ -41,6 +42,12 @@ export const routes: Routes = [
       { path: 'my-purchases', loadComponent: () => import('./pages/user/my-purchases/my-purchases').then(m => m.MyPurchasesComponent) },
       { path: 'favorites',    loadComponent: () => import('./pages/user/favorites/favorites').then(m => m.FavoritesComponent) },
     ],
+  },
+
+  // Notifications
+  {
+    path: 'notifications',
+    component: NotificationsComponent,
   },
 
   // Product management (auth required)
