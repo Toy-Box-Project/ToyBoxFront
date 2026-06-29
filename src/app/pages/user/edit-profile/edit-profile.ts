@@ -34,10 +34,13 @@ export class EditProfileComponent implements OnInit, OnDestroy {
   provinces: string[] = [];
   cities: string[] = [];
 
+  previewLatitude: number | null = null;
+  previewLongitude: number | null = null;
+
   breadcrumbItems = [
-    { label: 'Inicio', url: '/' },
-    { label: 'Mi Perfil', url: '/user/profile' },
-    { label: 'Editar Perfil', url: null }
+    { label: 'Inicio', route: '/', icon: 'home' },
+    { label: 'Mi Perfil', route: '/user/profile', icon: 'person' },
+    { label: 'Editar Perfil', icon: 'edit' }
   ];
 
   private destroy$ = new Subject<void>();
@@ -77,7 +80,7 @@ export class EditProfileComponent implements OnInit, OnDestroy {
       first_name: ['', [Validators.required, Validators.minLength(2)]],
       last_name: ['', [Validators.required, Validators.minLength(2)]],
       email: ['', [Validators.required, Validators.email]],
-      phone_number: ['', [Validators.required, Validators.pattern(/^\d{9,15}$/)]],
+      phone_number: ['', [Validators.pattern(/^\d{9,15}$/)]],
       user_birthday: ['', [Validators.required, this.minAgeValidator(18)]],
       user_province: ['', [Validators.required]],
       user_city: ['', [Validators.required]],
@@ -86,10 +89,18 @@ export class EditProfileComponent implements OnInit, OnDestroy {
       profile_picture: ['', []]
     });
 
+    // Escuchar cambios en provincia para actualizar ciudades y coordenadas
     this.editProfileForm.get('user_province')?.valueChanges
       .pipe(takeUntil(this.destroy$))
       .subscribe(async (province) => {
         await this.onProvinceChange(province);
+      });
+
+    // Escuchar cambios en ciudad para actualizar coordenadas
+    this.editProfileForm.get('user_city')?.valueChanges
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(async (city) => {
+        await this.onCityChange(city);
       });
   }
 
@@ -124,6 +135,13 @@ export class EditProfileComponent implements OnInit, OnDestroy {
             );
           }
 
+          // Cargar las coordenadas iniciales del usuario (en background)
+          if (user.user_province && user.user_city) {
+            this.onCityChange(user.user_city).catch(error =>
+              console.error('Error loading initial coordinates:', error)
+            );
+          }
+
           if (user.profile_picture) {
             this.profilePicturePreview = user.profile_picture;
           }
@@ -143,12 +161,46 @@ export class EditProfileComponent implements OnInit, OnDestroy {
       try {
         this.cities = await this.locationsService.getCiudadesByProvincia(province);
         this.editProfileForm.get('user_city')?.reset();
+        this.previewLatitude = null;
+        this.previewLongitude = null;
       } catch (error) {
         console.error('Error loading cities:', error);
         this.cities = [];
       }
     } else {
       this.cities = [];
+      this.previewLatitude = null;
+      this.previewLongitude = null;
+    }
+  }
+
+  /**
+   * Se ejecuta cuando cambia la ciudad seleccionada
+   * Obtiene las coordenadas geográficas para mostrar en el mapa en tiempo real
+   */
+  async onCityChange(city: string): Promise<void> {
+    const province = this.editProfileForm.get('user_province')?.value;
+
+    if (city && province) {
+      try {
+        const coordinates = await this.locationsService.getCoordinates(province, city);
+        if (coordinates) {
+          this.previewLatitude = coordinates.lat;
+          this.previewLongitude = coordinates.lng;
+          console.log('✅ Coordenadas actualizadas para mapa preview:', { lat: this.previewLatitude, lng: this.previewLongitude });
+        } else {
+          console.warn('⚠️ No se encontraron coordenadas para', city, province);
+          this.previewLatitude = null;
+          this.previewLongitude = null;
+        }
+      } catch (error) {
+        console.error('❌ Error cargando coordenadas del mapa:', error);
+        this.previewLatitude = null;
+        this.previewLongitude = null;
+      }
+    } else {
+      this.previewLatitude = null;
+      this.previewLongitude = null;
     }
   }
 

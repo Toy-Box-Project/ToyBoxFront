@@ -1,15 +1,53 @@
-<div
-  class="avatar"
-  [class.avatar--clickable]="clickable"
-  [style.width.px]="size"
-  [style.height.px]="size"
-  [style.fontSize.px]="size * 0.4"
-  [attr.role]="clickable ? 'button' : null"
-  [attr.tabindex]="clickable ? 0 : null"
->
-  @if (finalSrc) {
-    <img [src]="finalSrc" [alt]="'Avatar de ' + name" class="avatar__image" />
-  } @else {
-    <span class="avatar__initials">{{ initials }}</span>
+<div class="avatar-container">
+  <div
+    class="avatar"
+    [class]="sizeClass"
+    [class.avatar--clickable]="!editable"
+    [style.width.px]="sizePixels"
+    [style.height.px]="sizePixels"
+    [style.fontSize.px]="sizePixels * 0.35"
+    (click)="openModal()"
+    [attr.role]="editable ? null : 'button'"
+    [attr.tabindex]="editable ? -1 : 0">
+
+    @if (finalSrc) {
+      <img [src]="finalSrc" [alt]="'Avatar de ' + displayName" class="avatar__image" />
+    } @else {
+      <span class="avatar__initials">{{ initials }}</span>
+    }
+  </div>
+
+  @if (editable) {
+    <div class="avatar-edit-overlay">
+      <input
+        type="file"
+        accept="image/*"
+        (change)="onImageSelected($event)"
+        style="display: none;" />
+
+      <button class="avatar-action change-btn" (click)="triggerFileInput()" title="Cambiar foto">
+        <span class="material-symbols-outlined">photo_camera</span>
+      </button>
+
+      @if (finalSrc) {
+        <button class="avatar-action delete-btn" (click)="deleteImage()" title="Eliminar foto">
+          <span class="material-symbols-outlined">delete</span>
+        </button>
+      }
+    </div>
   }
 </div>
+
+@if (showModal() && finalSrc && !editable) {
+  <div class="avatar-modal-overlay" (click)="closeModal()">
+    <div class="avatar-modal" (click)="$event.stopPropagation()">
+      <button class="modal-close" (click)="closeModal()" title="Cerrar">
+        <span class="material-symbols-outlined">close</span>
+      </button>
+
+      <img [src]="finalSrc" [alt]="'Foto de ' + displayName" class="modal-image" />
+
+      <p class="modal-name">{{ displayName }}</p>
+    </div>
+  </div>
+}

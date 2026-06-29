@@ -1,16 +1,46 @@
+.avatar-container {
+  position: relative;
+  display: inline-block;
+}
+
 .avatar {
-  background: linear-gradient(135deg, var(--secondary-toybox), #5176b8);
-  color: white;
-  border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--secondary-toybox) 0%, var(--primary-toybox) 100%);
   overflow: hidden;
-  font-weight: 700;
-  text-transform: uppercase;
   border: 2px solid var(--outline-variant);
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
   flex-shrink: 0;
+}
+
+.avatar--small {
+  width: 32px;
+  height: 32px;
+  font-size: 11px;
+}
+
+.avatar--medium {
+  width: 48px;
+  height: 48px;
+  font-size: 17px;
+}
+
+.avatar--large {
+  width: 80px;
+  height: 80px;
+  font-size: 28px;
+}
+
+.avatar--clickable {
+  cursor: pointer;
+}
+
+.avatar--clickable:hover {
+  border-color: var(--primary-toybox);
+  box-shadow: 0 2px 8px rgba(216, 69, 101, 0.2);
+  transform: scale(1.05);
 }
 
 .avatar__image {
@@ -20,31 +50,187 @@
 }
 
 .avatar__initials {
-  font-family: var(--font-title);
-  letter-spacing: 0.5px;
+  color: var(--color-white);
+  font-weight: 700;
+  user-select: none;
 }
 
-.avatar--clickable {
+.avatar-edit-overlay {
+  position: absolute;
+  bottom: -8px;
+  right: -8px;
+  display: flex;
+  gap: 4px;
+  background: var(--color-white);
+  border-radius: 50%;
+  padding: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  opacity: 0;
+  transform: scale(0.8);
+  transition: all 0.2s ease;
+  pointer-events: none;
+}
+
+.avatar-container:hover .avatar-edit-overlay {
+  opacity: 1;
+  transform: scale(1);
+  pointer-events: auto;
+}
+
+.avatar-action {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: none;
   cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 16px;
 }
 
-.avatar--clickable:hover {
-  border-color: var(--primary-toybox);
-  box-shadow: 0 4px 12px rgba(216, 69, 101, 0.25);
-  transform: translateY(-2px);
+.change-btn {
+  background: var(--primary-toybox);
+  color: var(--color-white);
 }
 
-.avatar--clickable:active {
-  transform: translateY(0);
+.change-btn:hover {
+  background: var(--primary-toybox-dark);
+  transform: scale(1.1);
 }
 
-.avatar--clickable:focus {
-  outline: 2px solid var(--primary-toybox);
-  outline-offset: 2px;
+.delete-btn {
+  background: #ef5350;
+  color: var(--color-white);
+}
+
+.delete-btn:hover {
+  background: #c62828;
+  transform: scale(1.1);
+}
+
+.avatar-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.2s ease;
+}
+
+.avatar-modal {
+  position: relative;
+  background: var(--color-white);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  max-width: 500px;
+  width: 90%;
+  box-shadow: var(--shadow-elevation-5);
+  animation: slideUp 0.3s ease;
+}
+
+.modal-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--on-surface-variant);
+  font-size: 24px;
+  padding: 0;
+  transition: color 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-close:hover {
+  color: var(--on-surface);
+}
+
+.modal-image {
+  width: 100%;
+  max-height: 400px;
+  object-fit: contain;
+  border-radius: var(--radius-md);
+  margin-bottom: 16px;
+}
+
+.modal-name {
+  text-align: center;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--on-surface);
+  margin: 0;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@media (max-width: 768px) {
+  .avatar-edit-overlay {
+    bottom: -4px;
+    right: -4px;
+  }
+
+  .avatar-action {
+    width: 28px;
+    height: 28px;
+    font-size: 14px;
+  }
+
+  .avatar-modal {
+    padding: 16px;
+  }
+
+  .modal-name {
+    font-size: 1rem;
+  }
 }
 
 @media (max-width: 480px) {
-  .avatar {
-    border-width: 1.5px;
+  .avatar-action {
+    width: 24px;
+    height: 24px;
+    font-size: 12px;
+  }
+
+  .modal-close {
+    top: 8px;
+    right: 8px;
+    font-size: 20px;
+  }
+
+  .avatar-modal {
+    padding: 12px;
+    width: 95%;
+  }
+
+  .modal-name {
+    font-size: 0.9rem;
   }
 }
