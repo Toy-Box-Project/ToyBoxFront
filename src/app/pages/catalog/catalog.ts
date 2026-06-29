@@ -1,11 +1,13 @@
-import { Component } from '@angular/core';
-import { Category } from '../../shared/interfaces/category.interface';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ProductCardComponent } from '../../shared/components/product-card/product-card';
 import { SearchBarComponent } from '../../shared/components/search-bar/search-bar';
 import { FilterSidebarComponent } from '../../shared/components/filter-sidebar/filter-sidebar';
-import { Itemfilters } from '../../shared/interfaces/item.interface';
+import { ProductsService } from '../../core/services/products.service';
+import { CategoriesService } from '../../core/services/categories.service';
+import { Category } from '../../shared/interfaces/category.interface';
+import { ItemCard, Itemfilters } from '../../shared/interfaces/item.interface';
 
-// DEMO - use interface ItemCard
+// Shape que usa app-product-card (@Input product: DemoProduct)
 interface CatalogProduct {
   id: number;
   title: string;
@@ -17,6 +19,32 @@ interface CatalogProduct {
   badge: string;
 }
 
+const CATEGORY_ICONS: Record<number, string> = {
+  1: '/assets/images/Iconos%20categorias/icono_munecosycoches.svg',
+  2: '/assets/images/Iconos%20categorias/icono_construccion.svg',
+  3: '/assets/images/Iconos%20categorias/icono_juegosmesa.svg',
+  4: '/assets/images/Iconos%20categorias/icono_educativo.svg',
+  5: '/assets/images/Iconos%20categorias/icono_bebes.svg',
+  6: '/assets/images/Iconos%20categorias/icono_airelibre.svg',
+  7: '/assets/images/Iconos%20categorias/icono_imaginacion.svg',
+  8: '/assets/images/Iconos%20categorias/icono_videojuegos.svg',
+};
+
+const STATUS_LABELS: Record<string, string> = {
+  draft:        'Borrador',
+  published:    'Publicado',
+  under_review: 'En revisión',
+  removed:      'Retirado',
+  sold:         'Vendido',
+};
+
+const BADGE_LABELS: Record<string, string> = {
+  available: 'Disponible',
+  sold:      'Vendido',
+  paused:    'Pausado',
+  deleted:   'Eliminado',
+};
+
 @Component({
   selector: 'app-catalog',
   standalone: true,
@@ -24,154 +52,85 @@ interface CatalogProduct {
   templateUrl: './catalog.html',
   styleUrl: './catalog.css'
 })
-export class CatalogComponent {
+export class CatalogComponent implements OnInit {
   searchTerm = '';
   activeFilters: Itemfilters = {};
 
-  categories: Category[] = [
-    {
-      id_categories: 0,
-      name: 'Todas',
-      description: null
-    },
-    {
-      id_categories: 1,
-      name: 'Figuras, muñecos y vehículos',
-      description: null,
-      icon: '/assets/images/Iconos%20categorias/icono_munecosycoches.svg'
-    },
-    {
-      id_categories: 2,
-      name: 'Construcción y bloques',
-      description: null,
-      icon: '/assets/images/Iconos%20categorias/icono_construccion.svg'
-    },
-    {
-      id_categories: 3,
-      name: 'Juegos de mesa y puzzles',
-      description: null,
-      icon: '/assets/images/Iconos%20categorias/icono_juegosmesa.svg'
-    },
-    {
-      id_categories: 4,
-      name: 'Juguetes educativos',
-      description: null,
-      icon: '/assets/images/Iconos%20categorias/icono_educativo.svg'
-    },
-    {
-      id_categories: 5,
-      name: 'Bebés y primera infancia',
-      description: null,
-      icon: '/assets/images/Iconos%20categorias/icono_bebes.svg'
-    },
-    {
-      id_categories: 6,
-      name: 'Aire libre y movimiento',
-      description: null,
-      icon: '/assets/images/Iconos%20categorias/icono_airelibre.svg'
-    },
-    {
-      id_categories: 7,
-      name: 'Imaginación y juego simbólico',
-      description: null,
-      icon: '/assets/images/Iconos%20categorias/icono_imaginacion.svg'
-    },
-    {
-      id_categories: 8,
-      name: 'Videojuegos y consolas',
-      description: null,
-      icon: '/assets/images/Iconos%20categorias/icono_videojuegos.svg'
-    }
-  ];
+  categories: Category[] = [];
+  products: CatalogProduct[] = [];
 
-  
-  products: CatalogProduct[] = [
-    {
-      id: 1,
-      title: 'Pack de coches y figuras',
-      category: 'Figuras, muñecos y vehículos',
-      price: 18,
-      location: 'Madrid',
-      status: 'Muy buen estado',
-      image: '/assets/images/Iconos%20categorias/icono_munecosycoches.svg',
-      badge: 'Publicado'
-    },
-    {
-      id: 2,
-      title: 'Caja de bloques de construcción',
-      category: 'Construcción y bloques',
-      price: 22,
-      location: 'Valencia',
-      status: 'Buen estado',
-      image: '/assets/images/Iconos%20categorias/icono_construccion.svg',
-      badge: 'Publicado'
-    },
-    {
-      id: 3,
-      title: 'Puzzle familiar de animales',
-      category: 'Juegos de mesa y puzzles',
-      price: 12,
-      location: 'Murcia',
-      status: 'Como nuevo',
-      image: '/assets/images/Iconos%20categorias/icono_juegosmesa.svg',
-      badge: 'Reservado'
-    },
-    {
-      id: 4,
-      title: 'Juego educativo de ciencia',
-      category: 'Juguetes educativos',
-      price: 15,
-      location: 'Madrid',
-      status: 'Muy buen estado',
-      image: '/assets/images/Iconos%20categorias/icono_educativo.svg',
-      badge: 'Publicado'
-    },
-    {
-      id: 5,
-      title: 'Juguete sensorial para bebé',
-      category: 'Bebés y primera infancia',
-      price: 9,
-      location: 'Alicante',
-      status: 'Buen estado',
-      image: '/assets/images/Iconos%20categorias/icono_bebes.svg',
-      badge: 'Publicado'
-    },
-    {
-      id: 6,
-      title: 'Patinete infantil plegable',
-      category: 'Aire libre y movimiento',
-      price: 25,
-      location: 'Sevilla',
-      status: 'Usado',
-      image: '/assets/images/Iconos%20categorias/icono_airelibre.svg',
-      badge: 'Publicado'
-    },
-    {
-      id: 7,
-      title: 'Set de cocina de juguete',
-      category: 'Imaginación y juego simbólico',
-      price: 19,
-      location: 'Granada',
-      status: 'Buen estado',
-      image: '/assets/images/Iconos%20categorias/icono_imaginacion.svg',
-      badge: 'Publicado'
-    },
-    {
-      id: 8,
-      title: 'Mando para consola retro',
-      category: 'Videojuegos y consolas',
-      price: 14,
-      location: 'Barcelona',
-      status: 'Muy buen estado',
-      image: '/assets/images/Iconos%20categorias/icono_videojuegos.svg',
-      badge: 'Publicado'
-    }
-  ];
+  isLoading = false;
+  error = '';
+
+  constructor(
+    private productsService: ProductsService,
+    private categoriesService: CategoriesService,
+    private cdr: ChangeDetectorRef
+  ) {}
+
+  ngOnInit(): void {
+    this.loadCategories();
+    this.loadProducts();
+  }
+
+  loadCategories(): void {
+    this.categoriesService.getAll().subscribe({
+      next: (cats: Category[]) => {
+        this.categories = [
+          { id_categories: 0, name: 'Todas', description: null },
+          ...cats.map(c => ({ ...c, icon: CATEGORY_ICONS[c.id_categories] ?? '' })),
+        ];
+        this.cdr.markForCheck();
+      },
+      error: (err) => {
+        console.error('Error cargando categorías:', err);
+        this.cdr.markForCheck();
+      },
+    });
+  }
+
+  loadProducts(): void {
+    this.isLoading = true;
+    this.error = '';
+
+    const filters: Itemfilters = { ...this.activeFilters };
+    if (this.searchTerm.trim()) filters.search = this.searchTerm.trim();
+
+    this.productsService.getAll(filters).subscribe({
+      next: (res) => {
+        this.products = res.items.map(this.toCardProduct);
+        this.isLoading = false;
+        this.cdr.markForCheck();
+      },
+      error: (err) => {
+        this.error = 'Error al cargar los productos. Verifica que el servidor esté activo.';
+        this.isLoading = false;
+        console.error('Error cargando catálogo:', err);
+        this.cdr.markForCheck();
+      },
+    });
+  }
+
+  private toCardProduct(card: ItemCard): CatalogProduct {
+    return {
+      id:       card.id_items,
+      title:    card.title,
+      category: card.category?.name ?? 'Sin categoría',
+      price:    card.price,
+      location: card.location,
+      status:   STATUS_LABELS[card.conservation_status] ?? card.conservation_status,
+      image:    card.image || '/assets/images/Iconos%20categorias/icono_educativo.svg',
+      badge:    BADGE_LABELS[card.item_status] ?? card.item_status,
+    };
+  }
 
   onSearch(term: string): void {
     this.searchTerm = term;
+    this.loadProducts();
   }
-   onFiltersApplied(filters: Itemfilters): void {
+
+  onFiltersApplied(filters: Itemfilters): void {
     this.activeFilters = filters;
+    this.loadProducts();
   }
 }

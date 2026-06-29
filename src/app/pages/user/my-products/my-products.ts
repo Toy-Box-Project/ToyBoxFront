@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { PaginationComponent } from '../../../shared/components/pagination/pagination';
@@ -34,6 +34,7 @@ export class MyProductsComponent implements OnInit {
   private readonly reviewsService = inject(ReviewsService);
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
+  private readonly cdr = inject(ChangeDetectorRef);
 
   // Productos a la venta
   products: Item[] = [];
@@ -105,11 +106,13 @@ export class MyProductsComponent implements OnInit {
           images: card.image ? [{ id_photos: 0, photo_url: card.image, order: 0, fk_items_id: card.id_items }] : []
         } as Item));
         this.isLoadingProducts = false;
+        this.cdr.markForCheck();
       },
       error: (err) => {
         console.error('Error cargando productos:', err);
         this.productsError = 'Error al cargar los productos. Intenta de nuevo.';
         this.isLoadingProducts = false;
+        this.cdr.markForCheck();
       }
     });
   }
@@ -122,11 +125,13 @@ export class MyProductsComponent implements OnInit {
       next: (sales) => {
         this.sales = sales;
         this.isLoadingSales = false;
+        this.cdr.markForCheck();
       },
       error: (err) => {
         console.error('Error cargando ventas:', err);
         this.salesError = 'Error al cargar las ventas. Intenta de nuevo.';
         this.isLoadingSales = false;
+        this.cdr.markForCheck();
       }
     });
   }
@@ -141,11 +146,13 @@ export class MyProductsComponent implements OnInit {
       next: (reviews) => {
         this.receivedReviews = reviews;
         this.isLoadingReviews = false;
+        this.cdr.markForCheck();
       },
       error: (err) => {
         console.error('Error cargando reseñas:', err);
         this.reviewsError = 'Error al cargar las reseñas. Intenta de nuevo.';
         this.isLoadingReviews = false;
+        this.cdr.markForCheck();
       }
     });
   }

@@ -10,8 +10,8 @@ export class ReportsService {
 
   constructor(private http: HttpClient) {}
 
-  getPending(): Observable<Report[]> {
-    return this.http.get<Report[]>(this.API);
+  getPending(): Observable<any> {
+    return this.http.get<any>(this.API);
   }
 
   getById(id: number): Observable<Report> {

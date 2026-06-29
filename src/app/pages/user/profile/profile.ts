@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
@@ -49,7 +49,8 @@ export class ProfileComponent implements OnInit, OnDestroy {
     private reviewsService: ReviewsService,
     private locationsService: LocationsService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -87,12 +88,14 @@ export class ProfileComponent implements OnInit, OnDestroy {
           this.user = user;
           this.loadReviews(userId);
           this.updateBreadcrumb();
+          this.cdr.markForCheck();
           await this.loadCoordinates();
         },
         error: (error: any) => {
           this.isLoading = false;
           this.errorMessage = error.error?.message || 'Error al cargar el perfil del usuario.';
           console.error('Error loading public profile:', error);
+          this.cdr.markForCheck();
         }
       });
   }
@@ -118,12 +121,14 @@ export class ProfileComponent implements OnInit, OnDestroy {
           this.isAdmin = user.role === UserRole.Administrator;
           this.loadReviews(user.id_users);
           this.updateBreadcrumb();
+          this.cdr.markForCheck();
           await this.loadCoordinates();
         },
         error: (error: any) => {
           this.isLoading = false;
           this.errorMessage = error.error?.message || 'Error al cargar tu perfil.';
           console.error('Error loading private profile:', error);
+          this.cdr.markForCheck();
         }
       });
   }
@@ -135,10 +140,12 @@ export class ProfileComponent implements OnInit, OnDestroy {
         next: (reviews: Review[]) => {
           this.reviews = reviews;
           this.isLoading = false;
+          this.cdr.markForCheck();
         },
         error: (error: any) => {
           console.error('Error loading reviews:', error);
           this.isLoading = false;
+          this.cdr.markForCheck();
         }
       });
   }
