@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { ModalConfirmComponent } from '../../../shared/components/modal-confirm/modal-confirm';
@@ -19,7 +20,7 @@ interface ReportDetail {
 @Component({
   selector: 'app-report-detail',
   standalone: true,
-  imports: [RouterLink, ModalConfirmComponent, ToastComponent],
+  imports: [CommonModule, RouterLink, ModalConfirmComponent, ToastComponent],
   templateUrl: './report-detail.html',
   styleUrl: './report-detail.css'
 })
