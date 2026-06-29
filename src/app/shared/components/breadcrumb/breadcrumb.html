@@ -1,50 +1,42 @@
-@if (items.length > 0) {
+@if (items && items.length > 0) {
   <nav class="tb-breadcrumb" aria-label="Ruta de navegación">
     <ol class="tb-breadcrumb__list">
-
-      @for (item of items; track $index; let last = $last) {
+      @for (item of items; track $index; let last = $last; let idx = $index) {
         <li class="tb-breadcrumb__item" [class.tb-breadcrumb__item--active]="last">
-
           @if (!last && item.route) {
             <a
               [routerLink]="item.route"
               class="tb-breadcrumb__link"
+              role="link"
+              tabindex="0"
             >
               @if (item.icon) {
-                <span class="material-symbols-outlined tb-breadcrumb__link-icon">
+                <span class="material-symbols-outlined tb-breadcrumb__link-icon" aria-hidden="true">
                   {{ item.icon }}
                 </span>
               }
-              {{ item.label }}
+              <span class="tb-breadcrumb__link-text">{{ item.label }}</span>
             </a>
-          }
-
-          @else {
+          } @else {
             <span
               class="tb-breadcrumb__current"
               [attr.aria-current]="last ? 'page' : null"
             >
               @if (item.icon) {
-                <span class="material-symbols-outlined tb-breadcrumb__current-icon">
+                <span class="material-symbols-outlined tb-breadcrumb__current-icon" aria-hidden="true">
                   {{ item.icon }}
                 </span>
               }
-              {{ item.label }}
+              <span class="tb-breadcrumb__current-text">{{ item.label }}</span>
             </span>
           }
-
           @if (!last) {
-            <span
-              class="tb-breadcrumb__separator material-symbols-outlined"
-              aria-hidden="true"
-            >
+            <span class="tb-breadcrumb__separator material-symbols-outlined" aria-hidden="true">
               chevron_right
             </span>
           }
-
         </li>
       }
-
     </ol>
   </nav>
 }

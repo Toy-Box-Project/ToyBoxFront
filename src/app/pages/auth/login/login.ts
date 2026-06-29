@@ -2,114 +2,115 @@ import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { Component, inject, PLATFORM_ID } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
-
 import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
-    selector: 'app-login',
-    standalone: true,
-    imports: [ CommonModule, ReactiveFormsModule, RouterModule],
-    templateUrl: './login.html',
-    styleUrl: './login.css',
+  selector: 'app-login',
+  standalone: true,
+  imports: [CommonModule, ReactiveFormsModule, RouterModule],
+  templateUrl: './login.html',
+  styleUrl: './login.css',
 })
 export class LoginComponent {
-    private isBrowser = isPlatformBrowser (inject(PLATFORM_ID));
+  private isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
 
-    showPassword = false;
-    loginError = '';
+  showPassword = false;
+  isLoading = false;
+  loginError = '';
 
-    loginForm = new FormGroup({
+  constructor(
+    private router: Router,
+    private authService: AuthService
+  ) {}
 
-        email: new FormControl('', [
+  loginForm = new FormGroup({
+    email: new FormControl(
+      { value: '', disabled: false },
+      [
         Validators.required,
         Validators.pattern(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)
-        ]),
-
-        password: new FormControl('', [
+      ]
+    ),
+    password: new FormControl(
+      { value: '', disabled: false },
+      [
         Validators.required,
         Validators.minLength(6)
-        ])
+      ]
+    )
+  });
 
-    });
+  togglePassword(): void {
+    this.showPassword = !this.showPassword;
+  }
 
-    constructor(
-        private router: Router,
-        private authService: AuthService
-    ) {}
+  checkControl(control: string, error: string): boolean {
+    const c = this.loginForm.get(control);
+    return !!(c && c.touched && c.hasError(error));
+  }
 
-    togglePassword(): void {
-        this.showPassword = !this.showPassword;
+  onSubmit(): void {
+    this.loginError = '';
+
+    if (this.loginForm.invalid) {
+      this.loginForm.markAllAsTouched();
+      return;
     }
 
-    checkControl(control: string, error: string): boolean {
+    this.isLoading = true;
+    
+    this.disableForm();
 
-        const c = this.loginForm.get(control);
+    const credentials = this.loginForm.getRawValue();
 
-        return !!(
-        c &&
-        c.touched &&
-        c.hasError(error)
-        );
-    }
+    this.authService.login(credentials as any).subscribe({
+      next: (res) => {
+        this.isLoading = false;
+        this.enableForm();
 
-    onSubmit(): void {
-
-        this.loginError = '';
-
-        if (this.loginForm.invalid) {
-        return;
+        switch (res.user.role) {
+          case 'administrator':
+            this.router.navigate(['/catalog']);
+            break;
+          case 'moderator':
+            this.router.navigate(['/catalog']);
+            break;
+          default:
+            this.router.navigate(['/catalog']); 
         }
+      },
+      error: (err) => {
+        this.isLoading = false;
+        this.enableForm();
 
-        const credentials = this.loginForm.getRawValue();
-
-        /*
-        =======================================
-        REAL BACKEND (Node + Express + MySQL)
-        =======================================
-
-        this.authService.login(credentials).subscribe({
-        next: (res) => {
-            switch (res.user.role) {
-            case 'administrador':
-                this.router.navigate(['/admin']);
-                break;
-            case 'moderador':
-                this.router.navigate(['/moderator']);
-                break;
-            default:
-                this.router.navigate(['/user/profile']);
-            }
-        },
-        error: (err) => {
-            if (err.error?.message === 'INVALID_CREDENTIALS') {
-            this.loginError =
-                'Email o contraseña incorrectos'
-            } else {
-            this.loginError =
-                'Se ha producido un error al iniciar sesión';
-            }
-        }
-        });
-        */
-
-        /* demo */
-        if (
-        credentials.email === 'toybox@ejemplo.com' &&
-        credentials.password === '123456'
-        ) {
-        this.router.navigate(['/user/profile']);
+        if (err.error?.message === 'INVALID_CREDENTIALS') {
+          this.loginError = 'Email o contraseña incorrectos';
+        } else if (err.error?.message === 'USER_NOT_FOUND') {
+          this.loginError = 'Usuario no encontrado';
+        } else if (err.error?.message === 'USER_BLOCKED') {
+          this.loginError = 'Tu cuenta ha sido bloqueada';
+        } else if (err.status === 0) {
+          this.loginError = 'No hay conexión con el servidor';
         } else {
-        this.loginError =
-            'Email o contraseña incorrectos.';
+          this.loginError = err.error?.message || 'Error al iniciar sesión';
         }
-    }
+      }
+    });
+  }
 
-    goToForgotPassword(): void {
-        this.router.navigate(['/auth/forgot-password']);
-    }
+  private disableForm(): void {
+    this.loginForm.disable({ emitEvent: false });
+  }
 
-    goToRegister(): void {
-        this.router.navigate(['/auth/register']);
-    }
+  private enableForm(): void {
+    this.loginForm.enable({ emitEvent: false });
+  }
 
+  goToForgotPassword(): void {
+    this.router.navigate(['/auth/forgot-password']);
+  }
+
+  goToRegister(): void {
+    this.router.navigate(['/auth/register']);
+  }
 }

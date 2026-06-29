@@ -5,15 +5,18 @@
   overflow-x: hidden;
 }
 
+/* Header section */
 .favorites-title {
   font-size: 2rem;
   font-weight: 700;
   color: var(--primary-toybox);
+  margin-bottom: .5rem;
 }
 
 .favorites-subtitle {
   color: var(--on-surface-variant);
   margin: 0;
+  font-size: .95rem;
 }
 
 .favorites-count {
@@ -23,28 +26,54 @@
   color: var(--on-surface-variant);
 }
 
+/* Messages */
+.error-message {
+  background-color: rgba(211, 47, 47, .1);
+  color: var(--error);
+  padding: 1rem;
+  border-radius: var(--radius-md);
+  font-weight: 500;
+}
+
+.success-message {
+  background-color: rgba(46, 125, 50, .1);
+  color: var(--success);
+  padding: 1rem;
+  border-radius: var(--radius-md);
+  font-weight: 500;
+}
+
+/* Loading state */
+.spinner-border {
+  color: var(--primary-toybox);
+}
+
+/* Grid layout */
 .favorites-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
   gap: 1.5rem;
+  margin-bottom: 2rem;
 }
 
 .favorites-empty {
   font-size: .95rem;
 }
 
+/* Modal styles */
 .confirm-modal-backdrop {
   position: fixed;
   inset: 0;
-  background-color: rgba(0,0,0,.65);
+  background-color: rgba(0, 0, 0, .65);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 9999;
+  animation: fadeIn .2s ease-out;
 }
 
 .confirm-modal {
-  background: white;
+  background: var(--color-white);
   padding: 2rem;
   border-radius: var(--radius-lg);
   max-width: 420px;
@@ -57,6 +86,7 @@
 .modal-title {
   font-size: 1.4rem;
   margin-bottom: .5rem;
+  color: var(--primary-toybox);
 }
 
 .modal-text {
@@ -72,27 +102,71 @@
 }
 
 .btn-cancel {
-  background-color: #ddd;
-  border-radius: .5rem;
-  padding: .7rem 1.2rem;
+  background-color: var(--outline-variant);
+  color: var(--on-surface);
+  border: 1px solid var(--outline-variant);
+  border-radius: var(--radius-sm);
+  padding: .7rem 1.5rem;
   cursor: pointer;
+  font-weight: 500;
+  transition: all .2s ease;
+}
+
+.btn-cancel:hover {
+  background-color: #f5f5f5;
 }
 
 .btn-confirm-delete {
   background-color: var(--primary-toybox);
-  color: white;
-  border-radius: .5rem;
-  padding: .7rem 1.2rem;
+  color: var(--color-white);
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: .7rem 1.5rem;
   cursor: pointer;
+  font-weight: 500;
+  transition: all .2s ease;
+}
+
+.btn-confirm-delete:hover {
+  background-color: var(--primary-toybox-dark);
+  box-shadow: 0 4px 12px rgba(216, 69, 101, .3);
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 @keyframes fadeInScale {
-  from { opacity: 0; transform: scale(.9); }
-  to { opacity: 1; transform: scale(1); }
+  from {
+    opacity: 0;
+    transform: scale(.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
+/* Responsive design */
 @media (max-width: 768px) {
   .favorites-title {
     font-size: 1.6rem;
+  }
+
+  .favorites-grid {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+  }
+
+  header {
+    flex-direction: column;
+    align-items: flex-start !important;
+    gap: 1rem;
+  }
+
+  .favorites-count {
+    font-size: .75rem;
   }
 }

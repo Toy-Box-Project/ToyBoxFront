@@ -2,6 +2,8 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
+import { NavbarComponent } from "../../../shared/components/navbar/navbar";
+import { FooterComponent } from "../../../shared/components/footer/footer";
 
 // DEMO - use interface ReportItem
 interface ReportRow {
@@ -17,7 +19,7 @@ interface ReportRow {
 @Component({
   selector: 'app-reports-list',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink],
+  imports: [CommonModule, FormsModule, RouterLink, NavbarComponent, FooterComponent],
   templateUrl: './reports-list.html',
   styleUrl: './reports-list.css'
 })

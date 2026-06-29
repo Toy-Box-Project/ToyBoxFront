@@ -1,5 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
+import { NavbarComponent } from "../../../shared/components/navbar/navbar";
+import { FooterComponent } from "../../../shared/components/footer/footer";
 
 // interface LOCAL
 interface DashboardMetric {
@@ -19,7 +21,7 @@ interface AdminTask {
 @Component({
   selector: 'app-admin-dashboard',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, NavbarComponent, FooterComponent],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.css'
 })

@@ -6,6 +6,15 @@ import { Observable, tap } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { AuthResponse, LoginRequest, RegisterRequest, User } from '../../shared/interfaces/user.interface';
 
+export interface ForgotPasswordRequest {
+  email: string;
+}
+
+export interface ForgotPasswordResponse {
+  message: string;
+  email: string;
+}
+
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private readonly API = `${environment.apiUrl}/auth`;
@@ -49,6 +58,10 @@ export class AuthService {
     );
   }
 
+  forgotPassword(body: ForgotPasswordRequest): Observable<ForgotPasswordResponse> {
+    return this.http.post<ForgotPasswordResponse>(`${this.API}/forgot-password`, body);
+  }
+
   logout(): void {
     if (this.isBrowser) {
       localStorage.removeItem('token');
@@ -68,5 +81,16 @@ export class AuthService {
 
   hasRole(role: string): boolean {
     return this.currentUser()?.role === role;
+  }
+  
+  updateCurrentUser(updatedUser: Partial<User>): void {
+    const currentValue = this.currentUser();
+    if (currentValue) {
+      const merged = { ...currentValue, ...updatedUser };
+      this._currentUser.set(merged);
+      if (this.isBrowser) {
+        localStorage.setItem('user', JSON.stringify(merged));
+      }
+    }
   }
 }
