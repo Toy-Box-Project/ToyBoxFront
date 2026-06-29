@@ -106,6 +106,30 @@ dd {
   gap: var(--space-3);
 }
 
+.btn {
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  padding: 0.65rem 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.primary {
+  color: var(--color-white);
+  background: var(--color-primary);
+}
+
+.secondary {
+  color: var(--color-text);
+  border-color: var(--color-border);
+  background: var(--color-white);
+}
+
+.danger {
+  color: var(--color-white);
+  background: var(--color-danger);
+}
+
 @media (max-width: 820px) {
   .page-header,
   .detail-grid,

@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 
 interface DashboardMetric {
@@ -16,6 +17,7 @@ interface AdminTask {
 @Component({
   selector: 'app-admin-dashboard',
   standalone: true,
+  imports: [CommonModule],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.css'
 })
