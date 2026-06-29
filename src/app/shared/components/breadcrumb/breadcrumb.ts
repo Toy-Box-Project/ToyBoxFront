@@ -23,19 +23,15 @@ export class BreadcrumbComponent implements OnInit, OnDestroy {
 
   private destroy$ = new Subject<void>();
 
-  // Mapeo exhaustivo de rutas a etiquetas e iconos
   private routeLabels: { [key: string]: { label: string; icon?: string } } = {
-    // Rutas públicas
     'catalog': { label: 'Catálogo', icon: 'package' },
     'product': { label: 'Detalles del Producto', icon: 'info' },
 
-    // Auth
     'auth': { label: 'Autenticación', icon: 'security' },
     'login': { label: 'Iniciar Sesión', icon: 'login' },
     'register': { label: 'Registro', icon: 'person_add' },
     'forgot-password': { label: 'Recuperar Contraseña', icon: 'lock_reset' },
 
-    // User
     'user': { label: 'Mi Cuenta', icon: 'person' },
     'profile': { label: 'Perfil', icon: 'person' },
     'edit-profile': { label: 'Editar Perfil', icon: 'edit' },
@@ -43,19 +39,15 @@ export class BreadcrumbComponent implements OnInit, OnDestroy {
     'my-purchases': { label: 'Mis Compras', icon: 'shopping_bag' },
     'favorites': { label: 'Favoritos', icon: 'favorite' },
 
-    // Product Management
     'create': { label: 'Crear Producto', icon: 'add_circle' },
     'edit': { label: 'Editar Producto', icon: 'edit' },
 
-    // Chat
     'chat': { label: 'Mensajes', icon: 'mail' },
 
-    // Moderator
     'moderator': { label: 'Moderación', icon: 'shield' },
     'reports': { label: 'Reportes', icon: 'report' },
     'report': { label: 'Detalle del Reporte', icon: 'report_problem' },
 
-    // Admin
     'admin': { label: 'Panel de Admin', icon: 'admin_panel_settings' },
     'dashboard': { label: 'Dashboard', icon: 'dashboard' },
     'users': { label: 'Gestión de Usuarios', icon: 'people' },
@@ -90,14 +82,12 @@ export class BreadcrumbComponent implements OnInit, OnDestroy {
   private generateBreadcrumbs(): void {
     const breadcrumbs: BreadcrumbItem[] = [];
 
-    // Agregar "Inicio" siempre
     breadcrumbs.push({
       label: 'Inicio',
       route: ['/'],
       icon: 'home'
     });
 
-    // Obtener el URL actual
     const urlSegments: string[] = [];
     let route = this.activatedRoute.root;
 
@@ -113,7 +103,6 @@ export class BreadcrumbComponent implements OnInit, OnDestroy {
 
       if (routeSegments.length > 0) {
         routeSegments.forEach(segment => {
-          // Ignorar parámetros dinámicos (como :id)
           if (!segment.startsWith(':')) {
             urlSegments.push(segment);
           }
@@ -123,7 +112,6 @@ export class BreadcrumbComponent implements OnInit, OnDestroy {
       route = child;
     }
 
-    // Construir breadcrumbs basado en los segmentos
     let currentPath = '';
     for (let i = 0; i < urlSegments.length; i++) {
       const segment = urlSegments[i];
@@ -139,7 +127,6 @@ export class BreadcrumbComponent implements OnInit, OnDestroy {
       }
     }
 
-    // Si no hay items manually set, usar los generados
     if (this.items.length === 0) {
       this.items = breadcrumbs;
     }

@@ -1,11 +1,8 @@
 <div class="pattern-bg"></div>
 
-<app-navbar></app-navbar>
-
 <div class="container py-5 position-relative" style="z-index: 2;">
 
   <app-breadcrumb></app-breadcrumb>
-  <!-- Tabs Navigation -->
   <div class="tabs-wrapper mb-4">
     <button
       class="tab-btn"
@@ -24,7 +21,6 @@
     </button>
   </div>
 
-  <!-- Page Title -->
   <h2 class="page-title mb-3">
     @if (activeTab === 'purchases') {
       Reseñas que yo hice
@@ -33,14 +29,12 @@
     }
   </h2>
 
-  <!-- Loading State -->
   @if (isLoading) {
     <div class="loading-container">
       <div class="spinner"></div>
       <p class="loading-text">Cargando reseñas...</p>
     </div>
   } @else if (errorMessage) {
-    <!-- Error State -->
     <div class="error-alert">
       <span class="material-symbols-outlined">error</span>
       <div class="error-content">
@@ -49,9 +43,7 @@
       </div>
     </div>
   } @else {
-    <!-- Content -->
     @if (paginatedReviews.length === 0) {
-      <!-- Empty State -->
       <div class="empty-state">
         <span class="material-symbols-outlined">rate_review</span>
         <p class="empty-title">
@@ -70,12 +62,10 @@
         </p>
       </div>
     } @else {
-      <!-- Reviews List -->
       <div class="review-list">
         @for (review of paginatedReviews; track review.id_reviews) {
           <div class="review-item shadow-sm">
 
-            <!-- Product Image -->
             @if (review.reviewer?.profile_picture || review.reviewed?.profile_picture) {
               <img
                 class="review-img"
@@ -87,7 +77,6 @@
               </div>
             }
 
-            <!-- Review Info -->
             <div class="review-info">
               <h5>
                 @if (activeTab === 'purchases') {
@@ -98,7 +87,6 @@
               </h5>
               <p class="small text-muted">{{ review.review_date | date:'dd/MM/yyyy' }}</p>
 
-              <!-- Rating and Comment -->
               <div class="rating-row">
                 <app-star-rating [rating]="review.rating"></app-star-rating>
                 @if (review.comment) {
@@ -111,7 +99,6 @@
         }
       </div>
 
-      <!-- Pagination -->
       <div class="mt-4">
         <app-pagination
           [currentPage]="currentPage"
@@ -123,5 +110,3 @@
   }
 
 </div>
-
-<app-footer></app-footer>

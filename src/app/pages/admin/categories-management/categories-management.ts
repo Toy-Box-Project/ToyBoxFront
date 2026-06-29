@@ -3,8 +3,6 @@ import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ModalConfirmComponent } from '../../../shared/components/modal-confirm/modal-confirm';
 import { ToastComponent, ToastType } from '../../../shared/components/toast/toast';
-import { NavbarComponent } from "../../../shared/components/navbar/navbar";
-import { FooterComponent } from "../../../shared/components/footer/footer";
 
 // DEMO -> use interface Category
 interface CategoryRow {
@@ -17,7 +15,7 @@ interface CategoryRow {
 @Component({
   selector: 'app-categories-management',
   standalone: true,
-  imports: [CommonModule, FormsModule, ModalConfirmComponent, ToastComponent, NavbarComponent, FooterComponent],
+  imports: [CommonModule, FormsModule, ModalConfirmComponent, ToastComponent],
   templateUrl: './categories-management.html',
   styleUrl: './categories-management.css'
 })
