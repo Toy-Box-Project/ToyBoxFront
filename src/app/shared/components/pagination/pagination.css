@@ -1,0 +1,32 @@
+.pagination {
+    display: flex;
+    justify-content: center;
+    gap: .5rem;
+    flex-wrap: wrap;
+}
+
+.btn-page {
+    width: 42px;
+    height: 42px;
+    border: none;
+    border-radius: var(--radius-md);
+    background: white;
+    box-shadow: var(--shadow-card);
+    cursor: pointer;
+    transition: .2s ease;
+}
+
+.btn-page:hover:not(:disabled) {
+    background: var(--secondary-toybox);
+    color: white;
+}
+
+.btn-page.active {
+    background: var(--primary-toybox);
+    color: white;
+}
+
+.btn-page:disabled {
+    opacity: .4;
+    cursor: not-allowed;
+}

@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Category } from '../../interfaces/category.interface';
+import { Itemfilters } from '../../interfaces/item.interface';
 
 @Component({
   selector: 'app-filter-sidebar',
@@ -7,4 +9,33 @@ import { Component } from '@angular/core';
   templateUrl: './filter-sidebar.html',
   styleUrl: './filter-sidebar.css'
 })
-export class FilterSidebarComponent {}
+export class FilterSidebarComponent {
+  @Input() categories: Category[] = [];
+
+  @Output() filtersApplied = new EventEmitter<Itemfilters>();
+
+  productStates: string[] = [
+    'Como nuevo',
+    'Muy buen estado',
+    'Buen estado',
+    'Usado'
+  ];
+
+  onApplyFilters(
+    category: string,
+    maxPrice: string,
+    location: string,
+    status: string
+  ): void {
+    this.filtersApplied.emit({
+      category,
+      maxPrice,
+      location,
+      // status
+    });
+  }
+
+  onClearFilters(): void {
+    this.filtersApplied.emit({});
+  }
+}

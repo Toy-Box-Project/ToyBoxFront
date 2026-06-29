@@ -34,4 +34,8 @@ export class UsersService {
   toggleActive(id: number, active: boolean): Observable<User> {
     return this.http.patch<User>(`${environment.apiUrl}/admin/users/${id}/active`, { active });
   }
+
+  deleteAccount(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.API}/${id}`);
+  }
 }

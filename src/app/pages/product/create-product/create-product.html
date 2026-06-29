@@ -1,1 +1,192 @@
-<p>create product works!</p>
+<div class="pattern-bg"></div>
+
+<main class="create-product-page relative-z-10">
+  <section class="create-product-hero">
+    <div>
+      <span class="create-product-hero__eyebrow">Publicar juguete</span>
+
+      <h1>Da una segunda vida a un juguete</h1>
+
+      <p>
+        Completa la información principal del producto para que otras familias
+        puedan encontrarlo, valorarlo y contactar contigo de forma segura.
+      </p>
+    </div>
+
+    <aside class="create-product-tip card-toybox">
+      <span class="material-symbols-outlined">tips_and_updates</span>
+
+      <div>
+        <h2>Consejo Toybox</h2>
+        <p>
+          Usa un título claro, indica el estado real del juguete y añade varias
+          fotos para generar más confianza.
+        </p>
+      </div>
+    </aside>
+  </section>
+
+  <form class="create-product-layout">
+    <section class="form-panel card-toybox">
+      <div class="panel-heading">
+        <span class="material-symbols-outlined">edit_square</span>
+        <div>
+          <h2>Información del juguete</h2>
+          <p class="text-on-surface-variant">
+            Datos básicos que verá el comprador en el catálogo.
+          </p>
+        </div>
+      </div>
+
+      <div class="form-grid">
+        <div class="form-field form-field--full">
+          <label for="title">Título del producto</label>
+          <input
+            id="title"
+            class="form-control"
+            type="text"
+            placeholder="Ej. Caja de bloques de construcción"
+          />
+        </div>
+
+        <div class="form-field">
+          <label for="price">Precio</label>
+          <input
+            id="price"
+            class="form-control"
+            type="number"
+            placeholder="Ej. 18"
+          />
+        </div>
+
+        <div class="form-field">
+          <label for="state">Estado</label>
+          <select id="state" class="form-control">
+            <option value="">Selecciona estado</option>
+
+            @for (state of productStates; track state) {
+              <option>{{ state }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="form-field">
+          <label for="province">Provincia</label>
+          <input
+            id="province"
+            class="form-control"
+            type="text"
+            placeholder="Ej. Madrid"
+          />
+        </div>
+
+        <div class="form-field">
+          <label for="city">Ciudad</label>
+          <input
+            id="city"
+            class="form-control"
+            type="text"
+            placeholder="Ej. Madrid"
+          />
+        </div>
+
+        <div class="form-field form-field--full">
+          <label for="description">Descripción</label>
+          <textarea
+            id="description"
+            class="form-control"
+            rows="5"
+            placeholder="Describe el juguete, su estado, piezas incluidas y cualquier detalle útil."
+          ></textarea>
+        </div>
+      </div>
+    </section>
+
+    <section class="form-panel card-toybox">
+      <div class="panel-heading">
+        <span class="material-symbols-outlined">category</span>
+        <div>
+          <h2>Categoría</h2>
+          <p class="text-on-surface-variant">
+            Elige dónde encaja mejor tu juguete.
+          </p>
+        </div>
+      </div>
+
+      <div class="category-selector">
+        @for (category of categories; track category.id_categories) {
+          <button class="category-option" type="button">
+            <img [src]="category.icon" [alt]="category.name" />
+            <span>{{ category.name }}</span>
+          </button>
+        }
+      </div>
+    </section>
+
+    <section class="form-panel card-toybox">
+      <div class="panel-heading">
+        <span class="material-symbols-outlined">add_photo_alternate</span>
+        <div>
+          <h2>Imágenes del producto</h2>
+          <p class="text-on-surface-variant">
+            Añade fotos claras del juguete. Una de ellas será la imagen principal.
+          </p>
+        </div>
+      </div>
+
+      <div class="upload-box">
+        <span class="material-symbols-outlined">cloud_upload</span>
+        <h3>Arrastra tus imágenes aquí</h3>
+        <p>O haz clic para seleccionarlas desde tu ordenador.</p>
+
+        <button class="btn-toybox-secondary" type="button">
+          Seleccionar imágenes
+        </button>
+      </div>
+
+      <div class="image-preview-grid">
+        <div class="image-preview">
+          <img src="/assets/images/Iconos%20categorias/icono_munecosycoches.svg" alt="Vista previa" />
+          <span>Principal</span>
+        </div>
+
+        <div class="image-preview image-preview--empty">
+          <span class="material-symbols-outlined">add</span>
+        </div>
+
+        <div class="image-preview image-preview--empty">
+          <span class="material-symbols-outlined">add</span>
+        </div>
+      </div>
+    </section>
+
+    <aside class="publish-panel card-toybox">
+      <h2>Resumen de publicación</h2>
+
+      <ul>
+        <li>
+          <span class="material-symbols-outlined">check_circle</span>
+          Revisa que el título sea claro.
+        </li>
+        <li>
+          <span class="material-symbols-outlined">check_circle</span>
+          Añade precio, estado y ubicación.
+        </li>
+        <li>
+          <span class="material-symbols-outlined">check_circle</span>
+          Sube al menos una imagen.
+        </li>
+      </ul>
+
+      <div class="publish-actions">
+        <button class="btn-toybox-secondary" type="button">
+          Guardar borrador
+        </button>
+
+        <button class="btn-toybox-primary" type="button">
+          Publicar juguete
+        </button>
+      </div>
+    </aside>
+  </form>
+</main>

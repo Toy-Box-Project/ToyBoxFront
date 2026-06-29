@@ -1,47 +1,34 @@
-/* Oculta el navbar y el footer */
-app-navbar,
-app-footer {
-    display: none !important;
-}
-
 .not-found-container {
+    position: relative;
     width: 100%;
     min-height: 100vh;
-
     display: flex;
     justify-content: center;
     align-items: center;
-
     background: #ffffff;
-
     overflow: hidden;
-}
-
-.not-found-link {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    text-decoration: none;
-    cursor: pointer;
 }
 
 .not-found-image {
     width: 100%;
     max-width: 1600px;
     height: auto;
-
     display: block;
-
     user-select: none;
+    pointer-events: none;
 
-    transition: transform .25s ease;
 }
 
-.not-found-link:hover .not-found-image {
-    transform: scale(1.02);
+.home-link {
+    position: absolute;
+    left: 5%;
+    top: 61%;
+    width: 23%;
+    height: 8%;
+    z-index: 10;
+    cursor: pointer;
 }
 
-.not-found-link:active .not-found-image {
-    transform: scale(0.99);
+.home-link:hover {
+    background: rgba(216, 69, 101, 0.08);
 }

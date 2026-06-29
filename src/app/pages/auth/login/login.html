@@ -1,1 +1,123 @@
-<p>login works!</p>
+<div class="pattern-bg"></div>
+
+<div class="container py-5 relative-z-10">
+
+  <div class="card-toybox login-card p-4 p-md-5">
+
+    <div class="text-center mb-4">
+      <img
+        class="logo mb-3 d-block mx-auto"
+        src="./assets/images/Logos/toybox_logoprincipal.svg"
+        alt="ToyBox Logo">
+
+      <h1 class="login-title">Iniciar sesión</h1>
+      <p class="login-subtitle">Bienvenido de nuevo a ToyBox</p>
+    </div>
+
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+
+      <div class="mb-3">
+        <label class="form-label">Email</label>
+        <div class="input-group-wrapper">
+          <input
+            class="form-control"
+            type="email"
+            formControlName="email"
+            placeholder="tu@email.com"
+            aria-label="Email">
+
+          <span class="input-icon-right material-symbols-outlined">mail</span>
+        </div>
+
+        @if (checkControl('email', 'required')) {
+          <p class="error-message">Campo requerido</p>
+        }
+
+        @if (checkControl('email', 'pattern')) {
+          <p class="error-message">Email inválido</p>
+        }
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Contraseña</label>
+
+        <div class="input-group-wrapper">
+          <input
+            class="form-control"
+            [type]="showPassword ? 'text' : 'password'"
+            formControlName="password"
+            placeholder="••••••••"
+            aria-label="Contraseña">
+
+          <button
+            class="password-toggle"
+            type="button"
+            (click)="togglePassword()"
+            aria-label="Mostrar/ocultar contraseña">
+
+            <span class="material-symbols-outlined">
+              {{ showPassword ? 'visibility_off' : 'visibility' }}
+            </span>
+
+          </button>
+        </div>
+
+        @if (checkControl('password', 'required')) {
+          <p class="error-message">Campo requerido</p>
+        }
+
+        @if (checkControl('password', 'minlength')) {
+          <p class="error-message">Mínimo 6 caracteres</p>
+        }
+      </div>
+
+      @if (loginError) {
+        <p class="error-message text-center mb-3" role="alert">
+          {{ loginError }}
+        </p>
+      }
+
+      <button
+        class="btn-toybox-primary w-100 mb-3"
+        type="submit"
+        [disabled]="loginForm.invalid || isLoading"
+        aria-label="Iniciar sesión">
+
+        @if (isLoading) {
+          <span class="spinner-border spinner-border-sm me-2"></span>
+          <span>Validando...</span>
+        } @else {
+          <span>Iniciar sesión</span>
+          <span class="material-symbols-outlined">arrow_forward</span>
+        }
+
+      </button>
+
+      <div class="text-center mb-4">
+        <a
+          class="forgot-link"
+          (click)="goToForgotPassword()"
+          role="button"
+          tabindex="0">
+          ¿Olvidaste tu contraseña?
+        </a>
+      </div>
+
+    </form>
+
+    <div class="border-top pt-4 text-center">
+      <p class="text-on-surface-variant mb-0">
+        ¿No tienes una cuenta?
+        <a
+          class="signup-link"
+          (click)="goToRegister()"
+          role="button"
+          tabindex="0">
+          Regístrate
+        </a>
+      </p>
+    </div>
+
+  </div>
+
+</div>

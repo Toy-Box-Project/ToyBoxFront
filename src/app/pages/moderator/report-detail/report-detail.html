@@ -1,1 +1,61 @@
-<p>report detail works!</p>
+<main class="detail-page">
+
+  <a routerLink="/moderator/reports" class="back-link">Back to reports</a>
+
+  <header class="page-header">
+    <div>
+      <p class="eyebrow">Moderation</p>
+      <h1>Report #{{ report.id }}</h1>
+    </div>
+    <span class="status-pill" [class.resolved]="report.status === 'resolved'">{{ report.status }}</span>
+  </header>
+
+  <section class="detail-grid">
+    <article class="panel item-panel">
+      <h2>{{ report.itemTitle }}</h2>
+      <p>{{ report.itemDescription }}</p>
+      <dl>
+        <div>
+          <dt>Reported user</dt>
+          <dd>{{ report.reportedUser }}</dd>
+        </div>
+        <div>
+          <dt>Reporter</dt>
+          <dd>{{ report.reporter }}</dd>
+        </div>
+        <div>
+          <dt>Date</dt>
+          <dd>{{ report.reportDate }}</dd>
+        </div>
+      </dl>
+    </article>
+
+    <aside class="panel decision-panel">
+      <h2>Decision</h2>
+      <p>{{ report.reason }}</p>
+      <div class="decision-actions">
+        <button type="button" class="btn secondary" (click)="openAction('resolve')">Resolve only</button>
+        <button type="button" class="btn danger" (click)="openAction('withdraw')">Withdraw item</button>
+        <button type="button" class="btn primary" (click)="openAction('reactivate')">Reactivate item</button>
+      </div>
+    </aside>
+  </section>
+</main>
+
+<app-modal-confirm
+  [isOpen]="!!pendingAction"
+  [title]="modalTitle"
+  [message]="modalMessage"
+  confirmText="Confirm"
+  [variant]="pendingAction === 'withdraw' ? 'danger' : 'info'"
+  (confirmed)="confirmAction()"
+  (cancelled)="pendingAction = null"
+/>
+
+<app-toast
+  [visible]="toast.visible"
+  [type]="toast.type"
+  [title]="toast.title"
+  [message]="toast.message"
+  (dismissed)="toast.visible = false"
+/>

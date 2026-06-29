@@ -1,12 +1,13 @@
 import { Routes } from '@angular/router';
-import { authGuard } from './core/guards/auth.guard';
-import { roleGuard } from './core/guards/role.guard';
+// NOTE: Guards desactivados temporalmente durante el desarrollo de las páginas.
+// import { authGuard } from './core/guards/auth.guard';
+// import { roleGuard } from './core/guards/role.guard';
 
 export const routes: Routes = [
   // Public
   {
     path: '',
-    loadComponent: () => import('./pages/home/home').then(m => m.HomeComponent),
+    loadComponent: () => import('./pages/home/home').then(m => m.Home),
   },
   {
     path: 'catalog',
@@ -31,7 +32,7 @@ export const routes: Routes = [
   // User (auth required)
   {
     path: 'user',
-    canActivate: [authGuard],
+    // canActivate: [authGuard],
     children: [
       { path: 'profile',      loadComponent: () => import('./pages/user/profile/profile').then(m => m.ProfileComponent) },
       { path: 'profile/:id',  loadComponent: () => import('./pages/user/profile/profile').then(m => m.ProfileComponent) },
@@ -45,7 +46,7 @@ export const routes: Routes = [
   // Product management (auth required)
   {
     path: 'product',
-    canActivate: [authGuard],
+    // canActivate: [authGuard],
     children: [
       { path: 'create',    loadComponent: () => import('./pages/product/create-product/create-product').then(m => m.CreateProductComponent) },
       { path: 'edit/:id',  loadComponent: () => import('./pages/product/edit-product/edit-product').then(m => m.EditProductComponent) },
@@ -55,17 +56,17 @@ export const routes: Routes = [
   // Chat (auth required)
   {
     path: 'chat',
-    canActivate: [authGuard],
+    // canActivate: [authGuard],
     children: [
-      { path: '',    loadComponent: () => import('./pages/chat/chat-list/chat-list').then(m => m.ChatListComponent) },
-      { path: ':id', loadComponent: () => import('./pages/chat/chat-detail/chat-detail').then(m => m.ChatDetailComponent) },
+      { path: '',    loadComponent: () => import('./pages/chat/chat-list/chat-list').then(m => m.ChatList) },
+      { path: ':id', loadComponent: () => import('./pages/chat/chat-detail/chat-detail').then(m => m.ChatDetail) },
     ],
   },
 
   // Moderator (role required)
   {
     path: 'moderator',
-    canActivate: [authGuard, roleGuard],
+    // canActivate: [authGuard, roleGuard],
     data: { roles: ['moderador', 'administrador'] },
     children: [
       { path: 'reports',        loadComponent: () => import('./pages/moderator/reports-list/reports-list').then(m => m.ReportsListComponent) },
@@ -77,7 +78,7 @@ export const routes: Routes = [
   // Admin (role required)
   {
     path: 'admin',
-    canActivate: [authGuard, roleGuard],
+    // canActivate: [authGuard, roleGuard],
     data: { roles: ['administrador'] },
     children: [
       { path: 'dashboard',   loadComponent: () => import('./pages/admin/dashboard/dashboard').then(m => m.AdminDashboardComponent) },

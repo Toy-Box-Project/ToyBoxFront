@@ -1,10 +1,238 @@
-import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Component, inject, OnInit } from '@angular/core';
+import { AbstractControl, FormControl, FormGroup, ReactiveFormsModule, Validators, ValidationErrors } from '@angular/forms';
+import { Router, RouterModule } from '@angular/router';
+import { HttpErrorResponse } from '@angular/common/http';
+import { AuthService } from '../../../core/services/auth.service';
+import { LocationsService } from '../../../core/services/locations.service';
 
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [],
+  imports: [CommonModule, ReactiveFormsModule, RouterModule],
   templateUrl: './register.html',
-  styleUrl: './register.css'
+  styleUrl: './register.css',
 })
-export class RegisterComponent {}
+export class RegisterComponent implements OnInit {
+  private authService = inject(AuthService);
+  private locationsService = inject(LocationsService);
+  private router = inject(Router);
+
+  showPassword = false;
+  showConfirmPassword = false;
+  backendError = '';
+  backendSuccess = '';
+  isLoading = false;
+  showSuccessModal = false;
+
+  provincias: string[] = [];
+  ciudadesDisponibles: string[] = [];
+  codigosPostalesDisponibles: string[] = [];
+  ubicacionValidada = false;
+  ubicacionError = '';
+
+  private minLength8(control: FormControl): ValidationErrors | null {
+    return control.value && control.value.length >= 8 ? null : { minLength8: true };
+  }
+
+  private hasUppercase(control: FormControl): ValidationErrors | null {
+    return /[A-Z]/.test(control.value) ? null : { uppercase: true };
+  }
+
+  private hasSpecialChar(control: FormControl): ValidationErrors | null {
+    return /[!@#$%^&*()_\-+=\[\]{};:'",.<>/?\\|`~]/.test(control.value) ? null : { special: true };
+  }
+
+  private minAge18(control: FormControl): ValidationErrors | null {
+    if (!control.value) {
+      return null;
+    }
+
+    const birthDate = new Date(control.value);
+    const today = new Date();
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const monthDiff = today.getMonth() - birthDate.getMonth();
+
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+      age--;
+    }
+
+    return age >= 18 ? null : { minAge18: true };
+  }
+
+  private passwordsMatch(control: AbstractControl): ValidationErrors | null {
+    const password = control.get('password')?.value;
+    const confirmPassword = control.get('confirmPassword')?.value;
+
+    if (!password || !confirmPassword) {
+      return null;
+    }
+
+    return password === confirmPassword ? null : { passwordMismatch: true };
+  }
+
+  form = new FormGroup({
+    firstName: new FormControl('', [Validators.required, Validators.minLength(2), Validators.maxLength(30)]),
+    lastName: new FormControl('', [Validators.required, Validators.minLength(2), Validators.maxLength(30)]),
+    username: new FormControl('', [Validators.required, Validators.pattern(/^[a-zA-Z0-9_]+$/)]),
+    email: new FormControl('', [Validators.required, Validators.pattern(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)]),
+    password: new FormControl('', [
+      Validators.required,
+      this.minLength8.bind(this),
+      this.hasUppercase.bind(this),
+      this.hasSpecialChar.bind(this)
+    ]),
+    confirmPassword: new FormControl('', [Validators.required]),
+    phone: new FormControl('', [Validators.pattern(/^\d{9}$/)]),
+    birthdate: new FormControl('', [Validators.required, this.minAge18.bind(this)]),
+    province: new FormControl('', [Validators.required]),
+    city: new FormControl('', [Validators.required]),
+    postalCode: new FormControl('', [Validators.required, Validators.pattern(/^\d{5}$/)]),
+  }, { validators: this.passwordsMatch.bind(this) });
+
+  async ngOnInit(): Promise<void> {
+    this.provincias = await this.locationsService.getProvincias();
+
+    this.form.get('city')?.disable({ emitEvent: false });
+    this.form.get('postalCode')?.disable({ emitEvent: false });
+
+    this.form.get('province')?.valueChanges.subscribe(async (provincia) => {
+      const cityControl = this.form.get('city');
+      const postalControl = this.form.get('postalCode');
+
+      if (provincia) {
+        this.ciudadesDisponibles = await this.locationsService.getCiudadesByProvincia(provincia);
+        cityControl?.enable({ emitEvent: false });
+        this.form.patchValue({ city: '', postalCode: '' });
+        postalControl?.disable({ emitEvent: false });
+      } else {
+        this.ciudadesDisponibles = [];
+        cityControl?.disable({ emitEvent: false });
+        postalControl?.disable({ emitEvent: false });
+      }
+    });
+
+    this.form.get('city')?.valueChanges.subscribe(async (ciudad) => {
+      const postalControl = this.form.get('postalCode');
+      const provincia = this.form.get('province')?.value;
+
+      if (ciudad && provincia) {
+        this.codigosPostalesDisponibles = await this.locationsService.getCodigosPostalesByCity(provincia, ciudad);
+        postalControl?.enable({ emitEvent: false });
+        this.form.patchValue({ postalCode: '' });
+      } else {
+        this.codigosPostalesDisponibles = [];
+        postalControl?.disable({ emitEvent: false });
+      }
+    });
+
+    this.form.get('postalCode')?.valueChanges.subscribe(async (codigo) => {
+      if (codigo && codigo.length === 5) {
+        const ubicacion = await this.locationsService.findUbicacionByCodigoPostal(codigo);
+        if (ubicacion) {
+          this.form.patchValue({ province: ubicacion.provincia, city: ubicacion.ciudad }, { emitEvent: false });
+          this.ciudadesDisponibles = await this.locationsService.getCiudadesByProvincia(ubicacion.provincia);
+          this.codigosPostalesDisponibles = await this.locationsService.getCodigosPostalesByCity(ubicacion.provincia, ubicacion.ciudad);
+          this.ubicacionValidada = true;
+          this.ubicacionError = '';
+        }
+      }
+    });
+  }
+
+  togglePassword(): void {
+    this.showPassword = !this.showPassword;
+  }
+
+  toggleConfirmPassword(): void {
+    this.showConfirmPassword = !this.showConfirmPassword;
+  }
+
+  checkControl(control: string, error: string): boolean {
+    const c = this.form.get(control);
+    return !!(c && c.touched && c.hasError(error));
+  }
+
+  async onSubmit(): Promise<void> {
+    this.backendError = '';
+    this.backendSuccess = '';
+
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      return;
+    }
+
+    if (this.form.get('password')?.value !== this.form.get('confirmPassword')?.value) {
+      this.backendError = 'Las contraseñas no coinciden';
+      return;
+    }
+
+    const provincia = this.form.get('province')?.value || '';
+    const ciudad = this.form.get('city')?.value || '';
+    const codigoPostal = this.form.get('postalCode')?.value || '';
+
+    if (!provincia || !ciudad || !codigoPostal) {
+      this.ubicacionError = 'Completa todos los campos de ubicación';
+      return;
+    }
+
+    const validacion = await this.locationsService.validarUbicacion(provincia, ciudad, codigoPostal);
+    if (!validacion.valido) {
+      this.ubicacionError = validacion.error || 'Ubicación no válida';
+      return;
+    }
+
+    this.isLoading = true;
+    this.form.disable();
+
+    const rawValue = this.form.getRawValue();
+    const newUser = {
+      username: rawValue.username || '',
+      email: rawValue.email || '',
+      password: rawValue.password || '',
+      first_name: rawValue.firstName || '',
+      last_name: rawValue.lastName || '',
+      user_birthday: rawValue.birthdate || '',
+      user_city: rawValue.city || '',
+      user_province: rawValue.province || '',
+      user_zipcode: rawValue.postalCode || '',
+      phone_number: rawValue.phone || null,
+    };
+
+    this.authService.register(newUser).subscribe({
+      next: () => {
+        this.isLoading = false;
+        this.form.enable();
+
+        this.backendSuccess = '¡Usuario creado correctamente!';
+        this.showSuccessModal = true;
+
+        setTimeout(() => {
+          this.router.navigate(['/catalog']);
+        }, 2000);
+      },
+      error: (err: HttpErrorResponse) => {
+        this.isLoading = false;
+        this.form.enable({ emitEvent: false });
+        this.form.get('city')?.enable({ emitEvent: false });
+        this.form.get('postalCode')?.enable({ emitEvent: false });
+
+        if (err.status === 409) {
+          this.backendError = err.error?.error || 'El email o usuario ya están registrados.';
+        } else if (err.status === 422) {
+          this.backendError = 'Datos inválidos. Verifica todos los campos';
+        } else if (err.status === 0) {
+          this.backendError = 'Error de conexión. Verifica que el servidor esté corriendo';
+        } else {
+          this.backendError = 'Error al registrar usuario. Intenta de nuevo.';
+        }
+
+        console.error('Error en registro:', err);
+      }
+    });
+  }
+
+  goToLogin(): void {
+    this.router.navigate(['/auth/login']);
+  }
+}

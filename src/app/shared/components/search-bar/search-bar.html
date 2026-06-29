@@ -1,1 +1,25 @@
-<p>search bar works!</p>
+<div class="search-bar">
+  <label class="search-bar__label" for="toybox-search">
+    {{ label }}
+  </label>
+
+  <div class="search-bar__box">
+    <input
+      #searchInput
+      id="toybox-search"
+      class="form-control search-bar__input"
+      type="text"
+      [placeholder]="placeholder"
+      (keyup.enter)="onSearch(searchInput.value)"
+    />
+
+    <button
+      class="btn-toybox-primary search-bar__button"
+      type="button"
+      (click)="onSearch(searchInput.value)"
+    >
+      <span class="material-symbols-outlined">search</span>
+      {{ buttonText }}
+    </button>
+  </div>
+</div>

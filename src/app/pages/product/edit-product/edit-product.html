@@ -1,1 +1,211 @@
-<p>edit product works!</p>
+<div class="pattern-bg"></div>
+
+<main class="edit-product-page relative-z-10">
+  <section class="edit-product-hero">
+    <div>
+      <span class="edit-product-hero__eyebrow">Editar publicación</span>
+
+      <h1>Actualiza la información de tu juguete</h1>
+
+      <p>
+        Revisa los datos del producto, mejora la descripción, cambia el precio
+        o actualiza las imágenes para que tu publicación siga siendo clara y atractiva.
+      </p>
+    </div>
+
+    <aside class="edit-product-status card-toybox">
+      <span class="material-symbols-outlined">inventory_2</span>
+
+      <div>
+        <span class="edit-product-status__label">Estado actual</span>
+        <h2>{{ product.badge }}</h2>
+        <p>
+          Esta publicación está visible en el catálogo. Los cambios se aplicarán
+          cuando guardes la edición.
+        </p>
+      </div>
+    </aside>
+  </section>
+
+  <form class="edit-product-layout">
+    <section class="form-panel card-toybox">
+      <div class="panel-heading">
+        <span class="material-symbols-outlined">edit_square</span>
+
+        <div>
+          <h2>Datos del producto</h2>
+          <p class="text-on-surface-variant">
+            Modifica la información principal de tu juguete.
+          </p>
+        </div>
+      </div>
+
+      <div class="form-grid">
+        <div class="form-field form-field--full">
+          <label for="title">Título del producto</label>
+          <input
+            id="title"
+            class="form-control"
+            type="text"
+            [value]="product.title"
+          />
+        </div>
+
+        <div class="form-field">
+          <label for="price">Precio</label>
+          <input
+            id="price"
+            class="form-control"
+            type="number"
+            [value]="product.price"
+          />
+        </div>
+
+        <div class="form-field">
+          <label for="state">Estado</label>
+          <select id="state" class="form-control">
+            @for (state of productStates; track state) {
+              <option [selected]="state === product.status">{{ state }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="form-field">
+          <label for="province">Provincia</label>
+          <input
+            id="province"
+            class="form-control"
+            type="text"
+            [value]="product.province"
+          />
+        </div>
+
+        <div class="form-field">
+          <label for="city">Ciudad</label>
+          <input
+            id="city"
+            class="form-control"
+            type="text"
+            [value]="product.city"
+          />
+        </div>
+
+        <div class="form-field form-field--full">
+          <label for="description">Descripción</label>
+          <textarea
+            id="description"
+            class="form-control"
+            rows="5"
+          >{{ product.description }}</textarea>
+        </div>
+      </div>
+    </section>
+
+    <section class="form-panel card-toybox">
+      <div class="panel-heading">
+        <span class="material-symbols-outlined">category</span>
+
+        <div>
+          <h2>Categoría</h2>
+          <p class="text-on-surface-variant">
+            Puedes cambiar la categoría si el juguete encaja mejor en otra sección.
+          </p>
+        </div>
+      </div>
+
+      <div class="category-selector">
+        @for (category of categories; track category.id_categories) {
+          <button
+            class="category-option"
+            [class.category-option--active]="category.name === product.category"
+            type="button"
+          >
+            <img [src]="category.icon" [alt]="category.name" />
+            <span>{{ category.name }}</span>
+          </button>
+        }
+      </div>
+    </section>
+
+    <section class="form-panel card-toybox">
+      <div class="panel-heading">
+        <span class="material-symbols-outlined">photo_library</span>
+
+        <div>
+          <h2>Imágenes actuales</h2>
+          <p class="text-on-surface-variant">
+            Revisa las imágenes del producto o añade nuevas fotos.
+          </p>
+        </div>
+      </div>
+
+      <div class="current-image-box">
+        <img [src]="product.image" [alt]="product.title" />
+
+        <div>
+          <span>Imagen principal</span>
+          <p>
+            Esta imagen será la primera que verá el comprador en el catálogo.
+          </p>
+        </div>
+      </div>
+
+      <div class="image-preview-grid">
+        <div class="image-preview">
+          <img [src]="product.image" [alt]="product.title" />
+          <span>Principal</span>
+        </div>
+
+        <div class="image-preview">
+          <img src="/assets/images/Iconos%20categorias/icono_construccion.svg" alt="Imagen secundaria" />
+        </div>
+
+        <div class="image-preview image-preview--empty">
+          <span class="material-symbols-outlined">add</span>
+        </div>
+      </div>
+
+      <button class="btn-toybox-secondary upload-button" type="button">
+        <span class="material-symbols-outlined">add_photo_alternate</span>
+        Añadir más imágenes
+      </button>
+    </section>
+
+    <aside class="save-panel card-toybox">
+      <h2>Guardar cambios</h2>
+
+      <p>
+        Antes de guardar, revisa que todos los datos sigan siendo correctos.
+      </p>
+
+      <ul>
+        <li>
+          <span class="material-symbols-outlined">check_circle</span>
+          La publicación mantiene su historial.
+        </li>
+        <li>
+          <span class="material-symbols-outlined">check_circle</span>
+          Los compradores verán la información actualizada.
+        </li>
+        <li>
+          <span class="material-symbols-outlined">check_circle</span>
+          Puedes seguir editando más adelante.
+        </li>
+      </ul>
+
+      <div class="save-actions">
+        <button class="btn-toybox-secondary" type="button">
+          Cancelar
+        </button>
+
+        <button class="btn-toybox-primary" type="button">
+          Guardar cambios
+        </button>
+      </div>
+
+      <button class="danger-link" type="button">
+        Retirar publicación
+      </button>
+    </aside>
+  </form>
+</main>

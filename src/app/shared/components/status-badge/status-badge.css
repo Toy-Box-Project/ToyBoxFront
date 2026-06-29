@@ -1,0 +1,40 @@
+.badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: .35rem .85rem;
+    border-radius: 999px;
+    font-size: .85rem;
+    font-weight: 600;
+}
+
+.available {
+    background: rgba(46,125,50,.12);
+    color: var(--success);
+}
+
+.reserved {
+    background: rgba(255,193,7,.15);
+    color: #b8860b;
+}
+
+.sold {
+    background: rgba(216,69,101,.15);
+    color: var(--primary-toybox);
+}
+
+.new {
+    background: rgba(97,136,193,.15);
+    color: var(--secondary-toybox);
+}
+
+.used {
+    background: rgba(88,65,67,.12);
+    color: var(--on-surface-variant);
+}
+
+
+.featured {
+    background: var(--primary-toybox);
+    color: white;
+}

@@ -1,0 +1,19 @@
+@if (showError) {
+  <div class="map-error">
+    <span class="material-symbols-outlined">location_off</span>
+    <span>Ubicación no disponible</span>
+  </div>
+} @else {
+  <div class="map-container">
+    <iframe
+      [src]="mapUrl"
+      [width]="width"
+      [height]="height"
+      style="border: 0"
+      allowfullscreen=""
+      loading="lazy"
+      referrerpolicy="no-referrer-when-downgrade"
+      title="Mapa de ubicación"
+    ></iframe>
+  </div>
+}
