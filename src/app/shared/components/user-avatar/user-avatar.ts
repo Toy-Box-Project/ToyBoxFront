@@ -9,23 +9,25 @@ import { CommonModule } from '@angular/common';
   styleUrl: './user-avatar.css'
 })
 export class UserAvatarComponent {
+  @Input() src: string | null = null;
+  @Input() name: string = '';
+  @Input() size: number = 48;
+  @Input() clickable: boolean = false;
 
-  @Input() src: string | null = null;   
-  @Input() name: string = '';           
-  @Input() size: number = 48;           
-
-    get finalSrc(): string | null {
-        if (this.src && this.src.trim() !== '') return this.src;
-        return null; // ← null active @else { <span>{{ initials }}</span> }
+  get finalSrc(): string | null {
+    if (this.src && this.src.trim() !== '') {
+      return this.src;
     }
+    return null;
+  }
 
-    get initials(): string {
-        if (!this.name) return '?';
-        return this.name
-        .split(' ')
-        .map(n => n[0])
-        .join('')
-        .toUpperCase()
-        .slice(0, 2);
-    }
+  get initials(): string {
+    if (!this.name) return '?';
+    return this.name
+      .split(' ')
+      .map(n => n[0])
+      .join('')
+      .toUpperCase()
+      .slice(0, 2);
+  }
 }

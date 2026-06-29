@@ -14,6 +14,14 @@ export class ReviewsService {
     return this.http.get<Review[]>(`${this.API}/product/${productId}`);
   }
 
+  getByReviewer(reviewerId: number): Observable<Review[]> {
+    return this.http.get<Review[]>(`${this.API}/reviewer/${reviewerId}`);
+  }
+
+  getBySeller(sellerId: number): Observable<Review[]> {
+    return this.http.get<Review[]>(`${this.API}/seller/${sellerId}`);
+  }
+
   create(body: CreateReviewRequest): Observable<Review> {
     return this.http.post<Review>(this.API, body);
   }

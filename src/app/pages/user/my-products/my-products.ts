@@ -1,100 +1,277 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 
 import { NavbarComponent } from '../../../shared/components/navbar/navbar';
 import { FooterComponent } from '../../../shared/components/footer/footer';
 import { PaginationComponent } from '../../../shared/components/pagination/pagination';
+import { LoadingSpinnerComponent } from '../../../shared/components/loading-spinner/loading-spinner';
+import { StatusBadgeComponent } from '../../../shared/components/status-badge/status-badge';
+import { StarRatingComponent } from '../../../shared/components/star-rating/star-rating';
+import { ModalConfirmComponent } from '../../../shared/components/modal-confirm/modal-confirm';
+import { EmptyStateComponent } from '../../../shared/components/empty-state/empty-state';
 
-import { MyProduct } from '../../../shared/interfaces/item.interface';
+import { ProductsService } from '../../../core/services/products.service';
+import { OrdersService } from '../../../core/services/orders.service';
+import { ReviewsService } from '../../../core/services/reviews.service';
+import { AuthService } from '../../../core/services/auth.service';
+
+import { Item, ItemCard } from '../../../shared/interfaces/item.interface';
+import { ItemHistory } from '../../../shared/interfaces/item-history.interface';
+import { Review } from '../../../shared/interfaces/review.interface';
+import { ItemStatus } from '../../../shared/enums/item-status.enum';
+import { TradeStatus } from '../../../shared/enums/trade-status.enum';
+import { BreadcrumbComponent } from '../../../shared/components/breadcrumb/breadcrumb';
 
 @Component({
   selector: 'app-my-products',
   standalone: true,
-  imports: [ CommonModule, RouterModule, NavbarComponent, FooterComponent, PaginationComponent ],
+  imports: [
+    CommonModule,
+    RouterModule,
+    NavbarComponent,
+    FooterComponent,
+    PaginationComponent,
+    LoadingSpinnerComponent,
+    StatusBadgeComponent,
+    StarRatingComponent,
+    ModalConfirmComponent,
+    EmptyStateComponent, BreadcrumbComponent
+  ],
   templateUrl: './my-products.html',
   styleUrl: './my-products.css',
 })
 export class MyProductsComponent implements OnInit {
+  private readonly productsService = inject(ProductsService);
+  private readonly ordersService = inject(OrdersService);
+  private readonly reviewsService = inject(ReviewsService);
+  private readonly authService = inject(AuthService);
+  private readonly router = inject(Router);
 
-  products: MyProduct[] = [];
-  productToDelete: MyProduct | null = null;
-  showDeleteModal: boolean = false;
+  // Productos a la venta
+  products: Item[] = [];
+  isLoadingProducts = true;
+  productsError = '';
+  currentPage = 1;
+  totalPages = 1;
 
-  constructor(private router: Router) {}
+  // Transacciones de ventas
+  sales: ItemHistory[] = [];
+  isLoadingSales = true;
+  salesError = '';
+
+  // Reseñas como vendedor
+  receivedReviews: Review[] = [];
+  isLoadingReviews = true;
+  reviewsError = '';
+
+  // Modal de confirmación
+  productToDelete: Item | null = null;
+  showDeleteModal = false;
+
+  // Información del usuario actual
+  currentUserId: number | undefined;
 
   ngOnInit(): void {
-
-    /*
-    ============================================================
-    BACKEND REAL (Node + Express + MySQL - db_toybox
-    ============================================================
-
-    this.productService.getMyProducts(userId).subscribe({
-      next: (res) => this.products = res,
-      error: () => console.error('Error cargando productos')
-    });
-    */
-
-    // DEMO 
-    this.products = [
-      { id_products: 1, id_user: 10, product_title: 'Coche teledirigido', product_description: '', product_price: 25, product_category: 'juguetes', product_condition: 'nuevo', product_status: 'en_venta', product_created_at: '2026-05-12', product_updated_at: '2026-05-14', product_main_image: '/assets/images/demo1.jpg' },
-      { id_products: 2, id_user: 10, product_title: 'Muñeca articulada', product_description: '', product_price: 12, product_category: 'juguetes', product_condition: 'usado', product_status: 'en_venta', product_created_at: '2026-06-01', product_updated_at: '2026-06-02', product_main_image: '/assets/images/demo2.jpg' },
-      { id_products: 3, id_user: 10, product_title: 'Puzzle 500 piezas', product_description: '', product_price: 8, product_category: 'juguetes', product_condition: 'usado', product_status: 'en_venta', product_created_at: '2026-04-20', product_updated_at: '2026-04-21', product_main_image: '/assets/images/demo3.jpg' },
-      { id_products: 4, id_user: 10, product_title: 'Pelota saltarina', product_description: '', product_price: 5, product_category: 'juguetes', product_condition: 'nuevo', product_status: 'en_venta', product_created_at: '2026-03-10', product_updated_at: '2026-03-11', product_main_image: '/assets/images/demo4.jpg' },
-      { id_products: 5, id_user: 10, product_title: 'Set de pinturas', product_description: '', product_price: 15, product_category: 'manualidades', product_condition: 'nuevo', product_status: 'en_venta', product_created_at: '2026-02-15', product_updated_at: '2026-02-16', product_main_image: '/assets/images/demo5.jpg' },
-      { id_products: 6, id_user: 10, product_title: 'Robot educativo', product_description: '', product_price: 40, product_category: 'tecnología', product_condition: 'nuevo', product_status: 'en_venta', product_created_at: '2026-01-10', product_updated_at: '2026-01-12', product_main_image: '/assets/images/demo6.jpg' },
-      { id_products: 7, id_user: 10, product_title: 'Libro infantil', product_description: '', product_price: 6, product_category: 'libros', product_condition: 'usado', product_status: 'en_venta', product_created_at: '2025-12-01', product_updated_at: '2025-12-02', product_main_image: '/assets/images/demo7.jpg' },
-      { id_products: 8, id_user: 10, product_title: 'Camión de bomberos', product_description: '', product_price: 18, product_category: 'juguetes', product_condition: 'nuevo', product_status: 'en_venta', product_created_at: '2025-11-10', product_updated_at: '2025-11-11', product_main_image: '/assets/images/demo8.jpg' },
-      { id_products: 9, id_user: 10, product_title: 'Juego de mesa', product_description: '', product_price: 22, product_category: 'juegos', product_condition: 'usado', product_status: 'en_venta', product_created_at: '2025-10-05', product_updated_at: '2025-10-06', product_main_image: '/assets/images/demo9.jpg' },
-      { id_products: 10, id_user: 10, product_title: 'Peluche gigante', product_description: '', product_price: 30, product_category: 'juguetes', product_condition: 'nuevo', product_status: 'en_venta', product_created_at: '2025-09-01', product_updated_at: '2025-09-02', product_main_image: '/assets/images/demo10.jpg' }
-    ];
+    this.loadCurrentUser();
   }
 
-  viewProduct(id: number) {
+  private loadCurrentUser(): void {
+    const user = this.authService.currentUser();
+    if (user) {
+      this.currentUserId = user.id_users;
+      this.loadAllData();
+    } else {
+      this.productsError = 'No hay usuario autenticado';
+    }
+  }
+
+  private loadAllData(): void {
+    this.loadMyProducts();
+    this.loadMySales();
+    this.loadReceivedReviews();
+  }
+
+  private loadMyProducts(): void {
+    this.isLoadingProducts = true;
+    this.productsError = '';
+
+    if (!this.currentUserId) return;
+
+    this.productsService.getAll({ sellerId: this.currentUserId }).subscribe({
+      next: (response) => {
+        this.totalPages = response.totalPages || 1;
+        // ItemCard es compatible para mostrar, pero necesitamos Item para editar/eliminar
+        // Convertimos ItemCard a Item (los campos faltantes se pueden rellenar con valores por defecto)
+        this.products = (response.items || []).map((card: ItemCard) => ({
+          id_items: card.id_items,
+          title: card.title,
+          description: null,
+          price: card.price,
+          conservation_status: card.conservation_status,
+          item_status: card.item_status,
+          location: card.location,
+          publication_date: card.publication_date,
+          fk_seller_id: this.currentUserId ?? 0,
+          fk_categories_id: 0,
+          item_update: null,
+          images: card.image ? [{ id_photos: 0, photo_url: card.image, order: 0, fk_items_id: card.id_items }] : []
+        } as Item));
+        this.isLoadingProducts = false;
+      },
+      error: (err) => {
+        console.error('Error cargando productos:', err);
+        this.productsError = 'Error al cargar los productos. Intenta de nuevo.';
+        this.isLoadingProducts = false;
+      }
+    });
+  }
+
+  private loadMySales(): void {
+    this.isLoadingSales = true;
+    this.salesError = '';
+
+    this.ordersService.getMySales().subscribe({
+      next: (sales) => {
+        this.sales = sales;
+        this.isLoadingSales = false;
+      },
+      error: (err) => {
+        console.error('Error cargando ventas:', err);
+        this.salesError = 'Error al cargar las ventas. Intenta de nuevo.';
+        this.isLoadingSales = false;
+      }
+    });
+  }
+
+  private loadReceivedReviews(): void {
+    this.isLoadingReviews = true;
+    this.reviewsError = '';
+
+    if (!this.currentUserId) return;
+
+    this.reviewsService.getBySeller(this.currentUserId).subscribe({
+      next: (reviews) => {
+        this.receivedReviews = reviews;
+        this.isLoadingReviews = false;
+      },
+      error: (err) => {
+        console.error('Error cargando reseñas:', err);
+        this.reviewsError = 'Error al cargar las reseñas. Intenta de nuevo.';
+        this.isLoadingReviews = false;
+      }
+    });
+  }
+
+  viewProduct(id: number): void {
     this.router.navigate(['/product', id]);
   }
 
-  markAsPurchased(id: number) {
-    this.router.navigate(['/chat']); 
-  }
-
-  editProduct(id: number) {
+  editProduct(id: number): void {
     this.router.navigate(['/product/edit', id]);
   }
 
-  confirmDelete(product: MyProduct) {
+  markAsSold(id: number): void {
+    if (!this.currentUserId) return;
+
+    this.productsService.markAsSold(id).subscribe({
+      next: () => {
+        this.products = this.products.map(p =>
+          p.id_items === id ? { ...p, item_status: ItemStatus.Sold } : p
+        );
+      },
+      error: (err) => {
+        console.error('Error marcando producto como vendido:', err);
+      }
+    });
+  }
+
+  confirmDelete(product: Item): void {
     this.productToDelete = product;
     this.showDeleteModal = true;
   }
 
-  cancelDelete() {
+  cancelDelete(): void {
     this.showDeleteModal = false;
     this.productToDelete = null;
   }
 
-  deleteProductConfirmed() {
+  deleteProductConfirmed(): void {
     if (!this.productToDelete) return;
 
-    /*
-    ============================================================
-    BACKEND REAL
-    ============================================================
-
-    this.productService.deleteProduct(this.productToDelete.id_products).subscribe({
+    this.productsService.delete(this.productToDelete.id_items).subscribe({
       next: () => {
         this.products = this.products.filter(
-          p => p.id_products !== this.productToDelete!.id_products
+          p => p.id_items !== this.productToDelete!.id_items
         );
+        this.showDeleteModal = false;
+        this.productToDelete = null;
+      },
+      error: (err) => {
+        console.error('Error eliminando producto:', err);
       }
     });
-    */
+  }
 
-    this.products = this.products.filter(
-      p => p.id_products !== this.productToDelete!.id_products
-    );
+  getAverageRating(): number {
+    if (this.receivedReviews.length === 0) return 0;
+    const sum = this.receivedReviews.reduce((acc, review) => acc + review.rating, 0);
+    return sum / this.receivedReviews.length;
+  }
 
-    this.showDeleteModal = false;
-    this.productToDelete = null;
+  onPageChange(page: number): void {
+    this.currentPage = page;
+    this.productsService.getAll({ sellerId: this.currentUserId, page }).subscribe({
+      next: (response) => {
+        this.totalPages = response.totalPages || 1;
+        this.products = (response.items || []).map((card: ItemCard) => ({
+          id_items: card.id_items,
+          title: card.title,
+          description: null,
+          price: card.price,
+          conservation_status: card.conservation_status,
+          item_status: card.item_status,
+          location: card.location,
+          publication_date: card.publication_date,
+          fk_seller_id: this.currentUserId ?? 0,
+          fk_categories_id: 0,
+          item_update: null,
+          images: card.image ? [{ id_photos: 0, photo_url: card.image, order: 0, fk_items_id: card.id_items }] : []
+        } as Item));
+      },
+      error: (err) => {
+        console.error('Error cargando productos:', err);
+      }
+    });
+  }
+
+  // Mapear ItemStatus a valores compatibles con StatusBadgeComponent
+  mapItemStatus(status: ItemStatus): 'available' | 'reserved' | 'sold' | 'new' | 'used' | 'featured' {
+    switch (status) {
+      case ItemStatus.Available:
+        return 'available';
+      case ItemStatus.Sold:
+        return 'sold';
+      case ItemStatus.Paused:
+        return 'reserved';
+      case ItemStatus.Deleted:
+        return 'featured';
+      default:
+        return 'available';
+    }
+  }
+
+  // Mapear TradeStatus a valores compatibles con StatusBadgeComponent
+  mapTradeStatus(status: TradeStatus): 'available' | 'reserved' | 'sold' | 'new' | 'used' | 'featured' {
+    switch (status) {
+      case TradeStatus.Pending:
+        return 'reserved';
+      case TradeStatus.Done:
+        return 'sold';
+      case TradeStatus.Cancelled:
+        return 'featured';
+      default:
+        return 'available';
+    }
   }
 }

@@ -1,29 +1,54 @@
-
-<div class="location-card" (click)="openModal()">
-  <div
-    class="location-map"
-    [style.backgroundImage]="'url(' + (mapUrl || '/assets/images/map-placeholder.jpg') + ')'"
-  ></div>
-
-  <div class="location-overlay"></div>
+<!-- <div class="location-card cursor-pointer" (click)="openModal()" role="button" tabindex="0" (keyup.enter)="openModal()">
+  @if (isLoading) {
+    <div class="d-flex align-items-center justify-content-center h-100 bg-light">
+      <div class="spinner-border spinner-border-sm text-primary" role="status">
+        <span class="visually-hidden">Cargando mapa...</span>
+      </div>
+    </div>
+  } @else {
+    <div
+      class="location-map"
+      [style.backgroundImage]="mapUrl ? 'url(' + mapUrl + ')' : 'none'"
+    ></div>
+    <div class="location-overlay"></div>
+  }
 
   <div class="location-label">
     {{ location || 'Ubicación desconocida' }}
   </div>
 </div>
 
-
 @if (showModal) {
-  <div class="map-modal-overlay" (click)="closeModal()">
+  <div class="map-modal-overlay" (click)="closeModal()" role="dialog" aria-modal="true">
     <div class="map-modal" (click)="$event.stopPropagation()">
+      <button class="close-btn" type="button" (click)="closeModal()" aria-label="Cerrar mapa">✕</button>
 
-      <button class="close-btn" type="button" (click)="closeModal()">✕</button>
-
-      <img
-        [src]="mapUrl || '/assets/images/map-placeholder.jpg'"
-        class="map-modal-img"
-        alt="Mapa ampliado"
-      />
+      @if (mapUrl) {
+        <img [src]="mapUrl" class="map-modal-img" alt="Mapa ampliado de {{ location }}" />
+      } @else {
+        <div class="d-flex align-items-center justify-content-center" style="height: 400px;">
+          <p class="text-muted">No hay mapa disponible</p>
+        </div>
+      }
     </div>
+  </div>
+} -->
+@if (showError) {
+  <div class="map-error">
+    <span class="material-symbols-outlined">location_off</span>
+    <span>Ubicación no disponible</span>
+  </div>
+} @else {
+  <div class="map-container">
+    <iframe
+      [src]="mapUrl"
+      [width]="width"
+      [height]="height"
+      style="border: 0"
+      allowfullscreen=""
+      loading="lazy"
+      referrerpolicy="no-referrer-when-downgrade"
+      title="Mapa de ubicación"
+    ></iframe>
   </div>
 }

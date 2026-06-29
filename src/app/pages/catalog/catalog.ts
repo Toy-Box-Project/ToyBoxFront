@@ -4,6 +4,8 @@ import { ProductCardComponent } from '../../shared/components/product-card/produ
 import { SearchBarComponent } from '../../shared/components/search-bar/search-bar';
 import { FilterSidebarComponent } from '../../shared/components/filter-sidebar/filter-sidebar';
 import { Itemfilters } from '../../shared/interfaces/item.interface';
+import { FooterComponent } from "../../shared/components/footer/footer";
+import { NavbarComponent } from '../../shared/components/navbar/navbar';
 
 // DEMO - use interface ItemCard
 interface CatalogProduct {
@@ -20,7 +22,7 @@ interface CatalogProduct {
 @Component({
   selector: 'app-catalog',
   standalone: true,
-  imports: [ProductCardComponent, SearchBarComponent, FilterSidebarComponent],
+  imports: [ProductCardComponent, SearchBarComponent, FilterSidebarComponent, FooterComponent, NavbarComponent],
   templateUrl: './catalog.html',
   styleUrl: './catalog.css'
 })

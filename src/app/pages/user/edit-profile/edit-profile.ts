@@ -1,225 +1,385 @@
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, ViewChild, OnInit } from '@angular/core';
-import {
-  FormBuilder,
-  FormGroup,
-  Validators,
-  ReactiveFormsModule,
-  FormsModule
-} from '@angular/forms';
-import { Router, RouterModule } from '@angular/router';
-
+import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
+import { Router } from '@angular/router';
+import { HttpErrorResponse } from '@angular/common/http';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import { AuthService } from '../../../core/services/auth.service';
+import { UsersService } from '../../../core/services/users.service';
+import { LocationsService } from '../../../core/services/locations.service';
 import { NavbarComponent } from '../../../shared/components/navbar/navbar';
 import { FooterComponent } from '../../../shared/components/footer/footer';
-import { UserAvatarComponent } from '../../../shared/components/user-avatar/user-avatar';
-import { AuthService } from '../../../core/services/auth.service';
+import { BreadcrumbComponent } from '../../../shared/components/breadcrumb/breadcrumb';
+import { MapStaticComponent } from '../../../shared/components/map-static/map-static';
+import { User } from '../../../shared/interfaces/user.interface';
+
 
 @Component({
   selector: 'app-edit-profile',
   standalone: true,
-  imports: [ CommonModule, RouterModule, FormsModule, ReactiveFormsModule, NavbarComponent, FooterComponent, UserAvatarComponent ],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    NavbarComponent,
+    FooterComponent,
+    BreadcrumbComponent,
+    MapStaticComponent
+  ],
   templateUrl: './edit-profile.html',
-  styleUrl: './edit-profile.css',
+  styleUrls: ['./edit-profile.css']
 })
-export class EditProfileComponent implements OnInit {
-
-  @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
-
-  form!: FormGroup;
-  previewImage: string | null = null;
-
-  backendError = '';
-  backendSuccess = '';
-  showPassword = false;
+export class EditProfileComponent implements OnInit, OnDestroy {
+  editProfileForm!: FormGroup;
+  isLoading = false;
+  isSaving = false;
+  errorMessage: string | null = null;
+  successMessage: string | null = null;
   showDeleteModal = false;
+  showPasswordField = false;
+  profilePicturePreview: string | null = null;
+  selectedFile: File | null = null;
 
-  mapUrl: string = '/assets/images/map-placeholder.jpg';
-  user: any = null;
+  provinces: string[] = [];
+  cities: string[] = [];
+
+  breadcrumbItems = [
+    { label: 'Inicio', url: '/' },
+    { label: 'Mi Perfil', url: '/user/profile' },
+    { label: 'Editar Perfil', url: null }
+  ];
+
+  private destroy$ = new Subject<void>();
 
   constructor(
     private fb: FormBuilder,
-    // private authService: AuthService,
+    private authService: AuthService,
+    private usersService: UsersService,
+    private locationsService: LocationsService,
     private router: Router
   ) {}
 
-  ngOnInit() {
-    /*
-    ============================================================
-    REAL BACKEND — Cargar datos del usuario desde db_toybox
-    ============================================================
+  ngOnInit(): void {
+    this.checkAuthentication();
+    this.initializeForm();
+    this.loadLocationData();
+    this.loadUserData();
+  }
 
-    this.authService.getProfile().subscribe({
-      next: (res) => {
-        this.user = res;
-        this.initializeForm(res);
-      },
-      error: () => this.backendError = 'Error al cargar el perfil'
+  checkAuthentication(): void {
+    if (!this.authService.isLoggedIn()) {
+      this.router.navigate(['/login']);
+    }
+  }
+
+  async loadLocationData(): Promise<void> {
+    try {
+      this.provinces = await this.locationsService.getProvincias();
+    } catch (error) {
+      console.error('Error loading provinces:', error);
+      this.errorMessage = 'Error al cargar las provincias.';
+    }
+  }
+
+  initializeForm(): void {
+    this.editProfileForm = this.fb.group({
+      first_name: ['', [Validators.required, Validators.minLength(2)]],
+      last_name: ['', [Validators.required, Validators.minLength(2)]],
+      email: ['', [Validators.required, Validators.email]],
+      phone_number: ['', [Validators.required, Validators.pattern(/^\d{9,15}$/)]],
+      user_birthday: ['', [Validators.required, this.minAgeValidator(18)]],
+      user_province: ['', [Validators.required]],
+      user_city: ['', [Validators.required]],
+      user_zipcode: ['', [Validators.required, Validators.pattern(/^\d{4,6}$/)]],
+      password: ['', []],
+      profile_picture: ['', []]
     });
 
-    */
-
-    // MOCK TEMPORAL
-    this.user = {
-      username: 'lunita_dev',
-      firstName: 'Luna',
-      lastName: 'García',
-      email: 'luna@example.com',
-      phone: '612345678',
-      user_city: 'Madrid',
-      user_province: 'Madrid',
-      user_zipcode: '28001',
-      user_birthday: '1998-04-12',
-      profile_picture: '/assets/images/default-avatar.png'
-    };
-
-    this.initializeForm(this.user);
+    // Escuchar cambios en provincia para actualizar ciudades
+    this.editProfileForm.get('user_province')?.valueChanges
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(async (province) => {
+        await this.onProvinceChange(province);
+      });
   }
 
-  initializeForm(u: any) {
-    const date = u.user_birthday ? new Date(u.user_birthday) : null;
+  loadUserData(): void {
+    this.isLoading = true;
+    const currentUser = this.authService.currentUser();
 
-    this.form = this.fb.group({
-      username: [{ value: u.username, disabled: true }],   
-      firstName: [u.firstName, Validators.required],      
-      lastName: [u.lastName, Validators.required],         
-      email: [u.email, [Validators.required, Validators.pattern(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)]],
-      password: [''],
-      phone: [u.phone, [Validators.pattern(/^\d{9}$/)]],
-      day: [date ? String(date.getDate()).padStart(2, '0') : ''],
-      month: [date ? String(date.getMonth() + 1).padStart(2, '0') : ''],
-      year: [date ? String(date.getFullYear()) : ''],
-      user_city: [u.user_city, Validators.required],
-      user_province: [u.user_province, Validators.required],
-      user_zipcode: [u.user_zipcode, [Validators.required, Validators.pattern(/^\d{5}$/)]]
-    });
-
-    this.previewImage = u.profile_picture;
-
-    this.form.get('user_zipcode')?.valueChanges.subscribe(zip => {
-      if (/^\d{5}$/.test(zip)) this.updateMap(zip);
-    });
-
-    if (u.user_zipcode) this.updateMap(u.user_zipcode);
-  }
-
-  updateMap(zip: string) {
-    /*
-    ============================================================
-    REAL BACK / API MAPAS
-    ============================================================
-
-    this.mapService.getMap(zip).subscribe(url => this.mapUrl = url);
-
-    */
-    this.mapUrl = `/assets/images/maps/${zip}.jpg`;
-  }
-
-  triggerFileInput() {
-    this.fileInput.nativeElement.click();
-  }
-
-  onFileSelected(event: Event) {
-    const input = event.target as HTMLInputElement;
-    const file = input.files?.[0];
-    if (!file) return;
-
-    const reader = new FileReader();
-    reader.onload = () => this.previewImage = reader.result as string;
-    reader.readAsDataURL(file);
-  }
-
-  confirmDeletePhoto() {
-    this.previewImage = null;
-  }
-
-  togglePassword() {
-    this.showPassword = !this.showPassword;
-  }
-
-  openMap() {
-    //pending
-    this.router.navigate(['/user/map'], {
-      queryParams: { zip: this.form.value.user_zipcode }
-    });
-  }
-
-  checkControl(control: string, error: string): boolean {
-    const c = this.form.get(control);
-    return !!(c && c.touched && c.hasError(error));
-  }
-
-  save() {
-    this.backendError = '';
-    this.backendSuccess = '';
-
-    if (this.form.invalid) {
-      this.form.markAllAsTouched();
+    if (!currentUser) {
+      this.isLoading = false;
+      this.errorMessage = 'No hay usuario autenticado.';
       return;
     }
 
-    const f = this.form.getRawValue();
+    // Recargar datos del usuario desde el servidor
+    this.usersService.getById(currentUser.id_users)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (user: User) => {
+          this.editProfileForm.patchValue({
+            first_name: user.first_name,
+            last_name: user.last_name,
+            email: user.email,
+            phone_number: user.phone_number,
+            user_birthday: user.user_birthday,
+            user_province: user.user_province,
+            user_city: user.user_city,
+            user_zipcode: user.user_zipcode
+          });
 
-    const birthday =
-      f.day && f.month && f.year
-        ? `${f.year}-${f.month}-${f.day}`
-        : null;
+          // Cargar ciudades según la provincia
+          if (user.user_province) {
+            // No esperar, dejar que se cargue en background
+            this.onProvinceChange(user.user_province).catch(error =>
+              console.error('Error loading cities for province:', error)
+            );
+          }
 
-    const updatedUser = {
-      username: f.username,
-      firstName: f.firstName,
-      lastName: f.lastName,
-      email: f.email,
-      password: f.password || undefined,
-      phone: f.phone,
-      user_city: f.user_city,
-      user_province: f.user_province,
-      user_zipcode: f.user_zipcode,
-      user_birthday: birthday,
-      profile_picture: this.previewImage
-    };
+          // Cargar preview de foto
+          if (user.profile_picture) {
+            this.profilePicturePreview = user.profile_picture;
+          }
 
-    /*
-    ============================================================
-    REAL BACKEND — Actualizar usuario en db_toybox1
-    ============================================================
-
-    this.authService.updateProfile(updatedUser).subscribe({
-      next: () => {
-        this.backendSuccess = 'Perfil actualizado correctamente';
-        setTimeout(() => this.router.navigate(['/user/profile']), 1200);
-      },
-      error: (err) => {
-        this.backendError = err.error?.message || 'Error al actualizar el perfil';
-      }
-    });
-
-    */
-
-    this.backendSuccess = 'Simulación: perfil actualizado correctamente';
+          this.isLoading = false;
+        },
+        error: (error: HttpErrorResponse) => {
+          this.isLoading = false;
+          this.errorMessage = error.error?.message || 'Error al cargar tus datos.';
+          console.error('Error loading user data:', error);
+        }
+      });
   }
 
-  openDeleteModal() {
+  async onProvinceChange(province: string): Promise<void> {
+    if (province) {
+      try {
+        this.cities = await this.locationsService.getCiudadesByProvincia(province);
+        this.editProfileForm.get('user_city')?.reset();
+      } catch (error) {
+        console.error('Error loading cities:', error);
+        this.cities = [];
+      }
+    } else {
+      this.cities = [];
+    }
+  }
+
+  minAgeValidator(minAge: number): (control: AbstractControl) => ValidationErrors | null {
+    return (control: AbstractControl): ValidationErrors | null => {
+      if (!control.value) {
+        return null;
+      }
+
+      const birthDate = new Date(control.value);
+      const today = new Date();
+      let age = today.getFullYear() - birthDate.getFullYear();
+      const monthDiff = today.getMonth() - birthDate.getMonth();
+
+      if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+        age--;
+      }
+
+      return age >= minAge ? null : { minAge: { requiredAge: minAge, actualAge: age } };
+    };
+  }
+
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files[0]) {
+      const file = input.files[0];
+
+      // Validar tipo de archivo
+      if (!file.type.startsWith('image/')) {
+        this.errorMessage = 'Por favor selecciona una imagen válida.';
+        return;
+      }
+
+      // Validar tamaño (máx 5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        this.errorMessage = 'La imagen debe ser menor a 5MB.';
+        return;
+      }
+
+      this.selectedFile = file;
+
+      // Crear preview
+      const reader = new FileReader();
+      reader.onload = (e: ProgressEvent<FileReader>) => {
+        this.profilePicturePreview = (e.target as FileReader).result as string;
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
+  togglePasswordField(): void {
+    this.showPasswordField = !this.showPasswordField;
+    const passwordControl = this.editProfileForm.get('password');
+    if (this.showPasswordField) {
+      passwordControl?.setValidators([Validators.required, Validators.minLength(6)]);
+    } else {
+      passwordControl?.clearValidators();
+      passwordControl?.reset();
+    }
+    passwordControl?.updateValueAndValidity();
+  }
+
+  onSaveProfile(): void {
+    if (this.editProfileForm.invalid) {
+      this.markFormGroupTouched(this.editProfileForm);
+      return;
+    }
+
+    const currentUser = this.authService.currentUser();
+    if (!currentUser) {
+      this.errorMessage = 'No hay usuario autenticado.';
+      return;
+    }
+
+    this.isSaving = true;
+    this.errorMessage = null;
+    this.successMessage = null;
+
+    const formValue = this.editProfileForm.value;
+    const updateData: Partial<User> = {
+      first_name: formValue.first_name,
+      last_name: formValue.last_name,
+      email: formValue.email,
+      phone_number: formValue.phone_number,
+      user_birthday: formValue.user_birthday,
+      user_province: formValue.user_province,
+      user_city: formValue.user_city,
+      user_zipcode: formValue.user_zipcode
+    };
+
+    if (formValue.password) {
+      updateData.password = formValue.password;
+    }
+
+    this.usersService.updateProfile(currentUser.id_users, updateData)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (updatedUser: User) => {
+          this.isSaving = false;
+          this.successMessage = 'Perfil actualizado correctamente.';
+
+          // Actualizar datos en AuthService
+          this.authService.updateCurrentUser(updatedUser);
+
+          // Subir foto de perfil si se seleccionó
+          if (this.selectedFile) {
+            const formData = new FormData();
+            formData.append('profile_picture', this.selectedFile);
+            this.usersService.updateProfileImage(currentUser.id_users, formData)
+              .pipe(takeUntil(this.destroy$))
+              .subscribe({
+                next: (userWithImage: User) => {
+                  this.authService.updateCurrentUser(userWithImage);
+                  setTimeout(() => {
+                    this.router.navigate(['/user/profile']);
+                  }, 1500);
+                },
+                error: (error: HttpErrorResponse) => {
+                  console.error('Error uploading profile image:', error);
+                  // El perfil se actualizó, solo falló la imagen
+                  setTimeout(() => {
+                    this.router.navigate(['/user/profile']);
+                  }, 1500);
+                }
+              });
+          } else {
+            setTimeout(() => {
+              this.router.navigate(['/user/profile']);
+            }, 1500);
+          }
+        },
+        error: (error: HttpErrorResponse) => {
+          this.isSaving = false;
+          this.errorMessage = error.error?.message || 'Error al actualizar el perfil.';
+          console.error('Error updating profile:', error);
+        }
+      });
+  }
+
+  onCancel(): void {
+    if (confirm('¿Descartar cambios?')) {
+      this.router.navigate(['/user/profile']);
+    }
+  }
+
+  openDeleteModal(): void {
     this.showDeleteModal = true;
   }
 
-  closeDeleteModal() {
+  closeDeleteModal(): void {
     this.showDeleteModal = false;
   }
 
-  deleteAccount() {
-    /*
-    ============================================================
-    REAL BACKEND — Dar de baja cuenta
-    ============================================================
+  onDeleteAccount(): void {
+    const currentUser = this.authService.currentUser();
+    if (!currentUser) {
+      alert('No hay usuario autenticado.');
+      return;
+    }
 
-    this.authService.deleteAccount().subscribe({
-      next: () => this.router.navigate(['/auth/login']),
-      error: () => this.backendError = 'Error al eliminar la cuenta'
+    this.usersService.deleteAccount(currentUser.id_users)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: () => {
+          alert('Tu cuenta ha sido eliminada correctamente.');
+          this.authService.logout();
+          this.router.navigate(['/login']);
+        },
+        error: (error: HttpErrorResponse) => {
+          alert(error.error?.message || 'Error al eliminar la cuenta.');
+          console.error('Error deleting account:', error);
+        }
+      });
+  }
+
+  private markFormGroupTouched(formGroup: FormGroup): void {
+    Object.keys(formGroup.controls).forEach(key => {
+      const control = formGroup.get(key);
+      control?.markAsTouched();
+
+      if (control instanceof FormGroup) {
+        this.markFormGroupTouched(control);
+      }
     });
+  }
 
-    */
+  getErrorMessage(fieldName: string): string | null {
+    const control = this.editProfileForm.get(fieldName);
+    if (!control || !control.errors || !control.touched) {
+      return null;
+    }
 
-    alert('Simulación: cuenta eliminada');
-    this.router.navigate(['/auth/login']);
+    if (control.errors['required']) {
+      return `${fieldName.replace(/_/g, ' ')} es requerido`;
+    }
+    if (control.errors['email']) {
+      return 'Email inválido';
+    }
+    if (control.errors['minLength']) {
+      return `Mínimo ${control.errors['minLength'].requiredLength} caracteres`;
+    }
+    if (control.errors['pattern']) {
+      if (fieldName === 'phone_number') {
+        return 'Teléfono inválido (9-15 dígitos)';
+      }
+      if (fieldName === 'user_zipcode') {
+        return 'Código postal inválido (4-6 dígitos)';
+      }
+    }
+    if (control.errors['minAge']) {
+      return `Debes tener al menos ${control.errors['minAge'].requiredAge} años`;
+    }
+    return null;
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

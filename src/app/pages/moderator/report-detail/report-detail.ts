@@ -3,6 +3,8 @@ import { Component, inject } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { ModalConfirmComponent } from '../../../shared/components/modal-confirm/modal-confirm';
 import { ToastComponent, ToastType } from '../../../shared/components/toast/toast';
+import { FooterComponent } from "../../../shared/components/footer/footer";
+import { NavbarComponent } from "../../../shared/components/navbar/navbar";
 
 type ReportAction = 'resolve' | 'withdraw' | 'reactivate';
 
@@ -21,7 +23,7 @@ interface ReportDetail {
 @Component({
   selector: 'app-report-detail',
   standalone: true,
-  imports: [CommonModule, RouterLink, ModalConfirmComponent, ToastComponent],
+  imports: [CommonModule, RouterLink, ModalConfirmComponent, ToastComponent, FooterComponent, NavbarComponent],
   templateUrl: './report-detail.html',
   styleUrl: './report-detail.css'
 })

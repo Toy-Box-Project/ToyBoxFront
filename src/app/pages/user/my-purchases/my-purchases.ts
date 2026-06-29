@@ -1,73 +1,117 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { NavbarComponent } from '../../../shared/components/navbar/navbar';
 import { FooterComponent } from '../../../shared/components/footer/footer';
 import { PaginationComponent } from '../../../shared/components/pagination/pagination';
 import { StarRatingComponent } from '../../../shared/components/star-rating/star-rating';
+import { AuthService } from '../../../core/services/auth.service';
+import { ReviewsService } from '../../../core/services/reviews.service';
+import { Review } from '../../../shared/interfaces/review.interface';
+import { HttpErrorResponse } from '@angular/common/http';
+import { BreadcrumbComponent } from '../../../shared/components/breadcrumb/breadcrumb';
 
 @Component({
   selector: 'app-my-purchases',
   standalone: true,
-  imports: [ CommonModule, RouterModule, NavbarComponent, FooterComponent, PaginationComponent, StarRatingComponent ],
+  imports: [
+    CommonModule,
+    RouterModule,
+    NavbarComponent,
+    FooterComponent,
+    PaginationComponent,
+    StarRatingComponent, BreadcrumbComponent
+  ],
   templateUrl: './my-purchases.html',
   styleUrl: './my-purchases.css',
 })
 export class MyPurchasesComponent implements OnInit {
+  private authService = inject(AuthService);
+  private reviewsService = inject(ReviewsService);
 
   activeTab: 'purchases' | 'sales' = 'purchases';
 
-  myPurchaseReviews: any[] = [];
-  mySalesReviews: any[] = [];
+  myPurchaseReviews: Review[] = [];
+  mySalesReviews: Review[] = [];
 
+  isLoading = false;
+  errorMessage = '';
   currentPage = 1;
   pageSize = 6;
 
   ngOnInit(): void {
-
-    /*
-    ============================================================
-    BACKEND REAL (Node + Express + MySQL - db_toybox
-    ============================================================
-
-    this.reviewService.getMyPurchaseReviews(userId).subscribe(res => {
-      this.myPurchaseReviews = res;
-    });
-
-    this.reviewService.getMySalesReviews(userId).subscribe(res => {
-      this.mySalesReviews = res;
-    });
-    */
-
-    // DEMO— 7 reseñas de compras
-    this.myPurchaseReviews = [
-      { id: 1, product_title: 'Robot educativo', rating: 5, comment: 'Muy buen vendedor.', date: '2026-05-12', product_image: '/assets/images/demo6.jpg' },
-      { id: 2, product_title: 'Puzzle 500 piezas', rating: 4, comment: 'Llegó rápido.', date: '2026-04-20', product_image: '/assets/images/demo3.jpg' },
-      { id: 3, product_title: 'Set de pinturas', rating: 5, comment: 'Perfecto estado.', date: '2026-03-10', product_image: '/assets/images/demo5.jpg' },
-      { id: 4, product_title: 'Libro infantil', rating: 4, comment: 'Muy buen trato.', date: '2026-02-01', product_image: '/assets/images/demo7.jpg' },
-      { id: 5, product_title: 'Coche teledirigido', rating: 5, comment: 'Todo genial.', date: '2026-01-15', product_image: '/assets/images/demo1.jpg' },
-      { id: 6, product_title: 'Muñeca articulada', rating: 3, comment: 'Bien, pero tardó.', date: '2025-12-10', product_image: '/assets/images/demo2.jpg' },
-      { id: 7, product_title: 'Juego de mesa', rating: 5, comment: 'Muy divertido.', date: '2025-11-05', product_image: '/assets/images/demo9.jpg' }
-    ];
-
-    // DEMO — 7 reseñas de ventas
-    this.mySalesReviews = [
-      { id: 10, product_title: 'Coche teledirigido', rating: 5, comment: 'Mi hijo encantado.', date: '2026-05-14', product_image: '/assets/images/demo1.jpg' },
-      { id: 11, product_title: 'Set de pinturas', rating: 4, comment: 'Todo correcto.', date: '2026-02-16', product_image: '/assets/images/demo5.jpg' },
-      { id: 12, product_title: 'Robot educativo', rating: 5, comment: 'Muy útil.', date: '2026-01-12', product_image: '/assets/images/demo6.jpg' },
-      { id: 13, product_title: 'Libro infantil', rating: 4, comment: 'Buen estado.', date: '2025-12-02', product_image: '/assets/images/demo7.jpg' },
-      { id: 14, product_title: 'Puzzle 500 piezas', rating: 5, comment: 'Perfecto.', date: '2025-11-20', product_image: '/assets/images/demo3.jpg' },
-      { id: 15, product_title: 'Juego de mesa', rating: 3, comment: 'Bien, pero usado.', date: '2025-10-10', product_image: '/assets/images/demo9.jpg' },
-      { id: 16, product_title: 'Camión de bomberos', rating: 5, comment: 'Muy buen vendedor.', date: '2025-09-01', product_image: '/assets/images/demo8.jpg' }
-    ];
+    this.loadReviews();
   }
 
-  switchTab(tab: 'purchases' | 'sales') {
+  /**
+   * Cargar reseñas del backend
+   */
+  private loadReviews(): void {
+    const currentUser = this.authService.currentUser();
+
+    if (!currentUser) {
+      this.errorMessage = 'Debes estar autenticado para ver tus reseñas';
+      return;
+    }
+
+    this.isLoading = true;
+    this.errorMessage = '';
+
+    // Cargar reseñas de compras (como comprador)
+    this.reviewsService.getByReviewer(currentUser.id_users).subscribe({
+      next: (reviews) => {
+        this.myPurchaseReviews = reviews;
+      },
+      error: (err: HttpErrorResponse) => {
+        console.error('Error cargando reseñas de compras:', err);
+        this.handleError(err);
+      }
+    });
+
+    // Cargar reseñas de ventas (como vendedor)
+    this.reviewsService.getBySeller(currentUser.id_users).subscribe({
+      next: (reviews) => {
+        this.mySalesReviews = reviews;
+      },
+      error: (err: HttpErrorResponse) => {
+        console.error('Error cargando reseñas de ventas:', err);
+        this.handleError(err);
+      },
+      complete: () => {
+        this.isLoading = false;
+      }
+    });
+  }
+
+  /**
+   * Manejar errores de las peticiones
+   */
+  private handleError(err: HttpErrorResponse): void {
+    if (err.status === 0) {
+      this.errorMessage = 'No hay conexión con el servidor';
+    } else if (err.status === 401) {
+      this.errorMessage = 'Tu sesión ha expirado. Por favor, inicia sesión nuevamente';
+    } else if (err.status === 403) {
+      this.errorMessage = 'No tienes permiso para ver estas reseñas';
+    } else if (err.status === 404) {
+      this.errorMessage = 'No se encontraron reseñas';
+    } else {
+      this.errorMessage = err.error?.message || 'Error al cargar las reseñas. Intenta de nuevo.';
+    }
+  }
+
+  /**
+   * Cambiar entre pestañas de compras y ventas
+   */
+  switchTab(tab: 'purchases' | 'sales'): void {
     this.activeTab = tab;
     this.currentPage = 1;
   }
 
-  get paginatedReviews() {
+  /**
+   * Obtener reseñas paginadas según la pestaña activa
+   */
+  get paginatedReviews(): Review[] {
     const list = this.activeTab === 'purchases'
       ? this.myPurchaseReviews
       : this.mySalesReviews;
@@ -76,7 +120,10 @@ export class MyPurchasesComponent implements OnInit {
     return list.slice(start, start + this.pageSize);
   }
 
-  get totalPages() {
+  /**
+   * Obtener el número total de páginas
+   */
+  get totalPages(): number {
     const list = this.activeTab === 'purchases'
       ? this.myPurchaseReviews
       : this.mySalesReviews;
@@ -84,7 +131,10 @@ export class MyPurchasesComponent implements OnInit {
     return Math.ceil(list.length / this.pageSize);
   }
 
-  onPageChange(page: number) {
+  /**
+   * Manejar cambio de página
+   */
+  onPageChange(page: number): void {
     this.currentPage = page;
   }
 }
