@@ -1,38 +1,3 @@
-<!-- <div class="location-card cursor-pointer" (click)="openModal()" role="button" tabindex="0" (keyup.enter)="openModal()">
-  @if (isLoading) {
-    <div class="d-flex align-items-center justify-content-center h-100 bg-light">
-      <div class="spinner-border spinner-border-sm text-primary" role="status">
-        <span class="visually-hidden">Cargando mapa...</span>
-      </div>
-    </div>
-  } @else {
-    <div
-      class="location-map"
-      [style.backgroundImage]="mapUrl ? 'url(' + mapUrl + ')' : 'none'"
-    ></div>
-    <div class="location-overlay"></div>
-  }
-
-  <div class="location-label">
-    {{ location || 'Ubicación desconocida' }}
-  </div>
-</div>
-
-@if (showModal) {
-  <div class="map-modal-overlay" (click)="closeModal()" role="dialog" aria-modal="true">
-    <div class="map-modal" (click)="$event.stopPropagation()">
-      <button class="close-btn" type="button" (click)="closeModal()" aria-label="Cerrar mapa">✕</button>
-
-      @if (mapUrl) {
-        <img [src]="mapUrl" class="map-modal-img" alt="Mapa ampliado de {{ location }}" />
-      } @else {
-        <div class="d-flex align-items-center justify-content-center" style="height: 400px;">
-          <p class="text-muted">No hay mapa disponible</p>
-        </div>
-      }
-    </div>
-  </div>
-} -->
 @if (showError) {
   <div class="map-error">
     <span class="material-symbols-outlined">location_off</span>

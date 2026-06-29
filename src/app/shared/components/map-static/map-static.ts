@@ -1,7 +1,7 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
-import { environment } from '../../../../environments/environment';
+// import { ENVIRONMENT } from '../../../core/providers/environment.provider';
 
 @Component({
   selector: 'app-map-static',
@@ -16,20 +16,23 @@ export class MapStaticComponent {
   @Input() width: number = 600;
   @Input() height: number = 250;
 
-  constructor(private sanitizer: DomSanitizer) {}
+  private sanitizer = inject(DomSanitizer);
+  // private env = inject(ENVIRONMENT);
 
   get mapUrl(): SafeResourceUrl {
+    // TODO: Implementar mapa después
+    return this.sanitizer.bypassSecurityTrustResourceUrl('');
+
+    /*
     if (!this.location) {
       return this.sanitizer.bypassSecurityTrustResourceUrl('');
     }
-
-    const encodedLocation = encodeURIComponent(this.location);
-    const mapboxUrl = `https://api.mapbox.com/styles/v1/mapbox/light-v11/static/auto/auto/${this.width}x${this.height}@2x?access_token=${environment.mapboxToken}`;
 
     // Using OpenStreetMap Nominatim and StaticMap as fallback
     return this.sanitizer.bypassSecurityTrustResourceUrl(
       `https://www.openstreetmap.org/export/embed.html?bbox=${this.getMapBounds()}&layer=mapnik&marker=${this.getMapMarker()}`
     );
+    */
   }
 
   private getMapBounds(): string {
