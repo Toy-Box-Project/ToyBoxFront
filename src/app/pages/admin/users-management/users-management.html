@@ -29,16 +29,16 @@
       <tbody>
         @for (user of filteredUsers; track user.id) {
           <tr>
-            <td>
+            <td data-label="User">
               <strong>{{ user.username }}</strong>
               <span>{{ user.email }}</span>
             </td>
-            <td>{{ user.role }}</td>
-            <td>
+            <td data-label="Role">{{ user.role }}</td>
+            <td data-label="Status">
               <span class="status-pill" [class.blocked]="user.status === 'blocked'">{{ user.status }}</span>
             </td>
-            <td>{{ user.publishedItems }}</td>
-            <td>
+            <td data-label="Items">{{ user.publishedItems }}</td>
+            <td data-label="Action">
               <button type="button" class="link-button" [class.danger]="user.status === 'active'" (click)="askStatusChange(user)">
                 {{ user.status === 'active' ? 'Block' : 'Unblock' }}
               </button>
