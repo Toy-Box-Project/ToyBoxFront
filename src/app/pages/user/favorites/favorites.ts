@@ -2,9 +2,6 @@ import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
-
-import { NavbarComponent } from '../../../shared/components/navbar/navbar';
-import { FooterComponent } from '../../../shared/components/footer/footer';
 import { ProductCardComponent } from '../../../shared/components/product-card/product-card';
 import { PaginationComponent } from '../../../shared/components/pagination/pagination';
 import { FavoritesService } from '../../../core/services/favorites.service';
@@ -25,14 +22,7 @@ interface DemoProduct {
 @Component({
   selector: 'app-favorites',
   standalone: true,
-  imports: [
-    CommonModule,
-    RouterModule,
-    NavbarComponent,
-    FooterComponent,
-    ProductCardComponent,
-    PaginationComponent, BreadcrumbComponent
-  ],
+  imports: [CommonModule,RouterModule,ProductCardComponent,PaginationComponent, BreadcrumbComponent],
   templateUrl: './favorites.html',
   styleUrl: './favorites.css',
 })

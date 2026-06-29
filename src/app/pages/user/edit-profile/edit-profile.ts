@@ -8,8 +8,6 @@ import { takeUntil } from 'rxjs/operators';
 import { AuthService } from '../../../core/services/auth.service';
 import { UsersService } from '../../../core/services/users.service';
 import { LocationsService } from '../../../core/services/locations.service';
-import { NavbarComponent } from '../../../shared/components/navbar/navbar';
-import { FooterComponent } from '../../../shared/components/footer/footer';
 import { BreadcrumbComponent } from '../../../shared/components/breadcrumb/breadcrumb';
 import { MapStaticComponent } from '../../../shared/components/map-static/map-static';
 import { User } from '../../../shared/interfaces/user.interface';
@@ -18,14 +16,7 @@ import { User } from '../../../shared/interfaces/user.interface';
 @Component({
   selector: 'app-edit-profile',
   standalone: true,
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    NavbarComponent,
-    FooterComponent,
-    BreadcrumbComponent,
-    MapStaticComponent
-  ],
+  imports: [CommonModule,ReactiveFormsModule,BreadcrumbComponent,MapStaticComponent],
   templateUrl: './edit-profile.html',
   styleUrls: ['./edit-profile.css']
 })
@@ -95,7 +86,6 @@ export class EditProfileComponent implements OnInit, OnDestroy {
       profile_picture: ['', []]
     });
 
-    // Escuchar cambios en provincia para actualizar ciudades
     this.editProfileForm.get('user_province')?.valueChanges
       .pipe(takeUntil(this.destroy$))
       .subscribe(async (province) => {
@@ -113,7 +103,6 @@ export class EditProfileComponent implements OnInit, OnDestroy {
       return;
     }
 
-    // Recargar datos del usuario desde el servidor
     this.usersService.getById(currentUser.id_users)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
@@ -129,15 +118,12 @@ export class EditProfileComponent implements OnInit, OnDestroy {
             user_zipcode: user.user_zipcode
           });
 
-          // Cargar ciudades según la provincia
           if (user.user_province) {
-            // No esperar, dejar que se cargue en background
             this.onProvinceChange(user.user_province).catch(error =>
               console.error('Error loading cities for province:', error)
             );
           }
 
-          // Cargar preview de foto
           if (user.profile_picture) {
             this.profilePicturePreview = user.profile_picture;
           }
@@ -190,13 +176,11 @@ export class EditProfileComponent implements OnInit, OnDestroy {
     if (input.files && input.files[0]) {
       const file = input.files[0];
 
-      // Validar tipo de archivo
       if (!file.type.startsWith('image/')) {
         this.errorMessage = 'Por favor selecciona una imagen válida.';
         return;
       }
 
-      // Validar tamaño (máx 5MB)
       if (file.size > 5 * 1024 * 1024) {
         this.errorMessage = 'La imagen debe ser menor a 5MB.';
         return;
@@ -204,7 +188,6 @@ export class EditProfileComponent implements OnInit, OnDestroy {
 
       this.selectedFile = file;
 
-      // Crear preview
       const reader = new FileReader();
       reader.onload = (e: ProgressEvent<FileReader>) => {
         this.profilePicturePreview = (e.target as FileReader).result as string;
@@ -263,11 +246,8 @@ export class EditProfileComponent implements OnInit, OnDestroy {
         next: (updatedUser: User) => {
           this.isSaving = false;
           this.successMessage = 'Perfil actualizado correctamente.';
-
-          // Actualizar datos en AuthService
           this.authService.updateCurrentUser(updatedUser);
 
-          // Subir foto de perfil si se seleccionó
           if (this.selectedFile) {
             const formData = new FormData();
             formData.append('profile_picture', this.selectedFile);
@@ -282,7 +262,6 @@ export class EditProfileComponent implements OnInit, OnDestroy {
                 },
                 error: (error: HttpErrorResponse) => {
                   console.error('Error uploading profile image:', error);
-                  // El perfil se actualizó, solo falló la imagen
                   setTimeout(() => {
                     this.router.navigate(['/user/profile']);
                   }, 1500);

@@ -6,8 +6,6 @@ import { takeUntil } from 'rxjs/operators';
 import { AuthService } from '../../../core/services/auth.service';
 import { UsersService } from '../../../core/services/users.service';
 import { ReviewsService } from '../../../core/services/reviews.service';
-import { NavbarComponent } from '../../../shared/components/navbar/navbar';
-import { FooterComponent } from '../../../shared/components/footer/footer';
 import { BreadcrumbComponent } from '../../../shared/components/breadcrumb/breadcrumb';
 import { StarRatingComponent } from '../../../shared/components/star-rating/star-rating';
 import { MapStaticComponent } from '../../../shared/components/map-static/map-static';
@@ -18,14 +16,7 @@ import { UserRole } from '../../../shared/enums/user-role.enum';
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [
-    CommonModule,
-    NavbarComponent,
-    FooterComponent,
-    BreadcrumbComponent,
-    StarRatingComponent,
-    MapStaticComponent
-  ],
+  imports: [CommonModule,BreadcrumbComponent,StarRatingComponent,MapStaticComponent],
   templateUrl: './profile.html',
   styleUrls: ['./profile.css']
 })

@@ -1,9 +1,6 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
-
-import { NavbarComponent } from '../../../shared/components/navbar/navbar';
-import { FooterComponent } from '../../../shared/components/footer/footer';
 import { PaginationComponent } from '../../../shared/components/pagination/pagination';
 import { LoadingSpinnerComponent } from '../../../shared/components/loading-spinner/loading-spinner';
 import { StatusBadgeComponent } from '../../../shared/components/status-badge/status-badge';
@@ -26,18 +23,8 @@ import { BreadcrumbComponent } from '../../../shared/components/breadcrumb/bread
 @Component({
   selector: 'app-my-products',
   standalone: true,
-  imports: [
-    CommonModule,
-    RouterModule,
-    NavbarComponent,
-    FooterComponent,
-    PaginationComponent,
-    LoadingSpinnerComponent,
-    StatusBadgeComponent,
-    StarRatingComponent,
-    ModalConfirmComponent,
-    EmptyStateComponent, BreadcrumbComponent
-  ],
+  imports: [CommonModule,RouterModule,PaginationComponent,LoadingSpinnerComponent,StatusBadgeComponent,StarRatingComponent,
+    ModalConfirmComponent,EmptyStateComponent, BreadcrumbComponent],
   templateUrl: './my-products.html',
   styleUrl: './my-products.css',
 })

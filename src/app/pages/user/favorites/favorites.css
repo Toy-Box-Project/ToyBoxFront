@@ -5,7 +5,6 @@
   overflow-x: hidden;
 }
 
-/* Header section */
 .favorites-title {
   font-size: 2rem;
   font-weight: 700;
@@ -26,7 +25,6 @@
   color: var(--on-surface-variant);
 }
 
-/* Messages */
 .error-message {
   background-color: rgba(211, 47, 47, .1);
   color: var(--error);
@@ -43,12 +41,10 @@
   font-weight: 500;
 }
 
-/* Loading state */
 .spinner-border {
   color: var(--primary-toybox);
 }
 
-/* Grid layout */
 .favorites-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
@@ -60,7 +56,6 @@
   font-size: .95rem;
 }
 
-/* Modal styles */
 .confirm-modal-backdrop {
   position: fixed;
   inset: 0;
@@ -132,7 +127,6 @@
   box-shadow: 0 4px 12px rgba(216, 69, 101, .3);
 }
 
-/* Animations */
 @keyframes fadeIn {
   from { opacity: 0; }
   to { opacity: 1; }
@@ -149,7 +143,6 @@
   }
 }
 
-/* Responsive design */
 @media (max-width: 768px) {
   .favorites-title {
     font-size: 1.6rem;

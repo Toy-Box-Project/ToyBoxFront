@@ -1,9 +1,7 @@
-<app-navbar></app-navbar>
 
 <div class="edit-profile-container">
   <app-breadcrumb [items]="breadcrumbItems"></app-breadcrumb>
 
-  <!-- Loading State -->
   @if (isLoading) {
     <div class="loading-spinner">
       <div class="spinner-border text-primary" role="status">
@@ -12,28 +10,23 @@
     </div>
   }
 
-  <!-- Form Content -->
   @if (!isLoading) {
     <div class="edit-profile-content">
       <h1 class="page-title">Editar Perfil</h1>
 
-      <!-- Success Message -->
       @if (successMessage) {
         <div class="alert alert-success alert-dismissible fade show" role="alert">
           {{ successMessage }}
         </div>
       }
 
-      <!-- Error Message -->
       @if (errorMessage) {
         <div class="alert alert-danger alert-dismissible fade show" role="alert">
           {{ errorMessage }}
         </div>
       }
 
-      <!-- Edit Form -->
       <form [formGroup]="editProfileForm" (ngSubmit)="onSaveProfile()" class="edit-form">
-        <!-- Profile Picture Section -->
         <div class="form-section">
           <h2 class="section-title">Foto de Perfil</h2>
 
@@ -70,7 +63,6 @@
           </div>
         </div>
 
-        <!-- Personal Information -->
         <div class="form-section">
           <h2 class="section-title">Información Personal</h2>
 
@@ -170,7 +162,6 @@
           </div>
         </div>
 
-        <!-- Location Information -->
         <div class="form-section">
           <h2 class="section-title">Ubicación</h2>
 
@@ -236,7 +227,6 @@
             </div>
           </div>
 
-          <!-- Map Preview -->
           <div class="map-preview-section">
             <h3 class="small-title">Vista previa de ubicación</h3>
             @if (editProfileForm.get('user_province')?.value && editProfileForm.get('user_city')?.value) {
@@ -250,7 +240,6 @@
           </div>
         </div>
 
-        <!-- Password Section -->
         <div class="form-section">
           <div class="password-header">
             <h2 class="section-title">Contraseña</h2>
@@ -292,7 +281,6 @@
           }
         </div>
 
-        <!-- Form Actions -->
         <div class="form-actions">
           <button
             type="submit"
@@ -333,7 +321,6 @@
   }
 </div>
 
-<!-- Delete Account Modal -->
 @if (showDeleteModal) {
   <div class="modal-backdrop" (click)="closeDeleteModal()"></div>
   <div class="modal-dialog modal-confirm">
@@ -380,5 +367,3 @@
     </div>
   </div>
 }
-
-<app-footer></app-footer>

@@ -1,8 +1,6 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { NavbarComponent } from '../../../shared/components/navbar/navbar';
-import { FooterComponent } from '../../../shared/components/footer/footer';
 import { PaginationComponent } from '../../../shared/components/pagination/pagination';
 import { StarRatingComponent } from '../../../shared/components/star-rating/star-rating';
 import { AuthService } from '../../../core/services/auth.service';
@@ -14,14 +12,7 @@ import { BreadcrumbComponent } from '../../../shared/components/breadcrumb/bread
 @Component({
   selector: 'app-my-purchases',
   standalone: true,
-  imports: [
-    CommonModule,
-    RouterModule,
-    NavbarComponent,
-    FooterComponent,
-    PaginationComponent,
-    StarRatingComponent, BreadcrumbComponent
-  ],
+  imports: [CommonModule,RouterModule,PaginationComponent,StarRatingComponent, BreadcrumbComponent],
   templateUrl: './my-purchases.html',
   styleUrl: './my-purchases.css',
 })
