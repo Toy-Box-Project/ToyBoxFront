@@ -15,17 +15,19 @@
   </header>
 
   <section class="reports-list">
-    <article class="report-card" *ngFor="let report of filteredReports">
-      <div class="report-main">
-        <span class="status-pill" [class.resolved]="report.status === 'resolved'">{{ report.status }}</span>
-        <h2>{{ report.itemTitle }}</h2>
-        <p>{{ report.reason }}</p>
-        <small>Reported user: {{ report.reportedUser }} · Reporter: {{ report.reporter }}</small>
-      </div>
-      <div class="report-side">
-        <time>{{ report.date }}</time>
-        <a [routerLink]="['/moderator/report', report.id]">View detail</a>
-      </div>
-    </article>
+    @for (report of filteredReports; track report.id) {
+      <article class="report-card">
+        <div class="report-main">
+          <span class="status-pill" [class.resolved]="report.status === 'resolved'">{{ report.status }}</span>
+          <h2>{{ report.itemTitle }}</h2>
+          <p>{{ report.reason }}</p>
+          <small>Reported user: {{ report.reportedUser }} - Reporter: {{ report.reporter }}</small>
+        </div>
+        <div class="report-side">
+          <time>{{ report.date }}</time>
+          <a [routerLink]="['/moderator/report', report.id]">View detail</a>
+        </div>
+      </article>
+    }
   </section>
 </main>
