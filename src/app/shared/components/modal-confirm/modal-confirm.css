@@ -63,27 +63,6 @@
   margin-top: var(--space-2);
 }
 
-.btn {
+.modal-actions .btn {
   min-width: 6.5rem;
-  border: 1px solid transparent;
-  border-radius: var(--radius-sm);
-  padding: 0.55rem 0.9rem;
-  font-weight: 600;
-  cursor: pointer;
-}
-
-.btn-secondary {
-  color: var(--color-text);
-  border-color: var(--color-border);
-  background: var(--color-white);
-}
-
-.btn-primary {
-  color: var(--color-white);
-  background: var(--color-primary);
-}
-
-.btn-danger {
-  color: var(--color-white);
-  background: var(--color-danger);
 }

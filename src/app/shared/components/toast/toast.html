@@ -1,7 +1,9 @@
-<aside class="toast-message" *ngIf="visible" [class]="type" role="status" aria-live="polite">
-  <div class="toast-body">
-    <strong>{{ title }}</strong>
-    <span>{{ message }}</span>
-  </div>
-  <button type="button" aria-label="Close notification" (click)="dismiss()">x</button>
-</aside>
+@if (visible) {
+  <aside class="toast-message" [class]="type" role="status" aria-live="polite">
+    <div class="toast-body">
+      <strong>{{ title }}</strong>
+      <span>{{ message }}</span>
+    </div>
+    <button type="button" aria-label="Close notification" (click)="dismiss()">x</button>
+  </aside>
+}

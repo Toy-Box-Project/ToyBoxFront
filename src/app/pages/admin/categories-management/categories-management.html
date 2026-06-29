@@ -19,8 +19,10 @@
         <input type="text" name="description" [(ngModel)]="form.description" />
       </label>
       <div class="form-actions">
-        <button type="button" class="btn secondary" *ngIf="editingId" (click)="resetForm()">Cancel</button>
-        <button type="submit" class="btn primary">{{ editingId ? 'Save changes' : 'Create category' }}</button>
+        @if (editingId) {
+          <button type="button" class="btn btn--ghost" (click)="resetForm()">Cancel</button>
+        }
+        <button type="submit" class="btn btn--primary">{{ editingId ? 'Save changes' : 'Create category' }}</button>
       </div>
     </form>
   </section>
@@ -36,15 +38,17 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let category of filteredCategories">
-          <td>{{ category.name }}</td>
-          <td>{{ category.description }}</td>
-          <td>{{ category.items }}</td>
-          <td class="actions">
-            <button type="button" class="link-button" (click)="editCategory(category)">Edit</button>
-            <button type="button" class="link-button danger" (click)="askDelete(category)">Delete</button>
-          </td>
-        </tr>
+        @for (category of filteredCategories; track category.id) {
+          <tr>
+            <td>{{ category.name }}</td>
+            <td>{{ category.description }}</td>
+            <td>{{ category.items }}</td>
+            <td class="actions">
+              <button type="button" class="link-button" (click)="editCategory(category)">Edit</button>
+              <button type="button" class="link-button danger" (click)="askDelete(category)">Delete</button>
+            </td>
+          </tr>
+        }
       </tbody>
     </table>
   </section>
