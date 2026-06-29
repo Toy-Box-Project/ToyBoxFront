@@ -1,8 +1,26 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, OnDestroy } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { ImageGalleryComponent } from '../../shared/components/image-gallery/image-gallery';
-import { Category } from '../../shared/interfaces/category.interface';
+import { ProductsService } from '../../core/services/products.service';
 
-// DEMO - use interface ItemDetail
+const STATUS_LABELS: Record<string, string> = {
+  draft:        'Borrador',
+  published:    'Publicado',
+  under_review: 'En revisión',
+  removed:      'Retirado',
+  sold:         'Vendido',
+};
+
+const BADGE_LABELS: Record<string, string> = {
+  available: 'Disponible',
+  sold:      'Vendido',
+  paused:    'Pausado',
+  deleted:   'Eliminado',
+};
+
+// Shape que usa el template (category como string para {{ product.category }})
 interface DetailProduct {
   id: number;
   id_items: number;
@@ -13,7 +31,7 @@ interface DetailProduct {
   status: string;
   badge: string;
   image: string;
-  category: Category;
+  category: string;
   seller: {
     id_users?: number;
     name: string;
@@ -27,6 +45,16 @@ interface DetailProduct {
   averageRating?: number;
   reviews?: any[];
 }
+
+interface RelatedProduct {
+  id: number;
+  title: string;
+  category: string;
+  price: number;
+  location: string;
+  image: string;
+}
+
 @Component({
   selector: 'app-product-detail',
   standalone: true,
@@ -34,94 +62,119 @@ interface DetailProduct {
   templateUrl: './product-detail.html',
   styleUrl: './product-detail.css'
 })
-export class ProductDetailComponent {
+export class ProductDetailComponent implements OnInit, OnDestroy {
+  galleryImages: string[] = [];
+  product: DetailProduct = this.emptyProduct();
+  relatedProducts: RelatedProduct[] = [];
 
-    galleryImages: string[] = [
-    '/assets/images/Iconos%20categorias/icono_munecosycoches.svg',
-    '/assets/images/Iconos%20categorias/icono_construccion.svg',
-    '/assets/images/Iconos%20categorias/icono_juegosmesa.svg'
-  ];
+  isLoading = true;
+  error = '';
 
-product: DetailProduct = {
-    id: 1,
-    id_items: 1,
-    title: 'Pack de coches y figuras',
-    description: 'Pack de juguetes infantiles compuesto por coches, pequeñas figuras y accesorios. Está en muy buen estado y listo para que otro niño pueda seguir jugando.',
-    price: 18,
-    location: 'Madrid',
-    status: 'Muy buen estado',
-    badge: 'Publicado',
-    image: '/assets/images/Iconos%20categorias/icono_munecosycoches.svg',
-    category: {
-      id_categories: 1,
-      name: 'Figuras, muñecos y vehículos',
-      description: null,
-      icon: '/assets/images/Iconos%20categorias/icono_munecosycoches.svg'
-    },
-    seller: {
-      name: 'María López',
-      username: 'maria_lopez',
-      id_users: 1,
-      profile_picture: null,
-      rating: 4.8,
-      reviews: 23,
-      city: 'Madrid'
-    },
-    totalViews: 125,
-    averageRating: 4.8,
-    reviews: []
-  };
+  private destroy$ = new Subject<void>();
 
-  relatedProducts: DetailProduct[] = [
-    {
-      id: 2,
-      id_items: 2,
-      title: 'Caja de bloques',
-      description: null,
-      price: 22,
-      location: 'Valencia',
-      status: 'Buen estado',
-      badge: 'Publicado',
-      image: '/assets/images/Iconos%20categorias/icono_construccion.svg',
-      category: {
-        id_categories: 2,
-        name: 'Construcción y bloques',
-        description: null,
-        icon: '/assets/images/Iconos%20categorias/icono_construccion.svg'
-      },
+  constructor(
+    private route: ActivatedRoute,
+    private productsService: ProductsService,
+    private cdr: ChangeDetectorRef
+  ) {}
+
+  ngOnInit(): void {
+    this.route.params
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(params => {
+        const id = Number(params['id']);
+        if (id) this.loadProduct(id);
+      });
+  }
+
+  loadProduct(id: number): void {
+    this.isLoading = true;
+    this.error = '';
+
+    this.productsService.getById(id)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (raw: any) => {
+          this.product = this.mapProduct(raw);
+          this.galleryImages = (raw.photos ?? []).map((p: any) => p.photo_url).filter(Boolean);
+          if (!this.galleryImages.length && raw.main_photo) {
+            this.galleryImages = [raw.main_photo];
+          }
+          this.isLoading = false;
+          this.cdr.markForCheck();
+          this.loadRelated(raw.fk_categories_id, id);
+        },
+        error: (err: any) => {
+          this.error = err.status === 404
+            ? 'Producto no encontrado.'
+            : 'Error al cargar el producto.';
+          this.isLoading = false;
+          console.error('Error cargando producto:', err);
+          this.cdr.markForCheck();
+        },
+      });
+  }
+
+  private loadRelated(categoryId: number, excludeId: number): void {
+    this.productsService.getAll({ categoryId, limit: 6 })
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (res) => {
+          this.relatedProducts = res.items
+            .filter(item => item.id_items !== excludeId)
+            .slice(0, 4)
+            .map(item => ({
+              id:       item.id_items,
+              title:    item.title,
+              category: item.category?.name ?? 'Sin categoría',
+              price:    item.price,
+              location: item.location,
+              image:    item.image || '/assets/images/Iconos%20categorias/icono_educativo.svg',
+            }));
+          this.cdr.markForCheck();
+        },
+        error: (err: any) => console.error('Error cargando relacionados:', err),
+      });
+  }
+
+  private mapProduct(raw: any): DetailProduct {
+    return {
+      id:          raw.id_items,
+      id_items:    raw.id_items,
+      title:       raw.title,
+      description: raw.description ?? null,
+      price:       Number(raw.price),
+      location:    raw.location ?? 'Sin ubicación',
+      status:      STATUS_LABELS[raw.conservation_status] ?? raw.conservation_status ?? '',
+      badge:       BADGE_LABELS[raw.item_status] ?? raw.item_status ?? '',
+      image:       raw.main_photo ?? '',
+      category:    raw.category_name ?? '',
       seller: {
-        name: 'Carlos López',
-        username: 'carlos_lopez',
-        id_users: 2,
-        rating: 4.5,
-        reviews: 15,
-        city: 'Valencia'
-      }
-    },
-    {
-      id: 3,
-      id_items: 3,
-      title: 'Puzzle familiar',
-      description: null,
-      price: 12,
-      location: 'Murcia',
-      status: 'Como nuevo',
-      badge: 'Publicado',
-      image: '/assets/images/Iconos%20categorias/icono_juegosmesa.svg',
-      category: {
-        id_categories: 3,
-        name: 'Juegos de mesa y puzzles',
-        description: null,
-        icon: '/assets/images/Iconos%20categorias/icono_juegosmesa.svg'
+        id_users:        raw.fk_seller_id,
+        name:            `${raw.first_name ?? ''} ${raw.last_name ?? ''}`.trim(),
+        username:        raw.username,
+        profile_picture: raw.profile_picture ?? null,
+        rating:          0,
+        reviews:         0,
+        city:            raw.seller_city ?? '',
       },
-      seller: {
-        name: 'Ana Martínez',
-        username: 'ana_martinez',
-        id_users: 3,
-        rating: 5.0,
-        reviews: 8,
-        city: 'Murcia'
-      }
-    }
-  ];
+      totalViews:    0,
+      averageRating: 0,
+      reviews:       [],
+    };
+  }
+
+  private emptyProduct(): DetailProduct {
+    return {
+      id: 0, id_items: 0, title: '', description: null,
+      price: 0, location: '', status: '', badge: '',
+      image: '', category: '',
+      seller: { name: '', rating: 0, reviews: 0, city: '' },
+    };
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
 }
