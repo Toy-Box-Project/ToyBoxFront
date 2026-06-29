@@ -10,7 +10,13 @@ import { join } from 'node:path';
 const browserDistFolder = join(import.meta.dirname, '../browser');
 
 const app = express();
-const angularApp = new AngularNodeAppEngine();
+
+// Railway (y otros proxies) añaden x-forwarded-for; hay que confiar en el proxy
+app.set('trust proxy', true);
+
+const angularApp = new AngularNodeAppEngine({
+  allowedHosts: ['toyboxfront-production.up.railway.app', 'localhost'],
+});
 
 /**
  * Example Express Rest API endpoints can be defined here.

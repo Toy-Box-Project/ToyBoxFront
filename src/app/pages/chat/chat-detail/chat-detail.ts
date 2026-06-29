@@ -3,11 +3,12 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { ChatItem } from '../../../shared/interfaces/chat.interface';
 import { ChatMessageWithSender } from '../../../shared/interfaces/message.interface';
+import { BreadcrumbComponent } from '../../../shared/components/breadcrumb/breadcrumb';
 
 @Component({
   selector: 'app-chat-detail',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, BreadcrumbComponent],
   templateUrl: './chat-detail.html',
   styleUrls: ['./chat-detail.css']
 })
@@ -17,6 +18,12 @@ export class ChatDetail implements OnInit, AfterViewChecked {
 
   selectedConversationId: number | null = null;
   newMessage: string = '';
+
+  breadcrumbItems = [
+    { label: 'Inicio', route: '/', icon: 'home' },
+    { label: 'Buzón', route: '/chat', icon: 'inbox' },
+    { label: 'Conversación', icon: 'chat' }
+  ];
 
   conversations: ChatItem[] = [
     {
@@ -74,7 +81,7 @@ export class ChatDetail implements OnInit, AfterViewChecked {
   loadMessages(conversationId: number): void {
     // DEMO
     this.messages = [
-      { 
+      {
         id_messages: 1,
         content: '¡Hola! ¿Sigue disponible el juguete?',
         sent_date: '10:20',
