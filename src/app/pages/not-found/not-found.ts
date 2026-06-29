@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewEncapsulation } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 @Component({
@@ -6,6 +6,7 @@ import { RouterLink } from '@angular/router';
   standalone: true,
   imports: [RouterLink],
   templateUrl: './not-found.html',
-  styleUrl: './not-found.css'
+  styleUrl: './not-found.css',
+  encapsulation: ViewEncapsulation.None
 })
 export class NotFoundComponent {}
