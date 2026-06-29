@@ -13,11 +13,12 @@ import { MapStaticComponent } from '../../../shared/components/map-static/map-st
 import { User } from '../../../shared/interfaces/user.interface';
 import { Review } from '../../../shared/interfaces/review.interface';
 import { UserRole } from '../../../shared/enums/user-role.enum';
+import { UserAvatarComponent } from '../../../shared/components/user-avatar/user-avatar';
 
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [CommonModule, BreadcrumbComponent, StarRatingComponent, MapStaticComponent],
+  imports: [CommonModule, BreadcrumbComponent, StarRatingComponent, MapStaticComponent, UserAvatarComponent],
   templateUrl: './profile.html',
   styleUrls: ['./profile.css']
 })
@@ -219,15 +220,15 @@ export class ProfileComponent implements OnInit, OnDestroy {
   }
 
   goToCategoriesManagement(): void {
-    this.router.navigate(['/categories-management']);
+    this.router.navigate(['/admin/categories']);
   }
 
   goToUsersManagement(): void {
-    this.router.navigate(['/users-management']);
+    this.router.navigate(['/admin/users']);
   }
 
   goToDashboard(): void {
-    this.router.navigate(['/dashboard']);
+    this.router.navigate(['/admin/dashboard']);
   }
 
   logout(): void {
@@ -235,7 +236,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
       this.authService.logout();
       localStorage.removeItem('auth_token');
       localStorage.removeItem('user_data');
-      this.router.navigate(['/login']);
+      this.router.navigate(['/auth/login']);
     }
   }
 
@@ -251,7 +252,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
             this.authService.logout();
             localStorage.removeItem('auth_token');
             localStorage.removeItem('user_data');
-            this.router.navigate(['/login']);
+            this.router.navigate(['/auth/login']);
           },
           error: (error) => {
             alert(error.error?.message || 'Error al eliminar la cuenta.');

@@ -42,7 +42,121 @@ export class FavoritesComponent implements OnInit {
   backendSuccess = '';
 
   ngOnInit(): void {
-    this.loadFavorites();
+    // this.loadFavorites();
+      // Datos de prueba mientras el backend no esté listo
+  this.favorites = [
+    {
+      id: 1,
+      title: 'LEGO Star Wars',
+      category: 'Construcción',
+      price: 25,
+      location: 'Madrid',
+      status: 'Muy buen estado',
+      image: '/assets/images/placeholder.jpg',
+      badge: 'Guardado'
+    },
+    {
+      id: 1,
+      title: 'LEGO Star Wars',
+      category: 'Construcción',
+      price: 25,
+      location: 'Madrid',
+      status: 'Muy buen estado',
+      image: '/assets/images/placeholder.jpg',
+      badge: 'Guardado'
+    },{
+      id: 1,
+      title: 'LEGO Star Wars',
+      category: 'Construcción',
+      price: 25,
+      location: 'Madrid',
+      status: 'Muy buen estado',
+      image: '/assets/images/placeholder.jpg',
+      badge: 'Guardado'
+    },{
+      id: 1,
+      title: 'LEGO Star Wars',
+      category: 'Construcción',
+      price: 25,
+      location: 'Madrid',
+      status: 'Muy buen estado',
+      image: '/assets/images/placeholder.jpg',
+      badge: 'Guardado'
+    },
+    {
+      id: 1,
+      title: 'LEGO Star Wars',
+      category: 'Construcción',
+      price: 25,
+      location: 'Madrid',
+      status: 'Muy buen estado',
+      image: '/assets/images/placeholder.jpg',
+      badge: 'Guardado'
+    },
+    {
+      id: 1,
+      title: 'LEGO Star Wars',
+      category: 'Construcción',
+      price: 25,
+      location: 'Madrid',
+      status: 'Muy buen estado',
+      image: '/assets/images/placeholder.jpg',
+      badge: 'Guardado'
+    },
+    {
+      id: 1,
+      title: 'LEGO Star Wars',
+      category: 'Construcción',
+      price: 25,
+      location: 'Madrid',
+      status: 'Muy buen estado',
+      image: '/assets/images/placeholder.jpg',
+      badge: 'Guardado'
+    },
+    {
+      id: 1,
+      title: 'LEGO Star Wars',
+      category: 'Construcción',
+      price: 25,
+      location: 'Madrid',
+      status: 'Muy buen estado',
+      image: '/assets/images/placeholder.jpg',
+      badge: 'Guardado'
+    },
+    {
+      id: 1,
+      title: 'LEGO Star Wars',
+      category: 'Construcción',
+      price: 25,
+      location: 'Madrid',
+      status: 'Muy buen estado',
+      image: '/assets/images/placeholder.jpg',
+      badge: 'Guardado'
+    },
+    {
+      id: 1,
+      title: 'LEGO Star Wars',
+      category: 'Construcción',
+      price: 25,
+      location: 'Madrid',
+      status: 'Muy buen estado',
+      image: '/assets/images/placeholder.jpg',
+      badge: 'Guardado'
+    },
+    {
+      id: 1,
+      title: 'LEGO Star Wars',
+      category: 'Construcción',
+      price: 25,
+      location: 'Madrid',
+      status: 'Muy buen estado',
+      image: '/assets/images/placeholder.jpg',
+      badge: 'Guardado'
+    }
+
+  ];
+  this.isLoading = false; // Asegúrate de que no esté en true
+  this.updatePagination();
   }
 
   loadFavorites(): void {
