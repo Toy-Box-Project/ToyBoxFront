@@ -1,9 +1,14 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { firstValueFrom } from 'rxjs';
 
 interface LocationData {
   ciudades: string[];
   codigosPostales: Record<string, string[]>;
+}
+
+interface CoordinatesCache {
+  [key: string]: { lat: number; lng: number } | null;
 }
 
 @Injectable({
@@ -12,6 +17,7 @@ interface LocationData {
 export class LocationsService {
   private locationsData: Record<string, LocationData> = {};
   private loaded = false;
+  private coordinatesCache: CoordinatesCache = {};
 
   constructor(private http: HttpClient) {
     this.loadLocationsData();
@@ -82,6 +88,67 @@ export class LocationsService {
       }
     }
     return null;
+  }
+
+  /**
+   * Obtiene las coordenadas geográficas (latitud y longitud) de una ciudad y provincia
+   * Utiliza Nominatim API de OpenStreetMap
+   * @param provincia Nombre de la provincia
+   * @param ciudad Nombre de la ciudad
+   * @returns { lat: number; lng: number } | null
+   */
+  async getCoordinates(provincia: string, ciudad: string): Promise<{ lat: number; lng: number } | null> {
+    const cacheKey = `${ciudad}-${provincia}`;
+
+    // Verificar caché
+    if (cacheKey in this.coordinatesCache) {
+      return this.coordinatesCache[cacheKey];
+    }
+
+    try {
+      const query = `${ciudad}, ${provincia}, España`;
+      const encodedQuery = encodeURIComponent(query);
+
+      // Nominatim API de OpenStreetMap (requiere User-Agent)
+      const response = await firstValueFrom(
+        this.http.get<any[]>(
+          `https://nominatim.openstreetmap.org/search?format=json&q=${encodedQuery}`,
+          {
+            headers: {
+              'Accept': 'application/json',
+              'User-Agent': 'ToyBox-App/1.0'
+            }
+          }
+        )
+      );
+
+      if (response && response.length > 0) {
+        const result = {
+          lat: parseFloat(response[0].lat),
+          lng: parseFloat(response[0].lon)
+        };
+        // Guardar en caché
+        this.coordinatesCache[cacheKey] = result;
+        console.log(`✅ Coordenadas obtenidas para ${ciudad}, ${provincia}:`, result);
+        return result;
+      } else {
+        console.warn(`⚠️ No se encontraron coordenadas para ${ciudad}, ${provincia}`);
+        this.coordinatesCache[cacheKey] = null;
+        return null;
+      }
+    } catch (error) {
+      console.error(`❌ Error obteniendo coordenadas para ${ciudad}, ${provincia}:`, error);
+      this.coordinatesCache[cacheKey] = null;
+      return null;
+    }
+  }
+
+  /**
+   * Limpia el caché de coordenadas
+   */
+  clearCoordinatesCache(): void {
+    this.coordinatesCache = {};
+    console.log('✅ Caché de coordenadas limpiado');
   }
 
   private async ensureLoaded(): Promise<void> {

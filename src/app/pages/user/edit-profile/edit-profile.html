@@ -1,6 +1,6 @@
 
 <div class="edit-profile-container">
-  <app-breadcrumb [items]="breadcrumbItems"></app-breadcrumb>
+  <app-breadcrumb [items]="breadcrumbItems" [autoGenerate]="false"></app-breadcrumb>
 
   @if (isLoading) {
     <div class="loading-spinner">
@@ -229,11 +229,17 @@
 
           <div class="map-preview-section">
             <h3 class="small-title">Vista previa de ubicación</h3>
-            @if (editProfileForm.get('user_province')?.value && editProfileForm.get('user_city')?.value) {
+            @if (editProfileForm.get('user_province')?.value && editProfileForm.get('user_city')?.value && previewLatitude !== null && previewLongitude !== null) {
               <app-map-static
-                [location]="editProfileForm.get('user_city')?.value + ', ' + editProfileForm.get('user_province')?.value"
+                [latitude]="previewLatitude"
+                [longitude]="previewLongitude"
                 [zoom]="12"
               ></app-map-static>
+            } @else if (editProfileForm.get('user_province')?.value && editProfileForm.get('user_city')?.value) {
+              <p class="text-muted">
+                <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                Obteniendo coordenadas...
+              </p>
             } @else {
               <p class="text-muted">Selecciona provincia y ciudad para ver el mapa</p>
             }
@@ -294,16 +300,6 @@
               <i class="fas fa-save"></i>
               Guardar Cambios
             }
-          </button>
-
-          <button
-            type="button"
-            class="btn btn-secondary"
-            (click)="onCancel()"
-            [disabled]="isSaving"
-          >
-            <i class="fas fa-times"></i>
-            Cancelar
           </button>
 
           <button

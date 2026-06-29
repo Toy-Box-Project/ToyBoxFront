@@ -1,35 +1,20 @@
 .stars-wrapper {
   display: flex;
-  align-items: center;
-  gap: 0.75rem;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
 }
 
 .stars {
   display: flex;
   align-items: center;
-  gap: 0.35rem;
-  cursor: default;
+  gap: 4px;
 }
 
 .star {
-  font-weight: normal;
-  font-style: normal;
-  display: inline-block;
-  line-height: 1;
-  color: #e0e0e0;
-  transition: color 0.2s ease, text-shadow 0.2s ease, transform 0.15s ease;
-}
-
-.star--filled {
-  color: var(--primary-toybox);
-  text-shadow: 0 0 4px rgba(216, 69, 101, 0.3);
-}
-
-.star--half {
-  background: linear-gradient(90deg, var(--primary-toybox) 50%, #e0e0e0 50%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: var(--secondary-toybox);
+  transition: color 0.2s ease, transform 0.15s ease;
+  cursor: default;
 }
 
 .star.clickable {
@@ -37,7 +22,7 @@
 }
 
 .star.clickable:hover {
-  color: var(--secondary-toybox);
+  color: var(--primary-toybox);
   transform: scale(1.15);
 }
 
@@ -48,44 +33,59 @@
 .rating-info {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 4px;
   font-size: 0.9rem;
+  color: var(--on-surface-variant);
 }
 
 .rating-value {
-  font-family: var(--font-title);
-  font-weight: 700;
-  color: var(--primary-toybox);
-  font-size: 1rem;
-  min-width: 2.5rem;
+  font-weight: 600;
+  color: var(--on-surface);
+  font-size: 0.95rem;
 }
 
 .review-count {
-  color: var(--on-surface-variant);
-  font-family: var(--font-text);
   font-size: 0.85rem;
+  color: var(--on-surface-variant);
 }
 
-@media (max-width: 480px) {
-  .stars-wrapper {
-    gap: 0.5rem;
-  }
-
+@media (max-width: 768px) {
   .stars {
-    gap: 0.25rem;
+    gap: 3px;
   }
 
   .rating-info {
-    gap: 0.35rem;
-    font-size: 0.8rem;
+    font-size: 0.85rem;
   }
 
   .rating-value {
-    font-size: 0.95rem;
-    min-width: 2rem;
+    font-size: 0.9rem;
   }
 
   .review-count {
     font-size: 0.75rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .stars {
+    gap: 2px;
+  }
+
+  .star {
+    min-width: 20px;
+    text-align: center;
+  }
+
+  .rating-info {
+    font-size: 0.8rem;
+  }
+
+  .rating-value {
+    font-size: 0.85rem;
+  }
+
+  .review-count {
+    font-size: 0.7rem;
   }
 }

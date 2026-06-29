@@ -6,7 +6,8 @@ import { takeUntil } from 'rxjs/operators';
 import { AuthService } from '../../../core/services/auth.service';
 import { UsersService } from '../../../core/services/users.service';
 import { ReviewsService } from '../../../core/services/reviews.service';
-import { BreadcrumbComponent } from '../../../shared/components/breadcrumb/breadcrumb';
+import { LocationsService } from '../../../core/services/locations.service';
+import { BreadcrumbComponent, BreadcrumbItem } from '../../../shared/components/breadcrumb/breadcrumb';
 import { StarRatingComponent } from '../../../shared/components/star-rating/star-rating';
 import { MapStaticComponent } from '../../../shared/components/map-static/map-static';
 import { User } from '../../../shared/interfaces/user.interface';
@@ -16,7 +17,7 @@ import { UserRole } from '../../../shared/enums/user-role.enum';
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [CommonModule,BreadcrumbComponent,StarRatingComponent,MapStaticComponent],
+  imports: [CommonModule, BreadcrumbComponent, StarRatingComponent, MapStaticComponent],
   templateUrl: './profile.html',
   styleUrls: ['./profile.css']
 })
@@ -31,17 +32,22 @@ export class ProfileComponent implements OnInit, OnDestroy {
   showAvatarModal = false;
   showMapModal = false;
   currentUserId: number | null = null;
+
+  userLatitude: number | null = null;
+  userLongitude: number | null = null;
+
   private destroy$ = new Subject<void>();
 
-  breadcrumbItems = [
-    { label: 'Inicio', url: '/' },
-    { label: 'Perfil', url: '/user/profile' }
+  breadcrumbItems: BreadcrumbItem[] = [
+    { label: 'Inicio', route: '/', icon: 'home' },
+    { label: 'Perfil', route: '/user/profile', icon: 'person' }
   ];
 
   constructor(
     private authService: AuthService,
     private usersService: UsersService,
     private reviewsService: ReviewsService,
+    private locationsService: LocationsService,
     private route: ActivatedRoute,
     private router: Router
   ) {}
@@ -59,13 +65,10 @@ export class ProfileComponent implements OnInit, OnDestroy {
         const userId = params['id'];
 
         if (userId) {
-          // Si hay param: cargar ese usuario (público)
           this.loadPublicProfile(parseInt(userId));
         } else if (this.authService.isLoggedIn()) {
-          // Si no hay param y está autenticado: cargar su propio perfil (privado)
           this.loadPrivateProfile();
         } else {
-          // Si no hay param y NO está autenticado: cargar usuario 1 (público)
           this.loadPublicProfile(1);
         }
       });
@@ -79,11 +82,12 @@ export class ProfileComponent implements OnInit, OnDestroy {
     this.usersService.getById(userId)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
-        next: (user: User) => {
-          console.log('✅ User loaded:', user); // DEBUG
+        next: async (user: User) => {
+          console.log('✅ User loaded:', user);
           this.user = user;
           this.loadReviews(userId);
           this.updateBreadcrumb();
+          await this.loadCoordinates();
         },
         error: (error: any) => {
           this.isLoading = false;
@@ -105,16 +109,16 @@ export class ProfileComponent implements OnInit, OnDestroy {
       return;
     }
 
-    // Recargar datos del usuario desde el servidor
     this.usersService.getById(currentUser.id_users)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
-        next: (user: User) => {
-          console.log('✅ Current user loaded:', user); // DEBUG
+        next: async (user: User) => {
+          console.log('✅ Current user loaded:', user);
           this.user = user;
           this.isAdmin = user.role === UserRole.Administrator;
           this.loadReviews(user.id_users);
           this.updateBreadcrumb();
+          await this.loadCoordinates();
         },
         error: (error: any) => {
           this.isLoading = false;
@@ -125,7 +129,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
   }
 
   loadReviews(userId: number): void {
-    // Cargar reviews recibidas (como vendedor)
     this.reviewsService.getBySeller(userId)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
@@ -135,17 +138,40 @@ export class ProfileComponent implements OnInit, OnDestroy {
         },
         error: (error: any) => {
           console.error('Error loading reviews:', error);
-          // No fallar la carga del perfil si las reviews fallan
           this.isLoading = false;
         }
       });
   }
 
+  async loadCoordinates(): Promise<void> {
+    if (!this.user || !this.user.user_city || !this.user.user_province) {
+      console.warn('⚠️ No hay ciudad o provincia para cargar coordenadas');
+      return;
+    }
+
+    try {
+      const coordinates = await this.locationsService.getCoordinates(
+        this.user.user_province,
+        this.user.user_city
+      );
+
+      if (coordinates) {
+        this.userLatitude = coordinates.lat;
+        this.userLongitude = coordinates.lng;
+        console.log('✅ Coordenadas cargadas:', { lat: this.userLatitude, lng: this.userLongitude });
+      } else {
+        console.warn('⚠️ No se pudieron obtener coordenadas para', this.user.user_city, this.user.user_province);
+      }
+    } catch (error) {
+      console.error('❌ Error cargando coordenadas:', error);
+    }
+  }
+
   updateBreadcrumb(): void {
     if (this.user) {
       this.breadcrumbItems = [
-        { label: 'Inicio', url: '/' },
-        { label: `${this.user.first_name} ${this.user.last_name}`, url: '/user/profile' }
+        { label: 'Inicio', route: '/', icon: 'home' },
+        { label: `${this.user.first_name} ${this.user.last_name}`, route: '/user/profile', icon: 'person' }
       ];
     }
   }
@@ -242,8 +268,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
     if (confirm(`¿Silenciar a ${this.user.first_name}? Este usuario no podrá enviar mensajes ni crear anuncios.`)) {
       alert('❌ Esta funcionalidad aún no está implementada en el backend.');
       console.log('Intentando silenciar al usuario:', this.user.id_users);
-      // TODO: Implementar endpoint en backend para silenciar usuarios
-      // this.usersService.silenceUser(this.user.id_users)
     }
   }
 

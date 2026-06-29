@@ -30,6 +30,11 @@ export interface UserSummary {
   last_name: string;
 }
 
+export interface UserProfile extends User {
+  average_rating: number;
+  review_count: number;
+}
+
 export interface UserPublic {
   id_users: number;
   username: string;

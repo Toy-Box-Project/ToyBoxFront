@@ -1,7 +1,6 @@
 import { Component, Input, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
-// import { ENVIRONMENT } from '../../../core/providers/environment.provider';
 
 @Component({
   selector: 'app-map-static',
@@ -12,40 +11,65 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 })
 export class MapStaticComponent {
   @Input() location: string = '';
-  @Input() zoom: number = 13;
-  @Input() width: number = 600;
-  @Input() height: number = 250;
+  @Input() latitude: number | null = null;
+  @Input() longitude: number | null = null;
+  @Input() zoom: number = 14;
+  @Input() width: number | string = '100%';
+  @Input() height: number | string = 300;
 
   private sanitizer = inject(DomSanitizer);
-  // private env = inject(ENVIRONMENT);
 
   get mapUrl(): SafeResourceUrl {
-    // TODO: Implementar mapa después
-    return this.sanitizer.bypassSecurityTrustResourceUrl('');
-
-    /*
-    if (!this.location) {
+    if (!this.hasValidCoordinates() && !this.location) {
       return this.sanitizer.bypassSecurityTrustResourceUrl('');
     }
 
-    // Using OpenStreetMap Nominatim and StaticMap as fallback
-    return this.sanitizer.bypassSecurityTrustResourceUrl(
-      `https://www.openstreetmap.org/export/embed.html?bbox=${this.getMapBounds()}&layer=mapnik&marker=${this.getMapMarker()}`
+    if (this.hasValidCoordinates()) {
+      const markerCoords = `${this.latitude},${this.longitude}`;
+      const bbox = this.calculateBbox(this.latitude!, this.longitude!);
+      return this.sanitizer.bypassSecurityTrustResourceUrl(
+        `https://www.openstreetmap.org/export/embed.html?bbox=${bbox}&layer=mapnik&marker=${markerCoords}`
+      );
+    }
+
+    return this.sanitizer.bypassSecurityTrustResourceUrl('');
+  }
+
+  private hasValidCoordinates(): boolean {
+    return (
+      this.latitude !== null &&
+      this.latitude !== undefined &&
+      this.longitude !== null &&
+      this.longitude !== undefined &&
+      !isNaN(this.latitude) &&
+      !isNaN(this.longitude)
     );
-    */
   }
 
-  private getMapBounds(): string {
-    // Default bounds for Spain
-    return '-9.3,35.9,3.3,43.8';
+  private calculateBbox(lat: number, lng: number): string {
+    const offset = 0.05;
+    const south = (lat - offset).toFixed(4);
+    const west = (lng - offset).toFixed(4);
+    const north = (lat + offset).toFixed(4);
+    const east = (lng + offset).toFixed(4);
+    return `${west},${south},${east},${north}`;
   }
 
-  private getMapMarker(): string {
-    // Default marker in center of Spain
-    return '40.46,-3.75';
+  get locationDisplay(): string {
+    if (this.location) {
+      return this.location;
+    }
+    if (this.hasValidCoordinates()) {
+      return `${this.latitude?.toFixed(4)}, ${this.longitude?.toFixed(4)}`;
+    }
+    return '';
   }
 
   get showError(): boolean {
-    return !this.location || this.location.trim() === '';
+    return !this.hasValidCoordinates() && (!this.location || this.location.trim() === '');
+  }
+
+  get showMap(): boolean {
+    return this.hasValidCoordinates() || this.location.trim() !== '';
   }
 }

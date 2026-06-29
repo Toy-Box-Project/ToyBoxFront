@@ -3,21 +3,14 @@
     @for (star of stars; track star) {
       <span
         class="material-symbols-outlined star"
-        [class.star--filled]="star <= roundedRating"
-        [class.star--half]="star - 0.5 === roundedRating"
         [class.clickable]="!readonly"
         [style.fontSize.px]="size"
-        [style.color]="star <= roundedRating ? color : '#e0e0e0'"
+        [style.color]="getStarIcon(star) === 'star_border' ? '#ccc' : color"
         (click)="setRating(star)"
-        [attr.aria-hidden]="!readonly"
-        role="button"
-        tabindex="0"
+        [attr.role]="readonly ? 'img' : 'button'"
+        [attr.tabindex]="readonly ? -1 : 0"
       >
-        @if (star <= roundedRating) {
-          star
-        } @else {
-          star_border
-        }
+        {{ getStarIcon(star) }}
       </span>
     }
   </div>

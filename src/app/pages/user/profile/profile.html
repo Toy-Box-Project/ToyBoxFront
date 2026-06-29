@@ -2,7 +2,7 @@
   <div class="pattern-bg"></div>
 
   <div class="relative-z-10 profile-content">
-    <app-breadcrumb [items]="breadcrumbItems"></app-breadcrumb>
+    <app-breadcrumb></app-breadcrumb>
 
     @if (isLoading) {
       <div class="loading-spinner">
@@ -83,18 +83,30 @@
           }
         </div>
 
-        @if (reviews.length > 0) {
-          <div class="profile-rating">
-            <app-star-rating
-              [rating]="getAverageRating()"
-              [readonly]="true"
-            ></app-star-rating>
-            <span class="rating-count">({{ reviews.length }} valoraciones)</span>
-          </div>
-        }
+        <div class="profile-rating">
+          @if (reviews.length > 0) {
+            <div class="rating-content">
+              <app-star-rating
+                [rating]="getAverageRating()"
+                [reviewCount]="0"
+                [readonly]="true"
+                [size]="24"
+                [color]="'#d84565'">
+              </app-star-rating>
+              <span class="rating-info">(tiene {{ reviews.length }} reseña{{ reviews.length !== 1 ? 's' : '' }})</span>
+            </div>
+          } @else {
+            <div class="no-reviews-section">
+              <div class="stars-placeholder">
+                <span class="star-empty">☆☆☆☆☆</span>
+              </div>
+              <p class="no-reviews-text">Sin reseñas aún</p>
+            </div>
+          }
+        </div>
       </div>
 
-      @if (isCurrentUser) {
+                    @if (isCurrentUser) {
         <div class="profile-data-section">
           <h2 class="section-title">Información Personal</h2>
 
@@ -187,16 +199,24 @@
       @if (user.user_city && user.user_province) {
         <div class="profile-map-section">
           <h2 class="section-title">Ubicación</h2>
-          <button
-            class="map-container-btn"
-            (click)="toggleMapModal()"
-            aria-label="Ver mapa ampliado"
-          >
-            <app-map-static
-              [location]="user.user_city + ', ' + user.user_province"
-              [zoom]="12"
-            ></app-map-static>
-          </button>
+          @if (userLatitude !== null && userLongitude !== null) {
+            <button
+              class="map-container-btn"
+              (click)="toggleMapModal()"
+              aria-label="Ver mapa ampliado"
+            >
+              <app-map-static
+                [latitude]="userLatitude"
+                [longitude]="userLongitude"
+                [zoom]="12"
+              ></app-map-static>
+            </button>
+          } @else {
+            <div class="map-loading-placeholder">
+              <p>Cargando ubicación...</p>
+              <small>{{ user.user_city }}, {{ user.user_province }}</small>
+            </div>
+          }
         </div>
       }
 
@@ -256,7 +276,7 @@
   </div>
 }
 
-@if (showMapModal && user) {
+@if (showMapModal && user && userLatitude !== null && userLongitude !== null) {
   <div class="modal-backdrop" (click)="toggleMapModal()"></div>
   <div class="modal-dialog modal-map">
     <div class="modal-content">
@@ -273,7 +293,8 @@
       </div>
       <div class="modal-body">
         <app-map-static
-          [location]="user.user_city + ', ' + user.user_province"
+          [latitude]="userLatitude"
+          [longitude]="userLongitude"
           [zoom]="14"
         ></app-map-static>
       </div>
@@ -329,4 +350,3 @@
     </div>
   </div>
 }
-
