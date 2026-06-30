@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './core/guards/auth.guard';
 import { roleGuard } from './core/guards/role.guard';
+import { NotificationsComponent } from './pages/notifications/notifications';
 
 export const routes: Routes = [
   // Public
@@ -51,6 +52,13 @@ export const routes: Routes = [
       { path: 'favorites',    loadComponent: () => import('./pages/user/favorites/favorites').then(m => m.FavoritesComponent) },
     ],
   },
+
+  // Notifications
+  {
+    path: 'notifications',
+    component: NotificationsComponent,
+  },
+ 
 
   // Chat (auth required)
   {
