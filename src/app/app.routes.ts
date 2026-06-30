@@ -56,6 +56,7 @@ export const routes: Routes = [
   // Notifications
   {
     path: 'notifications',
+    canActivate: [authGuard],
     component: NotificationsComponent,
   },
  
