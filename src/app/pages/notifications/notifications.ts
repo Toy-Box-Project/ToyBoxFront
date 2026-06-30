@@ -2,24 +2,17 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 interface Notification {
-
   id: number;
-
   title: string;
-
   message: string;
-
   date: string;
-
   read: boolean;
-
   type:
     | 'message'
     | 'product'
     | 'sale'
     | 'favorite'
     | 'system';
-
 }
 
 @Component({
@@ -32,7 +25,6 @@ interface Notification {
 export class NotificationsComponent {
 
   notifications: Notification[] = [
-
     {
       id: 1,
       title: 'Nuevo mensaje',
@@ -41,7 +33,6 @@ export class NotificationsComponent {
       read: false,
       type: 'message'
     },
-
     {
       id: 2,
       title: 'Producto publicado',
@@ -50,7 +41,6 @@ export class NotificationsComponent {
       read: false,
       type: 'product'
     },
-
     {
       id: 3,
       title: 'Producto vendido',
@@ -59,7 +49,6 @@ export class NotificationsComponent {
       read: false,
       type: 'sale'
     },
-
     {
       id: 4,
       title: 'Nuevo favorito',
@@ -68,7 +57,6 @@ export class NotificationsComponent {
       read: true,
       type: 'favorite'
     },
-
     {
       id: 5,
       title: 'Bienvenido',
@@ -77,25 +65,18 @@ export class NotificationsComponent {
       read: true,
       type: 'system'
     }
-
   ];
 
   markAsRead(notification: Notification): void {
-
     notification.read = true;
-
   }
 
   get unreadCount(): number {
-
     return this.notifications.filter(n => !n.read).length;
-
   }
 
   getIcon(type: Notification['type']): string {
-
     switch (type) {
-
       case 'message':
         return 'chat';
 
@@ -110,9 +91,7 @@ export class NotificationsComponent {
 
       default:
         return 'notifications';
-
     }
-
   }
 
 }
