@@ -36,6 +36,7 @@ export class MyProductsComponent implements OnInit {
   private readonly router = inject(Router);
   private readonly cdr = inject(ChangeDetectorRef);
 
+  breadcrumbItems: any[] = [];
   products: Item[] = [];
   isLoadingProducts = true;
   productsError = '';
@@ -56,7 +57,18 @@ export class MyProductsComponent implements OnInit {
   currentUserId: number | undefined;
 
   ngOnInit(): void {
+    this.initializeBreadcrumbs();
     this.loadCurrentUser();
+  }
+
+  private initializeBreadcrumbs(): void {
+    const isLoggedIn = this.authService.isLoggedIn();
+    const homeRoute = isLoggedIn ? '/catalog' : '/home';
+    
+    this.breadcrumbItems = [
+      { label: 'Inicio', route: homeRoute, icon: 'home' },
+      { label: 'Mis Productos', icon: 'inventory_2' }
+    ];
   }
 
   private loadCurrentUser(): void {
