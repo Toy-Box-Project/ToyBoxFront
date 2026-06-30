@@ -4,22 +4,14 @@
   [class.tb-bubble--other]="!isOwn"
 >
 
+  <!-- MODIFICADO - Usar UserAvatarComponent en lugar de avatar manual -->
   @if (shouldShowAvatar) {
-    <div class="tb-bubble__avatar" [attr.aria-label]="'Avatar de ' + message.senderName">
-
-      @if (message.senderAvatar) {
-        <img
-          [src]="message.senderAvatar"
-          [alt]="message.senderName"
-          class="tb-bubble__avatar-img"
-        />
-      }
-      @else {
-        <span class="tb-bubble__avatar-initial">
-          {{ getSenderInitial() }}
-        </span>
-      }
-    </div>
+    <app-user-avatar
+      [src]="message.senderAvatar"
+      [name]="message.senderName"
+      size="small"
+      [attr.aria-label]="'Avatar de ' + message.senderName">
+    </app-user-avatar>
   }
 
   <div class="tb-bubble__content">
