@@ -15,7 +15,13 @@ export class NavbarComponent implements OnInit {
   isLoggedIn: boolean = false;
   userAvatar: string = '';
 
-  constructor(private router: Router, private authService: AuthService) { }
+  // Número de notificaciones sin leer
+  unreadNotifications: number = 3;
+
+  constructor(
+    private router: Router,
+    private authService: AuthService
+  ) {}
 
   ngOnInit(): void {
     this.isLoggedIn = this.authService.isLoggedIn();
@@ -34,4 +40,5 @@ export class NavbarComponent implements OnInit {
   goToCreateProduct(): void {
     this.router.navigate(['/product/create']);
   }
+
 }
