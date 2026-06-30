@@ -53,12 +53,10 @@ export class ForgotPasswordComponent {
         this.isLoading = false;
         this.enableForm();
 
-        // ✅ Mensaje de éxito
         this.backendSuccess =
           'Si el email existe en nuestro sistema, recibirás un enlace para restablecer tu contraseña en breve.';
         this.form.reset();
 
-        // Opcional: Redirigir a login después de 3 segundos
         setTimeout(() => {
           this.router.navigate(['/auth/login']);
         }, 3000);
@@ -72,14 +70,6 @@ export class ForgotPasswordComponent {
         this.backendSuccess =
           'Si el email existe en nuestro sistema, recibirás un enlace para restablecer tu contraseña en breve.';
         
-        // Si necesitas debug, puedes descomenta esto:
-        // if (err.error?.message === 'EMAIL_NOT_FOUND') {
-        //   this.backendError = 'Este email no está registrado.';
-        // } else if (err.status === 0) {
-        //   this.backendError = 'No hay conexión con el servidor.';
-        // } else {
-        //   this.backendError = 'Error al procesar la solicitud. Intenta más tarde.';
-        // }
       }
     });
   }

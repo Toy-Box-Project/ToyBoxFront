@@ -18,9 +18,7 @@
 
     @if (user && !isLoading) {
       <div class="profile-layout">
-        <!-- LEFT COLUMN -->
         <div class="profile-left-column">
-          <!-- Card 1: User Header & Rating -->
           <div class="profile-card">
             <div class="profile-header">
               <h1 class="profile-name">{{ getFullName() }}</h1>
@@ -34,7 +32,6 @@
               }
             </div>
 
-            <!-- Rating Section -->
             <div class="profile-rating">
               @if (reviews.length > 0) {
                 <div class="rating-content">
@@ -55,7 +52,6 @@
             </div>
           </div>
 
-          <!-- Card 2: Información Personal -->
           <div class="profile-card">
             <h2 class="section-title">Información Personal</h2>
 
@@ -105,9 +101,7 @@
           </div>
         </div>
 
-        <!-- RIGHT COLUMN -->
         <div class="profile-right-column">
-          <!-- Card 3: Avatar -->
           <div class="profile-card">
             <div style="text-align: center;">
               <app-user-avatar
@@ -119,7 +113,6 @@
             </div>
           </div>
 
-          <!-- Card 4: Map -->
           @if (user.user_city && user.user_province) {
             <div class="profile-card">
               <h2 class="section-title">Ubicación</h2>
@@ -143,7 +136,6 @@
             </div>
           }
 
-          <!-- Card 5: Action Buttons -->
           <div class="profile-card">
             <button class="btn btn-primary mb-2 w-100" (click)="goToEditProfile()">
               <i class="fas fa-edit"></i>
@@ -159,7 +151,6 @@
             </button>
           </div>
 
-          <!-- Admin Panel -->
           @if (isAdmin) {
             <div class="profile-card">
               <h3 style="font-size: 16px; font-weight: 700; color: var(--primary-toybox); margin: 0 0 1rem 0;">Panel Admin</h3>
@@ -177,7 +168,6 @@
         </div>
       </div>
 
-      <!-- Reviews Section (Full Width) -->
       @if (reviews.length > 0) {
         <div class="profile-card">
           <h2 class="section-title">Valoraciones ({{ reviews.length }})</h2>
@@ -205,9 +195,6 @@
   </div>
 </div>
 
-<!-- MODALS -->
-
-<!-- Avatar Modal -->
 @if (showAvatarModal && user?.profile_picture) {
   <div class="modal-backdrop" (click)="toggleAvatarModal()"></div>
   <div class="modal-dialog modal-avatar">
@@ -223,7 +210,6 @@
   </div>
 }
 
-<!-- Map Modal -->
 @if (showMapModal && user && userLatitude !== null && userLongitude !== null) {
   <div class="modal-backdrop" (click)="toggleMapModal()"></div>
   <div class="modal-dialog modal-map">
@@ -243,7 +229,6 @@
   </div>
 }
 
-<!-- Delete Modal -->
 @if (showDeleteModal) {
   <div class="modal-backdrop" (click)="closeDeleteModal()"></div>
   <div class="modal-dialog modal-confirm">
