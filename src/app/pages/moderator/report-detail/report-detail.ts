@@ -29,11 +29,11 @@ export class ReportDetailComponent {
 
   report: ReportDetail = {
     id: Number(this.route.snapshot.paramMap.get('id')) || 101,
-    itemTitle: 'Vintage console',
-    itemDescription: 'Second-hand console listed as new. Buyer reports scratches and missing controller.',
+    itemTitle: 'Consola vintage',
+    itemDescription: 'Consola de segunda mano publicada como nueva. El comprador reporta arañazos y falta de mando.',
     reporter: 'ana_user',
     reportedUser: 'seller_82',
-    reason: 'Misleading product condition',
+    reason: 'Estado del producto engañoso',
     status: 'pending',
     reportDate: '2026-06-14',
   };
@@ -43,18 +43,22 @@ export class ReportDetailComponent {
 
   get modalTitle(): string {
     return this.pendingAction === 'withdraw'
-      ? 'Withdraw item'
+      ? 'Retirar artículo'
       : this.pendingAction === 'reactivate'
-        ? 'Reactivate item'
-        : 'Resolve report';
+        ? 'Reactivar artículo'
+        : 'Resolver reporte';
   }
 
   get modalMessage(): string {
     return this.pendingAction === 'withdraw'
-      ? 'The reported item will be removed from the catalog.'
+      ? 'El artículo reportado se retirará del catálogo.'
       : this.pendingAction === 'reactivate'
-        ? 'The item will remain visible in the catalog.'
-        : 'The report will be marked as resolved.';
+        ? 'El artículo permanecerá visible en el catálogo.'
+        : 'El reporte se marcará como resuelto.';
+  }
+
+  get reportStatusLabel(): string {
+    return this.report.status === 'pending' ? 'Pendiente' : 'Resuelto';
   }
 
   openAction(action: ReportAction): void {
@@ -69,15 +73,15 @@ export class ReportDetailComponent {
     this.report = { ...this.report, status: 'resolved' };
 
     const messages: Record<ReportAction, string> = {
-      resolve: 'Report marked as resolved.',
-      withdraw: 'Item withdrawn and report resolved.',
-      reactivate: 'Item reactivated and report resolved.',
+      resolve: 'Reporte marcado como resuelto.',
+      withdraw: 'Artículo retirado y reporte resuelto.',
+      reactivate: 'Artículo reactivado y reporte resuelto.',
     };
 
     this.toast = {
       visible: true,
       type: 'success',
-      title: 'Moderation action completed',
+      title: 'Acción de moderación completada',
       message: messages[this.pendingAction],
     };
     this.pendingAction = null;

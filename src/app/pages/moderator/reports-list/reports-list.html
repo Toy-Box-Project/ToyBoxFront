@@ -1,16 +1,18 @@
-<main class="moderator-page">
+<div class="pattern-bg"></div>
+
+<main class="moderator-page relative-z-10">
 
   <header class="page-header">
     <div>
-      <p class="eyebrow">Moderation</p>
-      <h1>Reports list</h1>
+      <p class="eyebrow">Moderación</p>
+      <h1>Listado de reportes</h1>
     </div>
     <div class="filters">
-      <input type="search" placeholder="Search reports" [(ngModel)]="searchTerm" />
-      <select [(ngModel)]="statusFilter" aria-label="Filter reports by status">
-        <option value="all">All reports</option>
-        <option value="pending">Pending</option>
-        <option value="resolved">Resolved</option>
+      <input type="search" placeholder="Buscar reportes" [(ngModel)]="searchTerm" />
+      <select [(ngModel)]="statusFilter" aria-label="Filtrar reportes por estado">
+        <option value="all">Todos los reportes</option>
+        <option value="pending">Pendientes</option>
+        <option value="resolved">Resueltos</option>
       </select>
     </div>
   </header>
@@ -19,14 +21,14 @@
     @for (report of filteredReports; track report.id) {
       <article class="report-card">
         <div class="report-main">
-          <span class="status-pill" [class.resolved]="report.status === 'resolved'">{{ report.status }}</span>
+          <span class="status-pill" [class.resolved]="report.status === 'resolved'">{{ statusLabel(report.status) }}</span>
           <h2>{{ report.itemTitle }}</h2>
           <p>{{ report.reason }}</p>
-          <small>Reported user: {{ report.reportedUser }} - Reporter: {{ report.reporter }}</small>
+          <small>Usuario reportado: {{ report.reportedUser }} - Reportado por: {{ report.reporter }}</small>
         </div>
         <div class="report-side">
           <time>{{ report.date }}</time>
-          <a [routerLink]="['/moderator/report', report.id]">View detail</a>
+          <a [routerLink]="['/moderator/report', report.id]">Ver detalle</a>
         </div>
       </article>
     }

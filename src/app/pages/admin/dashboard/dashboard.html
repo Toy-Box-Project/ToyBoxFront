@@ -1,14 +1,16 @@
-<main class="admin-page">
+<div class="pattern-bg"></div>
+
+<main class="admin-page relative-z-10">
 
   <header class="page-header">
     <div>
-      <p class="eyebrow">Administration</p>
-      <h1>Dashboard</h1>
+      <p class="eyebrow">Administración</p>
+      <h1>Panel de control</h1>
     </div>
-    <span class="date-label">Today overview</span>
+    <span class="date-label">Resumen de hoy</span>
   </header>
 
-  <section class="metrics-grid" aria-label="Administration summary">
+  <section class="metrics-grid" aria-label="Resumen de administración">
     @for (metric of metrics; track metric.label) {
       <article class="metric-card" [class]="metric.tone">
         <span>{{ metric.label }}</span>
@@ -20,8 +22,8 @@
 
   <section class="panel">
     <div class="panel-heading">
-      <h2>Priority tasks</h2>
-      <span>{{ tasks.length }} active</span>
+      <h2>Tareas prioritarias</h2>
+      <span>{{ tasks.length }} activas</span>
     </div>
 
     <div class="task-list">
@@ -33,6 +35,27 @@
           </div>
           <span class="status-pill">{{ task.status }}</span>
         </article>
+      }
+    </div>
+  </section>
+
+  <section class="panel chart-panel" aria-label="Actividad de la plataforma">
+    <div class="panel-heading">
+      <h2>Actividad de la plataforma</h2>
+      <span>Vista rápida</span>
+    </div>
+
+    <div class="chart-list">
+      @for (item of chartItems; track item.label) {
+        <div class="chart-row">
+          <div>
+            <strong>{{ item.label }}</strong>
+            <span>{{ item.value }}</span>
+          </div>
+          <div class="chart-track">
+            <span class="chart-bar" [style.width.%]="item.percent"></span>
+          </div>
+        </div>
       }
     </div>
   </section>
