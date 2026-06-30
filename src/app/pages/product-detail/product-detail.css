@@ -29,9 +29,11 @@
 }
 
 .product-gallery__main img {
-  width: 58%;
-  height: 58%;
+  width: 100%;
+  height: 100%;
   object-fit: contain;
+  padding: 1.5rem;
+  mix-blend-mode: multiply;
 }
 
 .product-gallery__badge {
@@ -59,9 +61,13 @@
   border: 1px solid rgba(97, 136, 193, .18);
   border-radius: var(--radius-md);
   background: var(--color-white);
-  padding: .75rem;
+  padding: .5rem;
   cursor: pointer;
   min-height: 110px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
   transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease;
 }
 
@@ -72,9 +78,11 @@
 }
 
 .product-gallery__thumbs img {
-  width: 72px;
-  height: 72px;
+  width: 100%;
+  height: 100%;
   object-fit: contain;
+  display: block;
+  mix-blend-mode: multiply;
 }
 
 .product-info {
@@ -222,9 +230,12 @@
 }
 
 .related-card__image img {
-  width: 110px;
-  height: 110px;
+  width: 100%;
+  height: 100%;
   object-fit: contain;
+  padding: 1rem;
+  display: block;
+  mix-blend-mode: multiply;
 }
 
 .related-card__content {
@@ -283,8 +294,9 @@
   }
 
   .product-gallery__main img {
-    width: 68%;
-    height: 68%;
+    width: 100%;
+    height: 100%;
+    padding: 1rem;
   }
 
   .product-actions {
