@@ -6,7 +6,7 @@
         <div class="search-bar-wrapper">
             <div class="search-input-container">
                 <input type="text" class="search-input" placeholder="Búsqueda por texto libre" [value]="searchQuery"
-                    (input)="searchQuery = $any($event.target).value" (keyup.enter)="onSearch()" />
+                    (input)="onSearchInput($any($event.target).value)" (keyup.enter)="onSearch()" />
                 <button class="search-btn" (click)="onSearch()">
                     <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                         <circle cx="11" cy="11" r="8" />
@@ -26,7 +26,8 @@
             <div class="filters-grid">
                 <div class="filter-group">
                     <label>Elige categoría</label>
-                    <select [value]="filters.category" (change)="filters.category = $any($event.target).value">
+                    <select [value]="filters.category"
+                        (change)="filters.category = $any($event.target).value; applyFilters()">
                         <option value="">Todas</option>
                         @for (cat of categories; track cat.id) {
                         <option [value]="cat.id">{{ cat.name }}</option>
@@ -35,26 +36,28 @@
                 </div>
                 <div class="filter-group">
                     <label>Ubicación</label>
-                    <select [value]="filters.location" (change)="filters.location = $any($event.target).value">
+                    <select [value]="filters.location"
+                        (change)="filters.location = $any($event.target).value; applyFilters()">
                         <option value="">Cualquier lugar</option>
-                        <option value="madrid">Madrid</option>
-                        <option value="barcelona">Barcelona</option>
-                        <option value="valencia">Valencia</option>
+                        @for (loc of locations; track loc.value) {
+                        <option [value]="loc.value">{{ loc.label }}</option>
+                        }
                     </select>
                 </div>
                 <div class="filter-group">
                     <label>Mínimo €{{ filters.minPrice }}</label>
                     <input type="range" min="0" max="1000" [value]="filters.minPrice"
-                        (input)="filters.minPrice = $any($event.target).value" />
+                        (input)="filters.minPrice = $any($event.target).value" (change)="applyFilters()" />
                 </div>
                 <div class="filter-group">
                     <label>Máximo €{{ filters.maxPrice }}</label>
                     <input type="range" min="0" max="1000" [value]="filters.maxPrice"
-                        (input)="filters.maxPrice = $any($event.target).value" />
+                        (input)="filters.maxPrice = $any($event.target).value" (change)="applyFilters()" />
                 </div>
                 <div class="filter-group">
                     <label>Estado del artículo</label>
-                    <select [value]="filters.condition" (change)="filters.condition = $any($event.target).value">
+                    <select [value]="filters.condition"
+                        (change)="filters.condition = $any($event.target).value; applyFilters()">
                         <option value="">Cualquiera</option>
                         <option value="new">Nuevo</option>
                         <option value="like_new">Como nuevo</option>
@@ -64,7 +67,8 @@
                 </div>
                 <div class="filter-group">
                     <label>Ordenar por</label>
-                    <select [value]="filters.sortBy" (change)="filters.sortBy = $any($event.target).value">
+                    <select [value]="filters.sortBy"
+                        (change)="filters.sortBy = $any($event.target).value; applyFilters()">
                         <option value="date_desc">Más reciente</option>
                         <option value="price_asc">Precio: menor a mayor</option>
                         <option value="price_desc">Precio: mayor a menor</option>
@@ -76,7 +80,7 @@
 
         <nav class="categories-nav">
             <div class="sort-dropdown">
-                <select [value]="filters.sortBy" (change)="filters.sortBy = $any($event.target).value">
+                <select [value]="filters.sortBy" (change)="filters.sortBy = $any($event.target).value; applyFilters()">
                     <option value="date_desc">Más reciente</option>
                     <option value="price_asc">Precio ↑</option>
                     <option value="price_desc">Precio ↓</option>
@@ -93,6 +97,7 @@
         </nav>
     </section>
 
+    @if (!isSearching) {
     <section class="latest-section">
         <h2 class="section-title">Últimos productos</h2>
         <div class="latest-grid">
@@ -136,9 +141,15 @@
             </div>
         </div>
     </section>
+    }
 
     <section class="related-section">
-        <h2 class="section-title">Productos relacionados</h2>
+        <h2 class="section-title">{{ isSearching ? 'Resultados de búsqueda' : 'Productos relacionados' }}</h2>
+
+        @if (isSearching && relatedProducts.length === 0) {
+        <p class="no-results">No se encontraron productos para "{{ searchQuery }}".</p>
+        }
+
         <div class="products-grid">
             @for (product of relatedProducts; track product.id) {
             <div class="product-card" (click)="goToProduct(product.id)">
