@@ -1,65 +1,59 @@
-<div class="notifications-page">
+<div class="notifications-wrapper">
 
-    <div class="header">
+    <div class="pattern-bg"></div>
 
-        <h1>
+    <div class="relative-z-10">
 
-            <span class="material-symbols-outlined">
-                notifications
-            </span>
+        <div class="notifications-page">
 
-            Notificaciones
+            <div class="header">
 
-        </h1>
+                <h1>
 
-        <div class="counter">
+                    <span class="material-symbols-outlined">
+                        notifications
+                    </span>
 
-            {{ unreadCount }} sin leer
+                    Notificaciones
 
-        </div>
+                </h1>
 
-    </div>
+                <div class="counter">
 
-    @for(notification of notifications; track notification.id){
+                    {{ unreadCount }} sin leer
 
-        <div
-            class="notification-card"
-            [class.unread]="!notification.read"
-            (click)="markAsRead(notification)">
-
-            <div class="icon">
-
-                <span class="material-symbols-outlined">
-
-                    {{ getIcon(notification.type) }}
-
-                </span>
+                </div>
 
             </div>
 
-            <div class="content">
+            @for (notification of notifications; track notification.id) {
 
-                <h3>
+            <div
+                class="notification-card"
+                [class.unread]="!notification.read"
+                (click)="markAsRead(notification)">
 
-                    {{ notification.title }}
+                <div class="icon">
 
-                </h3>
+                    <span class="material-symbols-outlined">
 
-                <p>
+                        {{ getIcon(notification.type) }}
 
-                    {{ notification.message }}
+                    </span>
 
-                </p>
+                </div>
 
-                <small>
+                <div class="content">
 
-                    {{ notification.date }}
+                    <h3>{{ notification.title }}</h3>
 
-                </small>
+                    <p>{{ notification.message }}</p>
 
-            </div>
+                    <small>{{ notification.date }}</small>
 
-            @if(!notification.read){
+                </div>
+
+                @if (!notification.read) {
 
                 <span class="status unread-status">
 
@@ -67,7 +61,7 @@
 
                 </span>
 
-            } @else {
+                } @else {
 
                 <span class="status read-status">
 
@@ -75,10 +69,14 @@
 
                 </span>
 
+                }
+
+            </div>
+
             }
 
         </div>
 
-    }
+    </div>
 
 </div>
