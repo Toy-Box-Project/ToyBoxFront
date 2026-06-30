@@ -37,14 +37,16 @@ export class EditProfileComponent implements OnInit, OnDestroy {
   previewLatitude: number | null = null;
   previewLongitude: number | null = null;
 
-  breadcrumbItems = [
-    { label: 'Inicio', route: '/', icon: 'home' },
-    { label: 'Mi Perfil', route: '/user/profile', icon: 'person' },
-    { label: 'Editar Perfil', icon: 'edit' }
-  ];
+  // breadcrumbItems = [
+  //   { label: 'Inicio', route: '/', icon: 'home' },
+  //   { label: 'Mi Perfil', route: '/user/profile', icon: 'person' },
+  //   { label: 'Editar Perfil', icon: 'edit' }
+  // ];
+
+  breadcrumbItems: any[] = [];
 
   private destroy$ = new Subject<void>();
-
+  
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
@@ -54,11 +56,23 @@ export class EditProfileComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
+    this.initializeBreadcrumbs();
     this.checkAuthentication();
     this.initializeForm();
     this.loadLocationData();
     this.loadUserData();
   }
+
+  private initializeBreadcrumbs(): void {
+  const isLoggedIn = this.authService.isLoggedIn();
+  const homeRoute = isLoggedIn ? '/catalog' : '/home';
+
+  this.breadcrumbItems = [
+    { label: 'Inicio', route: homeRoute, icon: 'home' },
+    { label: 'Mi Perfil', route: '/user/profile', icon: 'person' },
+    { label: 'Editar Perfil', icon: 'edit' }
+  ];
+}
 
   checkAuthentication(): void {
     // if (!this.authService.isLoggedIn()) {

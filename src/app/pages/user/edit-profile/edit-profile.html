@@ -1,6 +1,10 @@
+<div class="pattern-bg"></div>
+
+<div class="breadcrumb-wrapper">
+  <app-breadcrumb [items]="breadcrumbItems" [autoGenerate]="false"></app-breadcrumb>
+</div>
 
 <div class="edit-profile-container">
-  <app-breadcrumb [items]="breadcrumbItems" [autoGenerate]="false"></app-breadcrumb>
 
   @if (isLoading) {
     <div class="loading-spinner">

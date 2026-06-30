@@ -6,6 +6,7 @@ import { ProductCardComponent } from '../../../shared/components/product-card/pr
 import { PaginationComponent } from '../../../shared/components/pagination/pagination';
 import { FavoritesService } from '../../../core/services/favorites.service';
 import { BreadcrumbComponent } from '../../../shared/components/breadcrumb/breadcrumb';
+import { AuthService } from '../../../core/services/auth.service';
 
 // Interfaz local para product-card
 interface DemoProduct {
@@ -29,11 +30,14 @@ interface DemoProduct {
 export class FavoritesComponent implements OnInit {
   private favoritesService = inject(FavoritesService);
   private cdr = inject(ChangeDetectorRef);
+  private authService = inject(AuthService); 
 
   favorites: DemoProduct[] = [];
   currentPage = 1;
   pageSize = 8;
   totalPages = 1;
+
+  breadcrumbItems: any[] = []; 
 
   showConfirmModal = false;
   selectedFavoriteId: number | null = null;
@@ -43,6 +47,7 @@ export class FavoritesComponent implements OnInit {
   backendSuccess = '';
 
   ngOnInit(): void {
+    this.initializeBreadcrumbs();
     // this.loadFavorites();
       // Datos de prueba mientras el backend no esté listo
   this.favorites = [
@@ -156,8 +161,18 @@ export class FavoritesComponent implements OnInit {
     }
 
   ];
-  this.isLoading = false; // Asegúrate de que no esté en true
+  this.isLoading = false; 
   this.updatePagination();
+  }
+
+  private initializeBreadcrumbs(): void {
+    const isLoggedIn = this.authService.isLoggedIn();
+    const homeRoute = isLoggedIn ? '/catalog' : '/home';
+
+    this.breadcrumbItems = [
+      { label: 'Inicio', route: homeRoute, icon: 'home' },
+      { label: 'Mis Favoritos', icon: 'favorite' }
+    ];
   }
 
   loadFavorites(): void {
@@ -166,7 +181,6 @@ export class FavoritesComponent implements OnInit {
 
     this.favoritesService.getMyFavorites().subscribe({
       next: (response: any) => {
-        // Mapear respuesta del backend a DemoProduct para product-card
         this.favorites = response.map((item: any) => ({
           id: item.id_items,
           title: item.title,

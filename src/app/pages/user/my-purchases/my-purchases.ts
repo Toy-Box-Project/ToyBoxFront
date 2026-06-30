@@ -20,6 +20,8 @@ export class MyPurchasesComponent implements OnInit {
   private authService = inject(AuthService);
   private reviewsService = inject(ReviewsService);
 
+  breadcrumbItems: any[] = [];
+
   activeTab: 'purchases' | 'sales' = 'purchases';
 
   myPurchaseReviews: Review[] = [];
@@ -31,7 +33,18 @@ export class MyPurchasesComponent implements OnInit {
   pageSize = 6;
 
   ngOnInit(): void {
+    this.initializeBreadcrumbs();
     this.loadReviews();
+  }
+
+  private initializeBreadcrumbs(): void {
+    const isLoggedIn = this.authService.isLoggedIn();
+    const homeRoute = isLoggedIn ? '/catalog' : '/home';
+    
+    this.breadcrumbItems = [
+      { label: 'Inicio', route: homeRoute, icon: 'home' },
+      { label: 'Mis Compras', icon: 'shopping_cart' }
+    ];
   }
 
   private loadReviews(): void {

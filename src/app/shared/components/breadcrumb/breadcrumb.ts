@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule, Router, NavigationEnd, ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil, filter } from 'rxjs/operators';
+import { AuthService } from '../../../core/services/auth.service';
 
 export interface BreadcrumbItem {
   label: string;
@@ -48,7 +49,8 @@ export class BreadcrumbComponent implements OnInit, OnDestroy {
 
   constructor(
     private router: Router,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private authService: AuthService
   ) {}
 
   ngOnInit(): void {
@@ -74,9 +76,13 @@ export class BreadcrumbComponent implements OnInit, OnDestroy {
   private generateBreadcrumbs(): void {
     const breadcrumbs: BreadcrumbItem[] = [];
 
+    // ← AGREGAR ESTO:
+    const isLoggedIn = this.authService.isLoggedIn();
+    const homeRoute = isLoggedIn ? '/catalog' : '/home';
+
     breadcrumbs.push({
       label: 'Inicio',
-      route: ['/'],
+      route: homeRoute,  // ← Dinámico según login
       icon: 'home'
     });
 

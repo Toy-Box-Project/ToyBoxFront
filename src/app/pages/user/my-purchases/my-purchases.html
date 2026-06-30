@@ -1,8 +1,11 @@
 <div class="pattern-bg"></div>
 
+<div class="breadcrumb-wrapper">
+  <app-breadcrumb [items]="breadcrumbItems" [autoGenerate]="false"></app-breadcrumb>
+</div>
+
 <div class="container py-5 position-relative" style="z-index: 2;">
 
-  <app-breadcrumb></app-breadcrumb>
   <div class="tabs-wrapper mb-4">
     <button
       class="tab-btn"
