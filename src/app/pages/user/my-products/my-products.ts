@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { PaginationComponent } from '../../../shared/components/pagination/pagination';
@@ -34,29 +34,25 @@ export class MyProductsComponent implements OnInit {
   private readonly reviewsService = inject(ReviewsService);
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
+  private readonly cdr = inject(ChangeDetectorRef);
 
-  // Productos a la venta
   products: Item[] = [];
   isLoadingProducts = true;
   productsError = '';
   currentPage = 1;
   totalPages = 1;
 
-  // Transacciones de ventas
   sales: ItemHistory[] = [];
   isLoadingSales = true;
   salesError = '';
 
-  // Reseñas como vendedor
   receivedReviews: Review[] = [];
   isLoadingReviews = true;
   reviewsError = '';
 
-  // Modal de confirmación
   productToDelete: Item | null = null;
   showDeleteModal = false;
 
-  // Información del usuario actual
   currentUserId: number | undefined;
 
   ngOnInit(): void {
@@ -88,8 +84,6 @@ export class MyProductsComponent implements OnInit {
     this.productsService.getAll({ sellerId: this.currentUserId }).subscribe({
       next: (response) => {
         this.totalPages = response.totalPages || 1;
-        // ItemCard es compatible para mostrar, pero necesitamos Item para editar/eliminar
-        // Convertimos ItemCard a Item (los campos faltantes se pueden rellenar con valores por defecto)
         this.products = (response.items || []).map((card: ItemCard) => ({
           id_items: card.id_items,
           title: card.title,
@@ -105,11 +99,13 @@ export class MyProductsComponent implements OnInit {
           images: card.image ? [{ id_photos: 0, photo_url: card.image, order: 0, fk_items_id: card.id_items }] : []
         } as Item));
         this.isLoadingProducts = false;
+        this.cdr.markForCheck();
       },
       error: (err) => {
         console.error('Error cargando productos:', err);
         this.productsError = 'Error al cargar los productos. Intenta de nuevo.';
         this.isLoadingProducts = false;
+        this.cdr.markForCheck();
       }
     });
   }
@@ -122,11 +118,13 @@ export class MyProductsComponent implements OnInit {
       next: (sales) => {
         this.sales = sales;
         this.isLoadingSales = false;
+        this.cdr.markForCheck();
       },
       error: (err) => {
         console.error('Error cargando ventas:', err);
         this.salesError = 'Error al cargar las ventas. Intenta de nuevo.';
         this.isLoadingSales = false;
+        this.cdr.markForCheck();
       }
     });
   }
@@ -141,11 +139,13 @@ export class MyProductsComponent implements OnInit {
       next: (reviews) => {
         this.receivedReviews = reviews;
         this.isLoadingReviews = false;
+        this.cdr.markForCheck();
       },
       error: (err) => {
         console.error('Error cargando reseñas:', err);
         this.reviewsError = 'Error al cargar las reseñas. Intenta de nuevo.';
         this.isLoadingReviews = false;
+        this.cdr.markForCheck();
       }
     });
   }
@@ -232,7 +232,6 @@ export class MyProductsComponent implements OnInit {
     });
   }
 
-  // Mapear ItemStatus a valores compatibles con StatusBadgeComponent
   mapItemStatus(status: ItemStatus): 'available' | 'reserved' | 'sold' | 'new' | 'used' | 'featured' {
     switch (status) {
       case ItemStatus.Available:
@@ -248,7 +247,6 @@ export class MyProductsComponent implements OnInit {
     }
   }
 
-  // Mapear TradeStatus a valores compatibles con StatusBadgeComponent
   mapTradeStatus(status: TradeStatus): 'available' | 'reserved' | 'sold' | 'new' | 'used' | 'featured' {
     switch (status) {
       case TradeStatus.Pending:

@@ -15,37 +15,6 @@
   flex-direction: row-reverse;
 }
 
-.tb-bubble__avatar {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  background: var(--secondary-toybox);
-  flex-shrink: 0;
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background-color .2s ease;
-}
-
-.tb-bubble__avatar:hover {
-  background-color: var(--primary-toybox);
-}
-
-.tb-bubble__avatar-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.tb-bubble__avatar-initial {
-  font-family: var(--font-title);
-  font-size: .85rem;
-  font-weight: 700;
-  color: var(--color-white);
-  user-select: none;
-}
-
 .tb-bubble__content {
   display: flex;
   flex-direction: column;
@@ -118,7 +87,6 @@
   color: var(--secondary-toybox);
 }
 
-
 @media (max-width: 575.98px) {
   .tb-bubble {
     max-width: 90%;
@@ -126,24 +94,14 @@
     margin-bottom: .5rem;
   }
 
-  .tb-bubble__avatar {
-    width: 28px;
-    height: 28px;
-    min-width: 28px;
-  }
-
-  .tb-bubble__avatar-initial {
-    font-size: .75rem;
+  .tb-bubble__sender {
+    font-size: .65rem;
+    padding: 0 .4rem;
   }
 
   .tb-bubble__text {
     font-size: .85rem;
     padding: .5rem .7rem;
-  }
-
-  .tb-bubble__sender {
-    font-size: .65rem;
-    padding: 0 .4rem;
   }
 
   .tb-bubble__time {
@@ -155,15 +113,9 @@
   }
 }
 
-@media (min-width: 576px) and (max-width: 767.98px) {
+@media (min-width: 576px) and (max-width: 991.98px) {
   .tb-bubble {
     max-width: 85%;
-  }
-
-  .tb-bubble__avatar {
-    width: 30px;
-    height: 30px;
-    min-width: 30px;
   }
 
   .tb-bubble__text {
@@ -180,40 +132,13 @@
   }
 }
 
-@media (min-width: 768px) and (max-width: 991.98px) {
-  .tb-bubble {
-    max-width: 75%;
-  }
-
-  .tb-bubble__avatar {
-    width: 30px;
-    height: 30px;
-  }
-
-  .tb-bubble__text {
-    font-size: .9rem;
-  }
-}
-
-@media (min-width: 992px) and (max-width: 1199.98px)  {
+@media (min-width: 992px) {
   .tb-bubble {
     max-width: 72%;
-  }
-}
-
-@media (min-width: 1200px) and (max-width: 1399.98px) {
-  .tb-bubble {
-    max-width: 70%;
   }
 
   .tb-bubble__text {
     padding: .6rem .9rem;
-  }
-}
-
-@media (min-width: 1400px) {
-  .tb-bubble {
-    max-width: 65%;
   }
 }
 

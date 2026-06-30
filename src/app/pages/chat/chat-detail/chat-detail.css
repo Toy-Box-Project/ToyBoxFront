@@ -166,50 +166,18 @@
     background: var(--background);
 }
 
-.message-wrapper {
-    display: flex;
+.no-messages {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  color: var(--on-surface-variant);
 }
 
-.message-wrapper.sent {
-    justify-content: flex-end;
-}
-
-.message-wrapper.received {
-    justify-content: flex-start;
-}
-
-.message-bubble {
-    max-width: 65%;
-    padding: 10px 14px;
-    border-radius: 18px;
-    position: relative;
-}
-
-.message-bubble.sent {
-    background: var(--secondary-toybox);
-    color: var(--color-white);
-    border-bottom-right-radius: 4px;
-}
-
-.message-bubble.received {
-    background: var(--color-white);
-    color: var(--on-surface);
-    border-bottom-left-radius: 4px;
-    box-shadow: var(--shadow-card);
-}
-
-.message-text {
-    font-family: var(--font-text);
-    font-size: 14px;
-    margin: 0 0 4px;
-    line-height: 1.4;
-}
-
-.message-time {
-    font-size: 11px;
-    opacity: 0.7;
-    display: block;
-    text-align: right;
+.no-messages p {
+  font-family: var(--font-text);
+  font-size: 14px;
+  margin: 0;
 }
 
 .chat-input-bar {

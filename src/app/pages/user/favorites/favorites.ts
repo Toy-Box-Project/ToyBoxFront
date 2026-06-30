@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ProductCardComponent } from '../../../shared/components/product-card/product-card';
@@ -28,6 +28,7 @@ interface DemoProduct {
 })
 export class FavoritesComponent implements OnInit {
   private favoritesService = inject(FavoritesService);
+  private cdr = inject(ChangeDetectorRef);
 
   favorites: DemoProduct[] = [];
   currentPage = 1;
@@ -179,11 +180,13 @@ export class FavoritesComponent implements OnInit {
 
         this.updatePagination();
         this.isLoading = false;
+        this.cdr.markForCheck();
       },
       error: (err: HttpErrorResponse) => {
         this.isLoading = false;
         this.handleError(err, 'Error al cargar favoritos');
         console.error('Error cargando favoritos:', err);
+        this.cdr.markForCheck();
       }
     });
   }

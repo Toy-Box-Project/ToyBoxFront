@@ -1,14 +1,14 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../../../../environments/environment';
 
-// interface LOCAL
 interface DashboardMetric {
   label: string;
-  value: number;
+  value: number | string;
   detail: string;
   tone: 'blue' | 'green' | 'amber' | 'red';
 }
 
-// interface LOCAL
 interface AdminTask {
   title: string;
   owner: string;
@@ -27,23 +27,116 @@ interface ChartItem {
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.css'
 })
-export class AdminDashboardComponent {
-  metrics: DashboardMetric[] = [
-    { label: 'Usuarios activos', value: 1248, detail: '+32 esta semana', tone: 'blue' },
-    { label: 'Artículos publicados', value: 386, detail: '18 en revisión', tone: 'green' },
-    { label: 'Categorías', value: 12, detail: '2 pendientes de actualizar', tone: 'amber' },
-    { label: 'Reportes abiertos', value: 7, detail: '3 de prioridad alta', tone: 'red' },
-  ];
+export class AdminDashboardComponent implements OnInit {
+  metrics: DashboardMetric[] = [];
+  tasks: AdminTask[] = [];
+  chartItems: ChartItem[] = [];
+  isLoading = true;
+  error = '';
 
-  tasks: AdminTask[] = [
-    { title: 'Revisar anuncios reportados', owner: 'Moderación', status: 'Pendiente' },
-    { title: 'Actualizar iconos de categorías', owner: 'Administración', status: 'En curso' },
-    { title: 'Comprobar cuentas bloqueadas', owner: 'Soporte', status: 'Pendiente' },
-  ];
+  constructor(private http: HttpClient) {}
 
-  chartItems: ChartItem[] = [
-    { label: 'Usuarios', value: 1248, percent: 92 },
-    { label: 'Artículos', value: 386, percent: 64 },
-    { label: 'Reportes', value: 7, percent: 28 },
-  ];
+  ngOnInit(): void {
+    this.loadStats();
+  }
+
+  loadStats(): void {
+    this.isLoading = true;
+    this.error = '';
+
+    this.http.get<any>(`${environment.apiUrl}/admin/stats`).subscribe({
+      next: stats => {
+        const activeUsers = this.findTotal(stats.users_by_status, 'status', 'active');
+        const blockedUsers = this.findTotal(stats.users_by_status, 'status', 'blocked');
+        const publishedItems = this.findTotal(stats.items_by_status, 'conservation_status', 'published');
+        const pendingReports = stats.pending_reports ?? 0;
+        const pendingReservations = stats.pending_reservations ?? 0;
+        const topCategories = stats.top_categories ?? [];
+
+        this.metrics = [
+          {
+            label: 'Usuarios activos',
+            value: activeUsers,
+            detail: `${blockedUsers} bloqueados`,
+            tone: 'blue',
+          },
+          {
+            label: 'Artículos publicados',
+            value: publishedItems,
+            detail: `${pendingReservations} reservas pendientes`,
+            tone: 'green',
+          },
+          {
+            label: 'Categorías top',
+            value: topCategories.length,
+            detail: topCategories[0]?.name ?? 'Sin datos',
+            tone: 'amber',
+          },
+          {
+            label: 'Reportes pendientes',
+            value: pendingReports,
+            detail: pendingReports > 0 ? 'Requieren revisión' : 'Sin pendientes',
+            tone: 'red',
+          },
+        ];
+
+        this.tasks = this.buildTasks(pendingReports, pendingReservations, blockedUsers);
+        this.chartItems = this.buildChartItems(activeUsers, publishedItems, pendingReports);
+        this.isLoading = false;
+      },
+      error: err => {
+        this.error = 'Error al cargar las estadísticas del panel.';
+        this.isLoading = false;
+        console.error('Error cargando stats admin:', err);
+      },
+    });
+  }
+
+  private buildTasks(pendingReports: number, pendingReservations: number, blockedUsers: number): AdminTask[] {
+    const tasks: AdminTask[] = [];
+
+    if (pendingReports > 0) {
+      tasks.push({
+        title: `Revisar ${pendingReports} reportes pendientes`,
+        owner: 'Moderación',
+        status: 'Pendiente',
+      });
+    }
+
+    if (pendingReservations > 0) {
+      tasks.push({
+        title: `Gestionar ${pendingReservations} reservas pendientes`,
+        owner: 'Soporte',
+        status: 'Pendiente',
+      });
+    }
+
+    if (blockedUsers > 0) {
+      tasks.push({
+        title: `Revisar ${blockedUsers} cuentas bloqueadas`,
+        owner: 'Administración',
+        status: 'Pendiente',
+      });
+    }
+
+    return tasks.length ? tasks : [{ title: 'Sin tareas pendientes', owner: 'Sistema', status: 'OK' }];
+  }
+
+  private buildChartItems(activeUsers: number, publishedItems: number, pendingReports: number): ChartItem[] {
+    const maxValue = Math.max(activeUsers, publishedItems, pendingReports, 1);
+
+    return [
+      { label: 'Usuarios', value: activeUsers, percent: this.toPercent(activeUsers, maxValue) },
+      { label: 'Artículos', value: publishedItems, percent: this.toPercent(publishedItems, maxValue) },
+      { label: 'Reportes', value: pendingReports, percent: this.toPercent(pendingReports, maxValue) },
+    ];
+  }
+
+  private findTotal(rows: any[] | undefined, key: string, value: string): number {
+    return rows?.find(row => row[key] === value)?.total ?? 0;
+  }
+
+  private toPercent(value: number, maxValue: number): number {
+    return Math.max(8, Math.round((value / maxValue) * 100));
+  }
 }

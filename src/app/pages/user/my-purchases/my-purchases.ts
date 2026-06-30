@@ -34,9 +34,6 @@ export class MyPurchasesComponent implements OnInit {
     this.loadReviews();
   }
 
-  /**
-   * Cargar reseñas del backend
-   */
   private loadReviews(): void {
     const currentUser = this.authService.currentUser();
 
@@ -48,7 +45,6 @@ export class MyPurchasesComponent implements OnInit {
     this.isLoading = true;
     this.errorMessage = '';
 
-    // Cargar reseñas de compras (como comprador)
     this.reviewsService.getByReviewer(currentUser.id_users).subscribe({
       next: (reviews) => {
         this.myPurchaseReviews = reviews;
@@ -59,7 +55,6 @@ export class MyPurchasesComponent implements OnInit {
       }
     });
 
-    // Cargar reseñas de ventas (como vendedor)
     this.reviewsService.getBySeller(currentUser.id_users).subscribe({
       next: (reviews) => {
         this.mySalesReviews = reviews;
@@ -74,9 +69,6 @@ export class MyPurchasesComponent implements OnInit {
     });
   }
 
-  /**
-   * Manejar errores de las peticiones
-   */
   private handleError(err: HttpErrorResponse): void {
     if (err.status === 0) {
       this.errorMessage = 'No hay conexión con el servidor';
@@ -91,17 +83,11 @@ export class MyPurchasesComponent implements OnInit {
     }
   }
 
-  /**
-   * Cambiar entre pestañas de compras y ventas
-   */
   switchTab(tab: 'purchases' | 'sales'): void {
     this.activeTab = tab;
     this.currentPage = 1;
   }
 
-  /**
-   * Obtener reseñas paginadas según la pestaña activa
-   */
   get paginatedReviews(): Review[] {
     const list = this.activeTab === 'purchases'
       ? this.myPurchaseReviews
@@ -111,9 +97,6 @@ export class MyPurchasesComponent implements OnInit {
     return list.slice(start, start + this.pageSize);
   }
 
-  /**
-   * Obtener el número total de páginas
-   */
   get totalPages(): number {
     const list = this.activeTab === 'purchases'
       ? this.myPurchaseReviews
@@ -122,9 +105,6 @@ export class MyPurchasesComponent implements OnInit {
     return Math.ceil(list.length / this.pageSize);
   }
 
-  /**
-   * Manejar cambio de página
-   */
   onPageChange(page: number): void {
     this.currentPage = page;
   }

@@ -89,14 +89,12 @@ export class EditProfileComponent implements OnInit, OnDestroy {
       profile_picture: ['', []]
     });
 
-    // Escuchar cambios en provincia para actualizar ciudades y coordenadas
     this.editProfileForm.get('user_province')?.valueChanges
       .pipe(takeUntil(this.destroy$))
       .subscribe(async (province) => {
         await this.onProvinceChange(province);
       });
 
-    // Escuchar cambios en ciudad para actualizar coordenadas
     this.editProfileForm.get('user_city')?.valueChanges
       .pipe(takeUntil(this.destroy$))
       .subscribe(async (city) => {
@@ -135,7 +133,6 @@ export class EditProfileComponent implements OnInit, OnDestroy {
             );
           }
 
-          // Cargar las coordenadas iniciales del usuario (en background)
           if (user.user_province && user.user_city) {
             this.onCityChange(user.user_city).catch(error =>
               console.error('Error loading initial coordinates:', error)
@@ -174,10 +171,6 @@ export class EditProfileComponent implements OnInit, OnDestroy {
     }
   }
 
-  /**
-   * Se ejecuta cuando cambia la ciudad seleccionada
-   * Obtiene las coordenadas geográficas para mostrar en el mapa en tiempo real
-   */
   async onCityChange(city: string): Promise<void> {
     const province = this.editProfileForm.get('user_province')?.value;
 

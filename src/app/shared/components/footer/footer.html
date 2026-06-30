@@ -39,15 +39,24 @@
             <div class="footer-col">
                 <h4>Toybox</h4>
                 <a routerLink="/">Inicio</a>
+                @if (isLoggedIn) {
                 <a routerLink="/catalog">Catálogo</a>
                 <a routerLink="/product/create">Vender</a>
+                } @else {
+                <a routerLink="/auth/login">Catálogo</a>
+                <a routerLink="/auth/login">Vender</a>
+                }
             </div>
+
+            @if (isLoggedIn) {
             <div class="footer-col">
                 <h4>Mi cuenta</h4>
                 <a routerLink="/user/profile">Mi perfil</a>
                 <a routerLink="/user/my-products">Mis productos</a>
                 <a routerLink="/user/favorites">Favoritos</a>
             </div>
+            }
+
             <div class="footer-col">
                 <h4>Ayuda</h4>
                 <a routerLink="/not-found">Contacto</a>

@@ -2,8 +2,6 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterModule, Router } from '@angular/router';
-import { AuthService } from '../../../core/services/auth.service';
-import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-forgot-password',
@@ -17,7 +15,7 @@ export class ForgotPasswordComponent {
   backendSuccess = '';
   isLoading = false;
 
-  constructor(private router: Router, private authService: AuthService) {}
+  constructor(private router: Router) {}
 
   form: FormGroup = new FormGroup({
     email: new FormControl(
@@ -46,42 +44,19 @@ export class ForgotPasswordComponent {
     this.isLoading = true;
     this.disableForm();
 
-    const { email } = this.form.value;
+    setTimeout(() => {
+      this.isLoading = false;
+      this.enableForm();
+      
+      this.backendSuccess =
+        'Si el email existe en nuestro sistema, recibirás un enlace para restablecer tu contraseña en breve.';
+      this.form.reset();
+      
+      setTimeout(() => {
+        this.router.navigate(['/auth/login']);
+      }, 3000);
+    }, 1000);
 
-    this.authService.forgotPassword({ email }).subscribe({
-      next: () => {
-        this.isLoading = false;
-        this.enableForm();
-
-        // ✅ Mensaje de éxito
-        this.backendSuccess =
-          'Si el email existe en nuestro sistema, recibirás un enlace para restablecer tu contraseña en breve.';
-        this.form.reset();
-
-        // Opcional: Redirigir a login después de 3 segundos
-        setTimeout(() => {
-          this.router.navigate(['/auth/login']);
-        }, 3000);
-      },
-      error: (err: HttpErrorResponse) => {
-        this.isLoading = false;
-        this.enableForm();
-
-        console.error('Error forgot password:', err);
-
-        this.backendSuccess =
-          'Si el email existe en nuestro sistema, recibirás un enlace para restablecer tu contraseña en breve.';
-        
-        // Si necesitas debug, puedes descomenta esto:
-        // if (err.error?.message === 'EMAIL_NOT_FOUND') {
-        //   this.backendError = 'Este email no está registrado.';
-        // } else if (err.status === 0) {
-        //   this.backendError = 'No hay conexión con el servidor.';
-        // } else {
-        //   this.backendError = 'Error al procesar la solicitud. Intenta más tarde.';
-        // }
-      }
-    });
   }
 
   private disableForm(): void {
