@@ -2,6 +2,9 @@
 
 <div class="relative-z-10">
 
+    <app-breadcrumb [items]="breadcrumbItems" [autoGenerate]="false"></app-breadcrumb>
+
+
     <div class="chat-list-page">
         <div class="chat-list-header">
             <h1 class="chat-title">Buzón</h1>
@@ -38,7 +41,17 @@
                 <div class="conv-info">
                     <div class="conv-top">
                         <span class="conv-username">{{ conv.otherUserName }}</span>
-                        <span class="conv-time">{{ conv.lastMessageAt }}</span>
+                        <span class="conv-time">
+                          @if (conv.lastMessageAt) {
+                            @if (isToday(conv.lastMessageAt)) {
+                              {{ conv.lastMessageAt | date: 'HH:mm' }}
+                            } @else if (isYesterday(conv.lastMessageAt)) {
+                              Ayer {{ conv.lastMessageAt | date: 'HH:mm' }}
+                            } @else {
+                              {{ conv.lastMessageAt | date: 'dd/MM, HH:mm' }}
+                            }
+                          }
+                        </span>
                     </div>
                     <p class="conv-product-title">{{ conv.itemTitle }}</p>
                     <p class="conv-last-message" [class.bold]="conv.unreadCount > 0">
