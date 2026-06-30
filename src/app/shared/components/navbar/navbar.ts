@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
 import { ChatService } from '../../../core/services/chat.service';
+import { NotificationsService } from '../../../core/services/notifications.service';
 import { UserRole } from '../../enums/user-role.enum';
 
 @Component({
@@ -27,7 +28,8 @@ export class NavbarComponent implements OnInit {
   constructor(
     private router: Router,
     private authService: AuthService,
-    private chatService: ChatService
+    private chatService: ChatService,
+    public notificationsService: NotificationsService
   ) { }
 
   ngOnInit(): void {
@@ -41,6 +43,7 @@ export class NavbarComponent implements OnInit {
 
     if (this.isLoggedIn) {
       this.loadUnreadMessages();
+      this.loadUnreadNotifications();
     }
   }
 
@@ -53,6 +56,10 @@ export class NavbarComponent implements OnInit {
         console.error('Error cargando chats para contador:', err);
       }
     });
+  }
+
+  loadUnreadNotifications(): void {
+    this.notificationsService.refreshUnreadCount();
   }
 
   goToLogin(): void {
