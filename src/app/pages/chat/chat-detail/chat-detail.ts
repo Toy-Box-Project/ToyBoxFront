@@ -1,13 +1,17 @@
-import { Component, OnInit, AfterViewChecked, ViewChild, ElementRef, NgZone, ChangeDetectorRef } from '@angular/core';
+import {
+  Component, OnInit, OnDestroy, AfterViewChecked,
+  ViewChild, ElementRef, NgZone, ChangeDetectorRef
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
+import { Subject, Subscription } from 'rxjs';
 import { ChatItem } from '../../../shared/interfaces/chat.interface';
 import { ChatMessageWithSender } from '../../../shared/interfaces/message.interface';
 import { BreadcrumbComponent } from '../../../shared/components/breadcrumb/breadcrumb';
 import { ChatBubbleComponent } from '../../../shared/components/chat-bubble/chat-bubble';
 import { AuthService } from '../../../core/services/auth.service';
 import { ChatService } from '../../../core/services/chat.service';
-import { Subject } from 'rxjs';
+import { SocketService } from '../../../core/services/socket.service';
 
 @Component({
   selector: 'app-chat-detail',
@@ -16,7 +20,7 @@ import { Subject } from 'rxjs';
   templateUrl: './chat-detail.html',
   styleUrls: ['./chat-detail.css']
 })
-export class ChatDetail implements OnInit, AfterViewChecked {
+export class ChatDetail implements OnInit, AfterViewChecked, OnDestroy {
 
   @ViewChild('messagesContainer') messagesContainer!: ElementRef;
 
@@ -28,38 +32,58 @@ export class ChatDetail implements OnInit, AfterViewChecked {
   messages: ChatMessageWithSender[] = [];
 
   private conversationsLoaded$ = new Subject<void>();
+  private socketSub: Subscription | null = null;
 
   get selectedConversation(): ChatItem | undefined {
     return this.conversations.find(c => c.id_conversations === this.selectedConversationId);
   }
 
   constructor(
-    private authService: AuthService, 
+    private authService: AuthService,
     private route: ActivatedRoute,
     private chatService: ChatService,
-    private ngZone: NgZone, 
-
-    private cdr: ChangeDetectorRef  
-  ) { this.currentUserId = this.authService.currentUser()?.id_users ?? null; } 
+    private socketService: SocketService,
+    private ngZone: NgZone,
+    private cdr: ChangeDetectorRef
+  ) {
+    this.currentUserId = this.authService.currentUser()?.id_users ?? null;
+  }
 
   private initializeBreadcrumbs(): void {
-  const isLoggedIn = this.authService.isLoggedIn();
-  const homeRoute = isLoggedIn ? '/catalog' : '/home';
+    const isLoggedIn = this.authService.isLoggedIn();
+    const homeRoute = isLoggedIn ? '/catalog' : '/home';
+    this.breadcrumbItems = [
+      { label: 'Inicio', route: homeRoute, icon: 'home' },
+      { label: 'Buzón', route: '/chat', icon: 'inbox' }
+    ];
+  }
 
-  this.breadcrumbItems = [
-    { label: 'Inicio', route: homeRoute, icon: 'home' },
-    { label: 'Buzón', route: '/chat', icon: 'inbox' }
-  ];
-}
   ngOnInit(): void {
+    // Conectar el socket una sola vez al entrar al módulo de chat
+    this.socketService.connect();
+
+    // Escuchar mensajes entrantes en tiempo real
+    this.socketSub = this.socketService.onNewMessage<ChatMessageWithSender>().subscribe((msg) => {
+      this.ngZone.run(() => {
+        // Solo añadir si pertenece a la conversación activa y no es un duplicado
+        if (
+          msg.fk_conversations_id === this.selectedConversationId &&
+          !this.messages.some(m => m.id_messages === msg.id_messages)
+        ) {
+          this.messages.push(msg);
+          this.cdr.detectChanges();
+        }
+      });
+    });
+
     this.loadConversations();
     this.initializeBreadcrumbs();
+
     this.conversationsLoaded$.subscribe(() => {
       this.route.params.subscribe(params => {
         if (params['id']) {
           const chatId = +params['id'];
           this.selectConversation(chatId);
-
           this.chatService.markAsRead(chatId).subscribe({
             error: (err) => console.error('Error marcando como leído:', err)
           });
@@ -72,25 +96,37 @@ export class ChatDetail implements OnInit, AfterViewChecked {
     this.scrollToBottom();
   }
 
+  ngOnDestroy(): void {
+    // Abandonar la sala activa y limpiar suscripciones
+    if (this.selectedConversationId !== null) {
+      this.socketService.leaveConversation(this.selectedConversationId);
+    }
+    this.socketSub?.unsubscribe();
+    this.socketService.disconnect();
+  }
+
   selectConversation(id: number): void {
+    // Abandonar la sala anterior si hay una activa
+    if (this.selectedConversationId !== null) {
+      this.socketService.leaveConversation(this.selectedConversationId);
+    }
+
     this.selectedConversationId = id;
+    this.socketService.joinConversation(id);   // ← unirse a la sala en tiempo real
     this.loadMessages(id);
     this.loadConversationData(id);
-    
+
     const conv = this.selectedConversation;
     if (conv) {
       const isLoggedIn = this.authService.isLoggedIn();
       const homeRoute = isLoggedIn ? '/catalog' : '/home';
-
       this.breadcrumbItems = [
         { label: 'Inicio', route: homeRoute, icon: 'home' },
         { label: 'Buzón', route: '/chat', icon: 'inbox' },
         { label: `Conversación con ${conv.otherUserName}`, icon: 'chat' }
       ];
-
-    this.cdr.detectChanges();  
+      this.cdr.detectChanges();
     }
-
   }
 
   loadConversations(): void {
@@ -100,19 +136,17 @@ export class ChatDetail implements OnInit, AfterViewChecked {
           const currentUserId = this.authService.currentUser()?.id_users;
           const isMe_Seller = chat.fk_seller_id === currentUserId;
           const otherUserName = isMe_Seller ? chat.buyer_username : chat.seller_username;
-
           return {
             id_conversations: chat.id_conversations,
             otherUserName: otherUserName ?? 'Usuario',
             otherUserImage: '',
-            itemTitle: chat.item_title ?? 'Producto',     
-            itemImage: chat.item_photo ?? '',             
-            lastMessage: chat.last_message ?? '',         
-            lastMessageAt: chat.created_at ?? '',         
-            unreadCount: chat.unread_count ?? 0           
+            itemTitle: chat.item_title ?? 'Producto',
+            itemImage: chat.item_photo ?? '',
+            lastMessage: chat.last_message ?? '',
+            lastMessageAt: chat.created_at ?? '',
+            unreadCount: chat.unread_count ?? 0
           };
         });
-
         this.cdr.detectChanges();
         this.conversationsLoaded$.next();
       },
@@ -128,20 +162,18 @@ export class ChatDetail implements OnInit, AfterViewChecked {
     this.chatService.getMessages(conversationId).subscribe({
       next: (messages) => {
         this.messages = messages as ChatMessageWithSender[];
-        this.cdr.detectChanges();  
+        this.cdr.detectChanges();
       },
       error: (err) => {
         console.error('Error cargando mensajes:', err);
-        this.messages = []; 
+        this.messages = [];
       }
     });
   }
 
   private loadConversationData(conversationId: number): void {
     this.chatService.getChatById(conversationId).subscribe({
-      next: (chat: any) => {
-        console.log('Conversación cargada:', chat);
-      },
+      next: (chat: any) => console.log('Conversación cargada:', chat),
       error: (err: any) => console.error('Error cargando conversación:', err)
     });
   }
@@ -150,17 +182,17 @@ export class ChatDetail implements OnInit, AfterViewChecked {
     if (!this.newMessage.trim() || !this.selectedConversationId) return;
 
     const messageContent = this.newMessage.trim();
+    this.newMessage = '';  // limpiar input de inmediato (UX optimista)
 
     this.chatService.sendMessage(this.selectedConversationId, messageContent).subscribe({
-      next: (savedMessage) => {
-
-        this.ngZone.run(() => { 
-          this.messages.push(savedMessage as ChatMessageWithSender);
-          this.newMessage = '';  
-        });
+      next: () => {
+        // El socket emitirá new_message a ambos participantes (incluido el emisor),
+        // que lo recibirá en onNewMessage() y lo añadirá a la lista.
+        // No hace falta hacer push aquí para evitar duplicados.
       },
       error: (err) => {
         console.error('Error enviando mensaje:', err);
+        this.newMessage = messageContent; // restaurar si falla
       }
     });
   }
