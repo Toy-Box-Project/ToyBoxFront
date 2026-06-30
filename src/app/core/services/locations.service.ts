@@ -100,7 +100,6 @@ export class LocationsService {
   async getCoordinates(provincia: string, ciudad: string): Promise<{ lat: number; lng: number } | null> {
     const cacheKey = `${ciudad}-${provincia}`;
 
-    // Verificar caché
     if (cacheKey in this.coordinatesCache) {
       return this.coordinatesCache[cacheKey];
     }
@@ -109,7 +108,6 @@ export class LocationsService {
       const query = `${ciudad}, ${provincia}, España`;
       const encodedQuery = encodeURIComponent(query);
 
-      // Nominatim API de OpenStreetMap (requiere User-Agent)
       const response = await firstValueFrom(
         this.http.get<any[]>(
           `https://nominatim.openstreetmap.org/search?format=json&q=${encodedQuery}`,
@@ -143,9 +141,6 @@ export class LocationsService {
     }
   }
 
-  /**
-   * Limpia el caché de coordenadas
-   */
   clearCoordinatesCache(): void {
     this.coordinatesCache = {};
     console.log('✅ Caché de coordenadas limpiado');

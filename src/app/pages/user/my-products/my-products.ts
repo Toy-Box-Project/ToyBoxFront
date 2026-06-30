@@ -36,28 +36,23 @@ export class MyProductsComponent implements OnInit {
   private readonly router = inject(Router);
   private readonly cdr = inject(ChangeDetectorRef);
 
-  // Productos a la venta
   products: Item[] = [];
   isLoadingProducts = true;
   productsError = '';
   currentPage = 1;
   totalPages = 1;
 
-  // Transacciones de ventas
   sales: ItemHistory[] = [];
   isLoadingSales = true;
   salesError = '';
 
-  // Reseñas como vendedor
   receivedReviews: Review[] = [];
   isLoadingReviews = true;
   reviewsError = '';
 
-  // Modal de confirmación
   productToDelete: Item | null = null;
   showDeleteModal = false;
 
-  // Información del usuario actual
   currentUserId: number | undefined;
 
   ngOnInit(): void {
@@ -89,8 +84,6 @@ export class MyProductsComponent implements OnInit {
     this.productsService.getAll({ sellerId: this.currentUserId }).subscribe({
       next: (response) => {
         this.totalPages = response.totalPages || 1;
-        // ItemCard es compatible para mostrar, pero necesitamos Item para editar/eliminar
-        // Convertimos ItemCard a Item (los campos faltantes se pueden rellenar con valores por defecto)
         this.products = (response.items || []).map((card: ItemCard) => ({
           id_items: card.id_items,
           title: card.title,
@@ -239,7 +232,6 @@ export class MyProductsComponent implements OnInit {
     });
   }
 
-  // Mapear ItemStatus a valores compatibles con StatusBadgeComponent
   mapItemStatus(status: ItemStatus): 'available' | 'reserved' | 'sold' | 'new' | 'used' | 'featured' {
     switch (status) {
       case ItemStatus.Available:
@@ -255,7 +247,6 @@ export class MyProductsComponent implements OnInit {
     }
   }
 
-  // Mapear TradeStatus a valores compatibles con StatusBadgeComponent
   mapTradeStatus(status: TradeStatus): 'available' | 'reserved' | 'sold' | 'new' | 'used' | 'featured' {
     switch (status) {
       case TradeStatus.Pending:
