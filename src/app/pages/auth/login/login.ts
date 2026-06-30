@@ -3,6 +3,7 @@ import { Component, inject, PLATFORM_ID } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-login',
@@ -70,29 +71,30 @@ export class LoginComponent {
 
         switch (res.user.role) {
           case 'administrator':
-            this.router.navigate(['/catalog']);
+            this.router.navigate(['/admin/dashboard']);
             break;
           case 'moderator':
-            this.router.navigate(['/catalog']);
+            this.router.navigate(['/moderator/reports']);
             break;
           default:
             this.router.navigate(['/catalog']); 
         }
       },
-      error: (err) => {
+      error: (err: HttpErrorResponse) => {
         this.isLoading = false;
         this.enableForm();
+        const backendError = err.error?.error || '';
 
-        if (err.error?.message === 'INVALID_CREDENTIALS') {
+        if (err.status === 401) {
           this.loginError = 'Email o contraseña incorrectos';
-        } else if (err.error?.message === 'USER_NOT_FOUND') {
-          this.loginError = 'Usuario no encontrado';
-        } else if (err.error?.message === 'USER_BLOCKED') {
+        } else if (err.status === 403) {
           this.loginError = 'Tu cuenta ha sido bloqueada';
+        } else if (err.status === 400) {
+          this.loginError = backendError || 'Campos requeridos faltantes';
         } else if (err.status === 0) {
           this.loginError = 'No hay conexión con el servidor';
         } else {
-          this.loginError = err.error?.message || 'Error al iniciar sesión';
+          this.loginError = backendError || 'Error al iniciar sesión';
         }
       }
     });
