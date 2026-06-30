@@ -1,8 +1,6 @@
 import { Routes } from '@angular/router';
-import { NotificationsComponent } from './pages/notifications/notifications';
-// NOTE: Guards desactivados temporalmente durante el desarrollo de las páginas.
-// import { authGuard } from './core/guards/auth.guard';
-// import { roleGuard } from './core/guards/role.guard';
+import { authGuard } from './core/guards/auth.guard';
+import { roleGuard } from './core/guards/role.guard';
 
 export const routes: Routes = [
   // Public
@@ -14,6 +12,16 @@ export const routes: Routes = [
     path: 'catalog',
     loadComponent: () => import('./pages/catalog/catalog').then(m => m.CatalogComponent),
   },
+  // Product management (auth required) — debe ir ANTES de product/:id para que /product/create no sea capturado como id
+  {
+    path: 'product',
+    canActivate: [authGuard],
+    children: [
+      { path: 'create',    loadComponent: () => import('./pages/product/create-product/create-product').then(m => m.CreateProductComponent) },
+      { path: 'edit/:id',  loadComponent: () => import('./pages/product/edit-product/edit-product').then(m => m.EditProductComponent) },
+    ],
+  },
+
   {
     path: 'product/:id',
     loadComponent: () => import('./pages/product-detail/product-detail').then(m => m.ProductDetailComponent),
@@ -33,7 +41,7 @@ export const routes: Routes = [
   // User (auth required)
   {
     path: 'user',
-    // canActivate: [authGuard],
+    canActivate: [authGuard],
     children: [
       { path: 'profile',      loadComponent: () => import('./pages/user/profile/profile').then(m => m.ProfileComponent) },
       { path: 'profile/:id',  loadComponent: () => import('./pages/user/profile/profile').then(m => m.ProfileComponent) },
@@ -44,26 +52,10 @@ export const routes: Routes = [
     ],
   },
 
-  // Notifications
-  {
-    path: 'notifications',
-    component: NotificationsComponent,
-  },
-
-  // Product management (auth required)
-  {
-    path: 'product',
-    // canActivate: [authGuard],
-    children: [
-      { path: 'create',    loadComponent: () => import('./pages/product/create-product/create-product').then(m => m.CreateProductComponent) },
-      { path: 'edit/:id',  loadComponent: () => import('./pages/product/edit-product/edit-product').then(m => m.EditProductComponent) },
-    ],
-  },
-
   // Chat (auth required)
   {
     path: 'chat',
-    // canActivate: [authGuard],
+    canActivate: [authGuard],
     children: [
       { path: '',    loadComponent: () => import('./pages/chat/chat-list/chat-list').then(m => m.ChatList) },
       { path: ':id', loadComponent: () => import('./pages/chat/chat-detail/chat-detail').then(m => m.ChatDetail) },
@@ -73,11 +65,11 @@ export const routes: Routes = [
   // Moderator (role required)
   {
     path: 'moderator',
-    // canActivate: [authGuard, roleGuard],
-    data: { roles: ['moderador', 'administrador'] },
+    canActivate: [authGuard, roleGuard],
+    data: { roles: ['moderator', 'administrator'] },
     children: [
-      { path: 'reports',        loadComponent: () => import('./pages/moderator/reports-list/reports-list').then(m => m.ReportsListComponent) },
-      { path: 'report/:id',     loadComponent: () => import('./pages/moderator/report-detail/report-detail').then(m => m.ReportDetailComponent) },
+      { path: 'reports',    loadComponent: () => import('./pages/moderator/reports-list/reports-list').then(m => m.ReportsListComponent) },
+      { path: 'report/:id', loadComponent: () => import('./pages/moderator/report-detail/report-detail').then(m => m.ReportDetailComponent) },
       { path: '', redirectTo: 'reports', pathMatch: 'full' },
     ],
   },
@@ -85,13 +77,13 @@ export const routes: Routes = [
   // Admin (role required)
   {
     path: 'admin',
-    // canActivate: [authGuard, roleGuard],
-    data: { roles: ['administrador'] },
+    canActivate: [authGuard, roleGuard],
+    data: { roles: ['administrator'] },
     children: [
-      { path: 'dashboard',   loadComponent: () => import('./pages/admin/dashboard/dashboard').then(m => m.AdminDashboardComponent) },
-      { path: 'users',       loadComponent: () => import('./pages/admin/users-management/users-management').then(m => m.UsersManagementComponent) },
-      { path: 'categories',  loadComponent: () => import('./pages/admin/categories-management/categories-management').then(m => m.CategoriesManagementComponent) },
-{ path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+      { path: 'dashboard',  loadComponent: () => import('./pages/admin/dashboard/dashboard').then(m => m.AdminDashboardComponent) },
+      { path: 'users',      loadComponent: () => import('./pages/admin/users-management/users-management').then(m => m.UsersManagementComponent) },
+      { path: 'categories', loadComponent: () => import('./pages/admin/categories-management/categories-management').then(m => m.CategoriesManagementComponent) },
+      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
     ],
   },
 

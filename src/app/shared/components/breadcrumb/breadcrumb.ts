@@ -24,29 +24,23 @@ export class BreadcrumbComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
 
   private routeLabels: { [key: string]: { label: string; icon?: string } } = {
-    // Public Routes
     'catalog': { label: 'Catálogo', icon: 'shopping_bag' },
     'product': { label: 'Detalles del Producto', icon: 'info' },
 
-    // User Routes
     'profile': { label: 'Perfil', icon: 'person' },
     'edit-profile': { label: 'Editar Perfil', icon: 'edit' },
     'my-products': { label: 'Mis Productos', icon: 'store' },
     'my-purchases': { label: 'Mis Compras', icon: 'shopping_cart' },
     'favorites': { label: 'Favoritos', icon: 'favorite' },
 
-    // Product Management Routes
     'create': { label: 'Crear Producto', icon: 'add_circle' },
     'edit': { label: 'Editar Producto', icon: 'edit' },
 
-    // Chat Routes
     'chat': { label: 'Mensajes', icon: 'mail' },
 
-    // Moderator Routes
     'reports': { label: 'Reportes', icon: 'report' },
     'report': { label: 'Detalle del Reporte', icon: 'report_problem' },
 
-    // Admin Routes
     'dashboard': { label: 'Dashboard', icon: 'dashboard' },
     'users': { label: 'Gestión de Usuarios', icon: 'people' },
     'categories': { label: 'Gestión de Categorías', icon: 'category' }

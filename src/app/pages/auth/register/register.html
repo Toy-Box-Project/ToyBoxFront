@@ -11,17 +11,13 @@
       </p>
     </div>
 
-    @if (backendError) {
-      <p class="error-message text-center mb-3">
-        {{ backendError }}
-      </p>
-    }
-
-    @if (backendSuccess) {
-      <p class="success-message text-center mb-3">
-        {{ backendSuccess }}
-      </p>
-    }
+    <app-toast 
+      [visible]="toastVisible"
+      [type]="toastType"
+      [title]="toastTitle"
+      [message]="toastMessage"
+      (dismissed)="toastVisible = false">
+    </app-toast>
 
     <form [formGroup]="form" (ngSubmit)="onSubmit()">
 
@@ -50,7 +46,7 @@
           <p class="error-message">Campo requerido</p>
         }
         @if (checkControl('username','pattern')) {
-          <p class="error-message">Solo letras, números y guion bajo</p>
+          <p class="error-message">Solo letras, números, punto y guion bajo</p>
         }
       </div>
 
@@ -211,19 +207,14 @@
 
   </div>
 
-  @if (showSuccessModal) {
-    <div class="modal-backdrop">
-      <div class="modal-content">
-        <div class="modal-header">
-          <span class="material-symbols-outlined modal-icon">check_circle</span>
-        </div>
-        <div class="modal-body">
-          <h2>¡Bienvenido a ToyBox!</h2>
-          <p>{{ backendSuccess }}</p>
-          <p class="small">Redirigiendo al catálogo...</p>
-        </div>
-      </div>
-    </div>
-  }
-
 </div>
+
+<app-modal-confirm
+  [isOpen]="showSuccessModal"
+  title="¡Bienvenido a ToyBox! 🧸"
+  [message]="'Tu cuenta ha sido creada correctamente. Redirigiendo...'"
+  confirmText="Ir al catálogo"
+  variant="info"
+  (confirmed)="router.navigate(['/catalog'])"
+  (cancelled)="router.navigate(['/catalog'])">
+</app-modal-confirm>

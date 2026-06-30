@@ -9,6 +9,7 @@
     --radius: 12px;
     display: block;
     font-family: 'Albert Sans', sans-serif;
+    min-height: calc(100vh - 72px);
 }
 
 .chat-list-page {
@@ -16,6 +17,9 @@
     margin: 0 auto;
     padding: 40px 24px;
     font-family: var(--font-title);
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
 }
 
 .chat-list-header {
@@ -184,6 +188,13 @@
     font-size: 15px;
     margin: 0;
     font-family: var(--font-text);
+}
+
+.conv-time {
+  font-size: 12px;
+  color: var(--on-surface-variant);
+  flex-shrink: 0;
+  white-space: nowrap;
 }
 
 @media (max-width: 768px) {

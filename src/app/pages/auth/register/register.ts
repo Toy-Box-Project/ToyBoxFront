@@ -5,23 +5,23 @@ import { Router, RouterModule } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 import { AuthService } from '../../../core/services/auth.service';
 import { LocationsService } from '../../../core/services/locations.service';
+import { ToastComponent } from "../../../shared/components/toast/toast";
+import { ModalConfirmComponent } from "../../../shared/components/modal-confirm/modal-confirm";
 
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterModule, ToastComponent, ModalConfirmComponent],
   templateUrl: './register.html',
   styleUrl: './register.css',
 })
 export class RegisterComponent implements OnInit {
   private authService = inject(AuthService);
   private locationsService = inject(LocationsService);
-  private router = inject(Router);
+  public router = inject(Router);
 
   showPassword = false;
   showConfirmPassword = false;
-  backendError = '';
-  backendSuccess = '';
   isLoading = false;
   showSuccessModal = false;
 
@@ -30,6 +30,11 @@ export class RegisterComponent implements OnInit {
   codigosPostalesDisponibles: string[] = [];
   ubicacionValidada = false;
   ubicacionError = '';
+
+  toastVisible = false;
+  toastType: 'success' | 'error' | 'warning' | 'info' = 'success';
+  toastTitle = '';
+  toastMessage = '';
 
   private minLength8(control: FormControl): ValidationErrors | null {
     return control.value && control.value.length >= 8 ? null : { minLength8: true };
@@ -74,7 +79,7 @@ export class RegisterComponent implements OnInit {
   form = new FormGroup({
     firstName: new FormControl('', [Validators.required, Validators.minLength(2), Validators.maxLength(30)]),
     lastName: new FormControl('', [Validators.required, Validators.minLength(2), Validators.maxLength(30)]),
-    username: new FormControl('', [Validators.required, Validators.pattern(/^[a-zA-Z0-9_]+$/)]),
+    username: new FormControl('', [Validators.required, Validators.pattern(/^[a-zA-Z0-9_.]+$/)]),
     email: new FormControl('', [Validators.required, Validators.pattern(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)]),
     password: new FormControl('', [
       Validators.required,
@@ -140,6 +145,18 @@ export class RegisterComponent implements OnInit {
     });
   }
 
+  showToast(type: 'success' | 'error', title: string, message: string): void {
+    this.toastType = type;
+    this.toastTitle = title;
+    this.toastMessage = message;
+    this.toastVisible = true;
+    
+    setTimeout(() => {
+      this.toastVisible = false;
+    }, 4000);
+  }
+
+
   togglePassword(): void {
     this.showPassword = !this.showPassword;
   }
@@ -154,16 +171,8 @@ export class RegisterComponent implements OnInit {
   }
 
   async onSubmit(): Promise<void> {
-    this.backendError = '';
-    this.backendSuccess = '';
-
     if (this.form.invalid) {
       this.form.markAllAsTouched();
-      return;
-    }
-
-    if (this.form.get('password')?.value !== this.form.get('confirmPassword')?.value) {
-      this.backendError = 'Las contraseñas no coinciden';
       return;
     }
 
@@ -203,8 +212,6 @@ export class RegisterComponent implements OnInit {
       next: () => {
         this.isLoading = false;
         this.form.enable();
-
-        this.backendSuccess = '¡Usuario creado correctamente!';
         this.showSuccessModal = true;
 
         setTimeout(() => {
@@ -212,21 +219,19 @@ export class RegisterComponent implements OnInit {
         }, 2000);
       },
       error: (err: HttpErrorResponse) => {
-        this.isLoading = false;
-        this.form.enable({ emitEvent: false });
-        this.form.get('city')?.enable({ emitEvent: false });
-        this.form.get('postalCode')?.enable({ emitEvent: false });
-
-        if (err.status === 409) {
-          this.backendError = err.error?.error || 'El email o usuario ya están registrados.';
-        } else if (err.status === 422) {
-          this.backendError = 'Datos inválidos. Verifica todos los campos';
-        } else if (err.status === 0) {
-          this.backendError = 'Error de conexión. Verifica que el servidor esté corriendo';
-        } else {
-          this.backendError = 'Error al registrar usuario. Intenta de nuevo.';
-        }
-
+          this.isLoading = false;
+          this.form.enable({ emitEvent: false });
+          this.form.get('city')?.enable({ emitEvent: false });        
+          this.form.get('postalCode')?.enable({ emitEvent: false });  
+          
+          let errorMsg = 'Error al registrar usuario. Intenta de nuevo.';
+          if (err.status === 409) {
+            errorMsg = err.error?.error || 'El email o usuario ya están registrados.';
+          } else if (err.status === 422) {
+            errorMsg = 'Datos inválidos. Verifica todos los campos';
+          }
+          this.showToast('error', 'Error de registro', errorMsg);
+      
         console.error('Error en registro:', err);
       }
     });

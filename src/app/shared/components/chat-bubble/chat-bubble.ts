@@ -1,11 +1,14 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import { ChatMessageWithSender } from '../../interfaces/message.interface';
+// AGREGADO - Importar UserAvatarComponent para reutilizar avatar
+import { UserAvatarComponent } from '../user-avatar/user-avatar';
 
 @Component({
   selector: 'app-chat-bubble',
   standalone: true,
-  imports: [CommonModule],
+  // MODIFICADO - Agregar UserAvatarComponent en imports
+  imports: [CommonModule, UserAvatarComponent],
   templateUrl: './chat-bubble.html',
   styleUrl: './chat-bubble.css'
 })
@@ -21,7 +24,4 @@ export class ChatBubbleComponent {
     return this.message.read ? 'Leído' : 'Enviado';
   }
 
-  getSenderInitial(): string {
-    return this.message.senderName.charAt(0).toUpperCase();
-  }
 }

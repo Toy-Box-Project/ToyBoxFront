@@ -1,8 +1,11 @@
-import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
+import { ReportsService } from '../../../core/services/reports.service';
+import { ReportStatus } from '../../../shared/enums/report-status.enum';
 
-// DEMO - use interface ReportItem
+// Shape local para el template
 interface ReportRow {
   id: number;
   itemTitle: string;
@@ -20,50 +23,57 @@ interface ReportRow {
   templateUrl: './reports-list.html',
   styleUrl: './reports-list.css'
 })
-export class ReportsListComponent {
+export class ReportsListComponent implements OnInit {
   statusFilter: 'all' | 'pending' | 'resolved' = 'all';
   searchTerm = '';
 
-  reports: ReportRow[] = [
-    {
-      id: 101,
-      itemTitle: 'Vintage console',
-      reporter: 'ana_user',
-      reportedUser: 'seller_82',
-      reason: 'Misleading product condition',
-      status: 'pending',
-      date: '2026-06-14',
-    },
-    {
-      id: 102,
-      itemTitle: 'Mountain bike',
-      reporter: 'buyer_madrid',
-      reportedUser: 'sport_seller',
-      reason: 'Suspicious listing',
-      status: 'pending',
-      date: '2026-06-13',
-    },
-    {
-      id: 103,
-      itemTitle: 'Desk lamp',
-      reporter: 'lucia_home',
-      reportedUser: 'decor_shop',
-      reason: 'Offensive description',
-      status: 'resolved',
-      date: '2026-06-10',
-    },
-  ];
+  reports: ReportRow[] = [];
+  isLoading = true;
+  error = '';
+
+  constructor(private reportsService: ReportsService) {}
+
+  ngOnInit(): void {
+    this.loadReports();
+  }
+
+  loadReports(): void {
+    this.isLoading = true;
+    this.error = '';
+
+    this.reportsService.getPending().subscribe({
+      next: (res: any) => {
+        // Backend devuelve { reports: [], total, page, limit }
+        const raw: any[] = res.reports ?? res ?? [];
+        this.reports = raw.map(r => ({
+          id:           r.id_reports,
+          itemTitle:    r.item_title ?? `Artículo #${r.fk_items_id}`,
+          reporter:     r.reporter_username ?? `Usuario #${r.fk_user_reports_received}`,
+          reportedUser: r.reported_username ?? `Usuario #${r.fk_user_reported}`,
+          reason:       r.reason,
+          status:       (r.status === ReportStatus.Resolved ? 'resolved' : 'pending') as 'pending' | 'resolved',
+          date:         r.report_date ? r.report_date.slice(0, 10) : '',
+        }));
+        this.isLoading = false;
+      },
+      error: (err: any) => {
+        this.error = err.status === 403
+          ? 'No tienes permisos para ver los reportes.'
+          : 'Error al cargar los reportes.';
+        this.isLoading = false;
+        console.error('Error cargando reportes:', err);
+      },
+    });
+  }
 
   get filteredReports(): ReportRow[] {
     const term = this.searchTerm.trim().toLowerCase();
-
     return this.reports.filter(report => {
       const matchesStatus = this.statusFilter === 'all' || report.status === this.statusFilter;
       const matchesTerm = !term ||
         report.itemTitle.toLowerCase().includes(term) ||
         report.reason.toLowerCase().includes(term) ||
         report.reportedUser.toLowerCase().includes(term);
-
       return matchesStatus && matchesTerm;
     });
   }
