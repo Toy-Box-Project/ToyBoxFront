@@ -20,14 +20,14 @@ interface CatalogProduct {
 }
 
 const CATEGORY_ICONS: Record<number, string> = {
-  1: '/assets/images/Iconos%20categorias/icono_munecosycoches.svg',
+  1: '/assets/images/Iconos%20categorias/icono_videojuegos.svg',
   2: '/assets/images/Iconos%20categorias/icono_construccion.svg',
-  3: '/assets/images/Iconos%20categorias/icono_juegosmesa.svg',
-  4: '/assets/images/Iconos%20categorias/icono_educativo.svg',
-  5: '/assets/images/Iconos%20categorias/icono_bebes.svg',
-  6: '/assets/images/Iconos%20categorias/icono_airelibre.svg',
-  7: '/assets/images/Iconos%20categorias/icono_imaginacion.svg',
-  8: '/assets/images/Iconos%20categorias/icono_videojuegos.svg',
+  3: '/assets/images/Iconos%20categorias/icono_bebes.svg',
+  4: '/assets/images/Iconos%20categorias/icono_juegosmesa.svg',
+  5: '/assets/images/Iconos%20categorias/icono_imaginacion.svg',
+  6: '/assets/images/Iconos%20categorias/icono_educativo.svg',
+  7: '/assets/images/Iconos%20categorias/icono_munecosycoches.svg',
+  8: '/assets/images/Iconos%20categorias/icono_airelibre.svg',
 };
 
 const STATUS_LABELS: Record<string, string> = {
