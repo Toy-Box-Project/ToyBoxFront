@@ -13,6 +13,11 @@ interface ReportRow {
   date: string;
 }
 
+const REPORT_STATUS_LABELS: Record<ReportRow['status'], string> = {
+  pending: 'Pendiente',
+  resolved: 'Resuelto',
+};
+
 @Component({
   selector: 'app-reports-list',
   standalone: true,
@@ -27,28 +32,28 @@ export class ReportsListComponent {
   reports: ReportRow[] = [
     {
       id: 101,
-      itemTitle: 'Vintage console',
+      itemTitle: 'Consola vintage',
       reporter: 'ana_user',
       reportedUser: 'seller_82',
-      reason: 'Misleading product condition',
+      reason: 'Estado del producto engañoso',
       status: 'pending',
       date: '2026-06-14',
     },
     {
       id: 102,
-      itemTitle: 'Mountain bike',
+      itemTitle: 'Bicicleta de montaña',
       reporter: 'buyer_madrid',
       reportedUser: 'sport_seller',
-      reason: 'Suspicious listing',
+      reason: 'Anuncio sospechoso',
       status: 'pending',
       date: '2026-06-13',
     },
     {
       id: 103,
-      itemTitle: 'Desk lamp',
+      itemTitle: 'Lámpara de escritorio',
       reporter: 'lucia_home',
       reportedUser: 'decor_shop',
-      reason: 'Offensive description',
+      reason: 'Descripción ofensiva',
       status: 'resolved',
       date: '2026-06-10',
     },
@@ -66,5 +71,9 @@ export class ReportsListComponent {
 
       return matchesStatus && matchesTerm;
     });
+  }
+
+  statusLabel(status: ReportRow['status']): string {
+    return REPORT_STATUS_LABELS[status];
   }
 }

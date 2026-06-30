@@ -15,6 +15,12 @@ interface AdminTask {
   status: string;
 }
 
+interface ChartItem {
+  label: string;
+  value: number;
+  percent: number;
+}
+
 @Component({
   selector: 'app-admin-dashboard',
   standalone: true,
@@ -23,15 +29,21 @@ interface AdminTask {
 })
 export class AdminDashboardComponent {
   metrics: DashboardMetric[] = [
-    { label: 'Active users', value: 1248, detail: '+32 this week', tone: 'blue' },
-    { label: 'Published items', value: 386, detail: '18 under review', tone: 'green' },
-    { label: 'Categories', value: 12, detail: '2 pending updates', tone: 'amber' },
-    { label: 'Open reports', value: 7, detail: '3 high priority', tone: 'red' },
+    { label: 'Usuarios activos', value: 1248, detail: '+32 esta semana', tone: 'blue' },
+    { label: 'Artículos publicados', value: 386, detail: '18 en revisión', tone: 'green' },
+    { label: 'Categorías', value: 12, detail: '2 pendientes de actualizar', tone: 'amber' },
+    { label: 'Reportes abiertos', value: 7, detail: '3 de prioridad alta', tone: 'red' },
   ];
 
   tasks: AdminTask[] = [
-    { title: 'Review reported listings', owner: 'Moderation', status: 'Pending' },
-    { title: 'Update category icons', owner: 'Admin', status: 'In progress' },
-    { title: 'Check blocked accounts', owner: 'Support', status: 'Pending' },
+    { title: 'Revisar anuncios reportados', owner: 'Moderación', status: 'Pendiente' },
+    { title: 'Actualizar iconos de categorías', owner: 'Administración', status: 'En curso' },
+    { title: 'Comprobar cuentas bloqueadas', owner: 'Soporte', status: 'Pendiente' },
+  ];
+
+  chartItems: ChartItem[] = [
+    { label: 'Usuarios', value: 1248, percent: 92 },
+    { label: 'Artículos', value: 386, percent: 64 },
+    { label: 'Reportes', value: 7, percent: 28 },
   ];
 }

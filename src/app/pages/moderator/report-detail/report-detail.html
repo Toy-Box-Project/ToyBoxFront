@@ -1,13 +1,15 @@
-<main class="detail-page">
+<div class="pattern-bg"></div>
 
-  <a routerLink="/moderator/reports" class="back-link">Back to reports</a>
+<main class="detail-page relative-z-10">
+
+  <a routerLink="/moderator/reports" class="back-link">Volver a reportes</a>
 
   <header class="page-header">
     <div>
-      <p class="eyebrow">Moderation</p>
-      <h1>Report #{{ report.id }}</h1>
+      <p class="eyebrow">Moderación</p>
+      <h1>Reporte #{{ report.id }}</h1>
     </div>
-    <span class="status-pill" [class.resolved]="report.status === 'resolved'">{{ report.status }}</span>
+    <span class="status-pill" [class.resolved]="report.status === 'resolved'">{{ reportStatusLabel }}</span>
   </header>
 
   <section class="detail-grid">
@@ -16,27 +18,27 @@
       <p>{{ report.itemDescription }}</p>
       <dl>
         <div>
-          <dt>Reported user</dt>
+          <dt>Usuario reportado</dt>
           <dd>{{ report.reportedUser }}</dd>
         </div>
         <div>
-          <dt>Reporter</dt>
+          <dt>Reportado por</dt>
           <dd>{{ report.reporter }}</dd>
         </div>
         <div>
-          <dt>Date</dt>
+          <dt>Fecha</dt>
           <dd>{{ report.reportDate }}</dd>
         </div>
       </dl>
     </article>
 
     <aside class="panel decision-panel">
-      <h2>Decision</h2>
+      <h2>Decisión</h2>
       <p>{{ report.reason }}</p>
       <div class="decision-actions">
-        <button type="button" class="btn btn--ghost" (click)="openAction('resolve')">Resolve only</button>
-        <button type="button" class="btn btn--danger" (click)="openAction('withdraw')">Withdraw item</button>
-        <button type="button" class="btn btn--primary" (click)="openAction('reactivate')">Reactivate item</button>
+        <button type="button" class="btn btn--ghost" (click)="openAction('resolve')">Resolver reporte</button>
+        <button type="button" class="btn btn--danger" (click)="openAction('withdraw')">Retirar artículo</button>
+        <button type="button" class="btn btn--primary" (click)="openAction('reactivate')">Reactivar artículo</button>
       </div>
     </aside>
   </section>
@@ -46,7 +48,7 @@
   [isOpen]="!!pendingAction"
   [title]="modalTitle"
   [message]="modalMessage"
-  confirmText="Confirm"
+  confirmText="Confirmar"
   [variant]="pendingAction === 'withdraw' ? 'danger' : 'info'"
   (confirmed)="confirmAction()"
   (cancelled)="pendingAction = null"

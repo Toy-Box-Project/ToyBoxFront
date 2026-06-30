@@ -8,10 +8,10 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 })
 export class ModalConfirmComponent {
   @Input() isOpen = false;
-  @Input() title = 'Confirm action';
-  @Input() message = 'Are you sure you want to continue?';
-  @Input() confirmText = 'Confirm';
-  @Input() cancelText = 'Cancel';
+  @Input() title = 'Confirmar acción';
+  @Input() message = '¿Seguro que quieres continuar?';
+  @Input() confirmText = 'Confirmar';
+  @Input() cancelText = 'Cancelar';
   @Input() variant: 'danger' | 'warning' | 'info' = 'danger';
 
   @Output() confirmed = new EventEmitter<void>();

@@ -1,28 +1,35 @@
-<main class="management-page">
+<div class="pattern-bg"></div>
+
+<main class="management-page relative-z-10">
   <header class="page-header">
     <div>
-      <p class="eyebrow">Administration</p>
-      <h1>Categories management</h1>
+      <p class="eyebrow">Administración</p>
+      <h1>Gestión de categorías</h1>
     </div>
-    <input type="search" placeholder="Search categories" [(ngModel)]="searchTerm" />
+    <input
+      type="search"
+      placeholder="Buscar categorías"
+      [ngModel]="searchTerm()"
+      (ngModelChange)="searchTerm.set($event)"
+    />
   </header>
 
-  <section class="form-panel" aria-label="Category form">
-    <h2>{{ editingId ? 'Edit category' : 'New category' }}</h2>
+  <section class="form-panel" aria-label="Formulario de categoría">
+    <h2>{{ editingId() ? 'Editar categoría' : 'Nueva categoría' }}</h2>
     <form (ngSubmit)="saveCategory()">
       <label>
-        Name
+        Nombre
         <input type="text" name="name" [(ngModel)]="form.name" />
       </label>
       <label>
-        Description
+        Descripción
         <input type="text" name="description" [(ngModel)]="form.description" />
       </label>
       <div class="form-actions">
-        @if (editingId) {
-          <button type="button" class="btn btn--ghost" (click)="resetForm()">Cancel</button>
+        @if (editingId()) {
+          <button type="button" class="btn btn--ghost" (click)="resetForm()">Cancelar</button>
         }
-        <button type="submit" class="btn btn--primary">{{ editingId ? 'Save changes' : 'Create category' }}</button>
+        <button type="submit" class="btn btn--primary">{{ editingId() ? 'Guardar cambios' : 'Crear categoría' }}</button>
       </div>
     </form>
   </section>
@@ -31,23 +38,33 @@
     <table>
       <thead>
         <tr>
-          <th>Name</th>
-          <th>Description</th>
-          <th>Items</th>
-          <th>Actions</th>
+          <th>Nombre</th>
+          <th>Descripción</th>
+          <th>Artículos</th>
+          <th>Acciones</th>
         </tr>
       </thead>
       <tbody>
-        @for (category of filteredCategories; track category.id) {
+        @if (isLoading()) {
           <tr>
-            <td data-label="Name">{{ category.name }}</td>
-            <td data-label="Description">{{ category.description }}</td>
-            <td data-label="Items">{{ category.items }}</td>
-            <td data-label="Actions" class="actions">
-              <button type="button" class="link-button" (click)="editCategory(category)">Edit</button>
-              <button type="button" class="link-button danger" (click)="askDelete(category)">Delete</button>
+            <td colspan="4">Cargando categorías...</td>
+          </tr>
+        } @else {
+          @for (category of filteredCategories(); track category.id) {
+          <tr>
+            <td data-label="Nombre">{{ category.name }}</td>
+            <td data-label="Descripción">{{ category.description }}</td>
+            <td data-label="Artículos">{{ category.items }}</td>
+            <td data-label="Acciones" class="actions">
+              <button type="button" class="link-button" (click)="editCategory(category)">Editar</button>
+              <button type="button" class="link-button danger" (click)="askDelete(category)">Eliminar</button>
             </td>
           </tr>
+          } @empty {
+            <tr>
+              <td colspan="4">No hay categorías para mostrar.</td>
+            </tr>
+          }
         }
       </tbody>
     </table>
@@ -55,18 +72,18 @@
 </main>
 
 <app-modal-confirm
-  [isOpen]="!!categoryToDelete"
-  title="Delete category"
-  [message]="'Delete ' + categoryToDelete?.name + '? This action cannot be undone.'"
-  confirmText="Delete"
+  [isOpen]="!!categoryToDelete()"
+  title="Eliminar categoría"
+  [message]="'Eliminar ' + categoryToDelete()?.name + '? Esta acción no se puede deshacer.'"
+  confirmText="Eliminar"
   (confirmed)="confirmDelete()"
-  (cancelled)="categoryToDelete = null"
+  (cancelled)="categoryToDelete.set(null)"
 />
 
 <app-toast
-  [visible]="toast.visible"
-  [type]="toast.type"
-  [title]="toast.title"
-  [message]="toast.message"
-  (dismissed)="toast.visible = false"
+  [visible]="toast().visible"
+  [type]="toast().type"
+  [title]="toast().title"
+  [message]="toast().message"
+  (dismissed)="toast.set({ ...toast(), visible: false })"
 />

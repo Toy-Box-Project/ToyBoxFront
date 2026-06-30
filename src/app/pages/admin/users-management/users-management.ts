@@ -61,10 +61,23 @@ export class UsersManagementComponent {
 
     this.showToast(
       'success',
-      'User updated',
-      `${this.selectedUser.username} is now ${nextStatus}.`
+      'Usuario actualizado',
+      `${this.selectedUser.username} ahora esta ${this.statusLabel(nextStatus).toLowerCase()}.`
     );
     this.selectedUser = null;
+  }
+
+  roleLabel(role: UserRow['role']): string {
+    const labels: Record<UserRow['role'], string> = {
+      user: 'Usuario',
+      moderator: 'Moderador',
+      administrator: 'Administrador',
+    };
+    return labels[role];
+  }
+
+  statusLabel(status: UserRow['status']): string {
+    return status === 'active' ? 'Activo' : 'Bloqueado';
   }
 
   private showToast(type: ToastType, title: string, message: string): void {
