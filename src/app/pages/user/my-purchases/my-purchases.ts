@@ -122,6 +122,18 @@ export class MyPurchasesComponent implements OnInit {
     return Math.ceil(list.length / this.pageSize);
   }
 
+  get emptyStateTitle(): string {
+    return this.activeTab === 'purchases'
+      ? 'Aún no has hecho reseñas'
+      : 'Aún no tienes reseñas de tus productos';
+  }
+
+  get emptyStateMessage(): string {
+    return this.activeTab === 'purchases'
+      ? 'Compra productos y déjanos tu opinión'
+      : 'Cuando otros usuarios compren tus productos, recibirás reseñas aquí';
+  }
+
   getTotalReviewsForUser(userId: number): number {
     if (this.activeTab === 'purchases') {
       return this.myPurchaseReviews.filter(r => r.fk_reviewed_id === userId).length;
