@@ -4,15 +4,9 @@
     overflow: hidden;
 }
 
-.pattern-bg {
-    position: absolute;
-    inset: 0;
-    background-image: url("/assets/images/background-pattern.svg");
-    background-repeat: repeat;
-    background-size: 700px;
-    opacity: .08;
-    z-index: 0;
-    pointer-events: none;
+.relative-z-10 {
+    position: relative;
+    z-index: 1;
 }
 
 .relative-z-10 {
