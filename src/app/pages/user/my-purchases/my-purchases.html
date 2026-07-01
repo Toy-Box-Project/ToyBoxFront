@@ -51,9 +51,11 @@
   @else {
     @if (paginatedReviews.length === 0) {
       <app-empty-state
-        title="@if (activeTab === 'purchases') { Aún no has hecho reseñas } @else { Aún no tienes reseñas de tus productos }"
-        message="@if (activeTab === 'purchases') { Compra productos y déjanos tu opinión } @else { Cuando otros usuarios compren tus productos, recibirás reseñas aquí }"
-        icon="rate_review">
+        icon="⭐"
+        [title]="emptyStateTitle"
+        [message]="emptyStateMessage"
+        [buttonText]="activeTab === 'purchases' ? 'Explorar catálogo' : ''"
+        [buttonLink]="'/catalog'">
       </app-empty-state>
     } 
     

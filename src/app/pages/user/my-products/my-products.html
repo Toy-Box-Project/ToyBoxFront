@@ -26,13 +26,13 @@
       <app-empty-state
         title="Error cargando productos"
         [message]="productsError"
-        icon="error"
+        icon="⚠️"
       ></app-empty-state>
     } @else if (products.length === 0) {
       <app-empty-state
+        icon="📦"
         title="Sin productos en venta"
         message="Aún no has publicado ningún producto. ¡Comienza a vender!"
-        icon="shopping_bag"
         [buttonText]="'Crear producto'"
         [buttonLink]="'/product/create'">
       </app-empty-state>
