@@ -1,4 +1,4 @@
-import { Component, Input, inject } from '@angular/core';
+import { Component, Input, inject, OnChanges, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
@@ -9,7 +9,9 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
   templateUrl: './map-static.html',
   styleUrl: './map-static.css'
 })
-export class MapStaticComponent {
+
+export class MapStaticComponent implements OnChanges {
+
   @Input() location: string = '';
   @Input() latitude: number | null = null;
   @Input() longitude: number | null = null;
@@ -19,6 +21,23 @@ export class MapStaticComponent {
 
   private sanitizer = inject(DomSanitizer);
 
+  ngOnChanges(changes: SimpleChanges): void {
+
+    if (changes['latitude'] || changes['longitude'] || changes['location']) {
+      console.log('✅ map-static: ngOnChanges() detectó cambio en coordenadas', {
+        latitude: this.latitude,
+        longitude: this.longitude,
+        location: this.location,
+        esValido: this.hasValidCoordinates(),
+
+        cambios: {
+          latitud: changes['latitude']?.currentValue,
+          longitud: changes['longitude']?.currentValue,
+        }
+      });
+    }
+  }
+
   get mapUrl(): SafeResourceUrl {
     if (!this.hasValidCoordinates() && !this.location) {
       return this.sanitizer.bypassSecurityTrustResourceUrl('');
@@ -27,9 +46,13 @@ export class MapStaticComponent {
     if (this.hasValidCoordinates()) {
       const markerCoords = `${this.latitude},${this.longitude}`;
       const bbox = this.calculateBbox(this.latitude!, this.longitude!);
-      return this.sanitizer.bypassSecurityTrustResourceUrl(
-        `https://www.openstreetmap.org/export/embed.html?bbox=${bbox}&layer=mapnik&marker=${markerCoords}`
-      );
+      
+      const url = `https://www.openstreetmap.org/export/embed.html?bbox=${bbox}&layer=mapnik&marker=${markerCoords}`;
+      
+      console.log('🗺️ map-static: URL generada para iframe:', url);
+      console.log('📍 map-static: Marcador en:', { lat: this.latitude, lng: this.longitude });
+      
+      return this.sanitizer.bypassSecurityTrustResourceUrl(url);
     }
 
     return this.sanitizer.bypassSecurityTrustResourceUrl('');
