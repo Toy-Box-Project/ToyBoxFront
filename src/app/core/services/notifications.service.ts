@@ -1,46 +1,51 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, tap } from 'rxjs';
-import { signal } from '@angular/core';
+import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 
-export interface AppNotification {
-    id_notifications: number;
-    message: string;
-    read: boolean;
-    created_at: string;
-    fk_users_id: number;
+export interface NotificationResponse {
+  id_notifications: number;
+  message: string;
+  read: boolean;
+  created_at: string;
+  fk_users_id: number;
 }
 
-@Injectable({ providedIn: 'root' })
+@Injectable({
+  providedIn: 'root'
+})
 export class NotificationsService {
-    private readonly API = `${environment.apiUrl}/notifications`;
+  private http = inject(HttpClient);
+  private apiUrl = `${environment.apiUrl}/notifications`;
 
-    private readonly _unreadCount = signal<number>(0);
-    readonly unreadCount = this._unreadCount.asReadonly();
+  // Signal que usa el navbar
+  unreadCount = signal(0);
 
-    constructor(private http: HttpClient) { }
+  getMyNotifications(): Observable<NotificationResponse[]> {
+    return this.http.get<NotificationResponse[]>(this.apiUrl);
+  }
 
-    getAll(): Observable<AppNotification[]> {
-        return this.http.get<AppNotification[]>(this.API);
-    }
+  getUnreadCount(): Observable<{ unreadCount: number }> {
+    return this.http.get<{ unreadCount: number }>(`${this.apiUrl}/unread-count`);
+  }
 
-    refreshUnreadCount(): void {
-        this.http.get<{ unreadCount: number }>(`${this.API}/unread-count`).subscribe({
-            next: (res) => this._unreadCount.set(res.unreadCount),
-            error: (err) => console.error('Error cargando notificaciones:', err)
-        });
-    }
+  refreshUnreadCount(): void {
+    this.getUnreadCount().subscribe({
+      next: (response) => {
+        this.unreadCount.set(response.unreadCount ?? 0);
+      },
+      error: (err) => {
+        console.error('Error cargando contador de notificaciones:', err);
+        this.unreadCount.set(0);
+      }
+    });
+  }
 
-    markAsRead(id: number): Observable<{ updated: number }> {
-        return this.http.patch<{ updated: number }>(`${this.API}/${id}/read`, {}).pipe(
-            tap(() => this.refreshUnreadCount())
-        );
-    }
+  markAsRead(id: number): Observable<{ updated: number }> {
+    return this.http.patch<{ updated: number }>(`${this.apiUrl}/${id}/read`, {});
+  }
 
-    markAllAsRead(): Observable<{ updated: number }> {
-        return this.http.patch<{ updated: number }>(`${this.API}/read-all`, {}).pipe(
-            tap(() => this.refreshUnreadCount())
-        );
-    }
+  markAllAsRead(): Observable<{ updated: number }> {
+    return this.http.patch<{ updated: number }>(`${this.apiUrl}/read-all`, {});
+  }
 }
