@@ -1,48 +1,64 @@
 <div class="pattern-bg"></div>
 
-<div class="relative-z-10">
-    <div class="notifications-page">
-        <div class="header">
-            <h1>
-                <span class="material-symbols-outlined">
-                    notifications
-                </span>
-                Notificaciones
-            </h1>
+<div class="container py-5 position-relative notifications-content">
+  
 
-            <div class="counter">
-                {{ unreadCount }} sin leer
-            </div>
-        </div>
+  <div class="notifications-page">
+    <app-breadcrumb></app-breadcrumb>
+    <div class="header">
+      <div>
+        <h1>
+          <span class="material-symbols-outlined">notifications</span>
+          Notificaciones
+        </h1>
+        <p class="notifications-subtitle">
+          Revisa la actividad reciente de tu cuenta en ToyBox.
+        </p>
+      </div>
 
-        @for (notification of notifications; track notification.id) {
-        <div
-            class="notification-card"
-            [class.unread]="!notification.read"
-            (click)="markAsRead(notification)">
-
-            <div class="icon">
-                <span class="material-symbols-outlined">
-                    {{ getIcon(notification.type) }}
-                </span>
-            </div>
-
-            <div class="content">
-                <h3>{{ notification.title }}</h3>
-                <p>{{ notification.message }}</p>
-                <small>{{ notification.date }}</small>
-            </div>
-
-            @if (!notification.read) {
-            <span class="status unread-status">
-                No leído
-            </span>
-            } @else {
-            <span class="status read-status">
-                Leído
-            </span>
-            }
-        </div>
-        }
+      <div class="counter">
+        {{ unreadCount }} sin leer
+      </div>
     </div>
+
+    @if (paginatedNotifications.length > 0) {
+      @for (notification of paginatedNotifications; track notification.id) {
+        <div
+          class="notification-card"
+          [class.unread]="!notification.read"
+          (click)="markAsRead(notification)">
+
+          <div class="icon">
+            <span class="material-symbols-outlined">
+              {{ getIcon(notification.type) }}
+            </span>
+          </div>
+
+          <div class="content">
+            <h3>{{ notification.title }}</h3>
+            <p>{{ notification.message }}</p>
+            <small>{{ notification.date }}</small>
+          </div>
+
+          @if (!notification.read) {
+            <span class="status unread-status">No leído</span>
+          } @else {
+            <span class="status read-status">Leído</span>
+          }
+        </div>
+      }
+
+      <div class="pagination-wrapper">
+        <app-pagination
+          [currentPage]="currentPage"
+          [totalPages]="totalPages"
+          (pageChange)="onPageChange($event)">
+        </app-pagination>
+      </div>
+    } @else {
+      <p class="notifications-empty">
+        Aún no tienes notificaciones.
+      </p>
+    }
+  </div>
 </div>

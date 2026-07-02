@@ -24,26 +24,27 @@ export class BreadcrumbComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
 
   private routeLabels: { [key: string]: { label: string; icon?: string } } = {
-    'catalog': { label: 'Catálogo', icon: 'shopping_bag' },
-    'product': { label: 'Detalles del Producto', icon: 'info' },
+  'catalog': { label: 'Catálogo', icon: 'shopping_bag' },
+  'product': { label: 'Detalles del Producto', icon: 'info' },
 
-    'profile': { label: 'Perfil', icon: 'person' },
-    'edit-profile': { label: 'Editar Perfil', icon: 'edit' },
-    'my-products': { label: 'Mis Productos', icon: 'store' },
-    'my-purchases': { label: 'Mis Compras', icon: 'shopping_cart' },
-    'favorites': { label: 'Favoritos', icon: 'favorite' },
+  'profile': { label: 'Perfil', icon: 'person' },
+  'edit-profile': { label: 'Editar Perfil', icon: 'edit' },
+  'my-products': { label: 'Mis Productos', icon: 'store' },
+  'my-purchases': { label: 'Mis Compras', icon: 'shopping_cart' },
+  'favorites': { label: 'Favoritos', icon: 'favorite' },
+  'notifications': { label: 'Notificaciones', icon: 'notifications' },
 
-    'create': { label: 'Crear Producto', icon: 'add_circle' },
-    'edit': { label: 'Editar Producto', icon: 'edit' },
+  'create': { label: 'Crear Producto', icon: 'add_circle' },
+  'edit': { label: 'Editar Producto', icon: 'edit' },
 
-    'chat': { label: 'Mensajes', icon: 'mail' },
+  'chat': { label: 'Mensajes', icon: 'mail' },
 
-    'reports': { label: 'Reportes', icon: 'report' },
-    'report': { label: 'Detalle del Reporte', icon: 'report_problem' },
+  'reports': { label: 'Reportes', icon: 'report' },
+  'report': { label: 'Detalle del Reporte', icon: 'report_problem' },
 
-    'dashboard': { label: 'Dashboard', icon: 'dashboard' },
-    'users': { label: 'Gestión de Usuarios', icon: 'people' },
-    'categories': { label: 'Gestión de Categorías', icon: 'category' }
+  'dashboard': { label: 'Dashboard', icon: 'dashboard' },
+  'users': { label: 'Gestión de Usuarios', icon: 'people' },
+  'categories': { label: 'Gestión de Categorías', icon: 'category' }
   };
 
   constructor(

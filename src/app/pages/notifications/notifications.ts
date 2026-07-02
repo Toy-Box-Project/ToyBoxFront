@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { BreadcrumbComponent } from '../../shared/components/breadcrumb/breadcrumb';
+import { PaginationComponent } from '../../shared/components/pagination/pagination';
 
 interface Notification {
   id: number;
@@ -18,11 +20,14 @@ interface Notification {
 @Component({
   selector: 'app-notifications',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, BreadcrumbComponent, PaginationComponent],
   templateUrl: './notifications.html',
   styleUrl: './notifications.css'
 })
 export class NotificationsComponent {
+  currentPage = 1;
+  pageSize = 5;
+  totalPages = 1;
 
   notifications: Notification[] = [
     {
@@ -64,8 +69,20 @@ export class NotificationsComponent {
       date: 'Hace 2 días',
       read: true,
       type: 'system'
+    },
+    {
+      id: 6,
+      title: 'Nuevo mensaje',
+      message: 'María te ha escrito sobre tu producto.',
+      date: 'Hace 3 días',
+      read: true,
+      type: 'message'
     }
   ];
+
+  constructor() {
+    this.updatePagination();
+  }
 
   markAsRead(notification: Notification): void {
     notification.read = true;
@@ -75,23 +92,34 @@ export class NotificationsComponent {
     return this.notifications.filter(n => !n.read).length;
   }
 
+  get paginatedNotifications(): Notification[] {
+    const start = (this.currentPage - 1) * this.pageSize;
+    return this.notifications.slice(start, start + this.pageSize);
+  }
+
+  updatePagination(): void {
+    this.totalPages = Math.max(1, Math.ceil(this.notifications.length / this.pageSize));
+    if (this.currentPage > this.totalPages) {
+      this.currentPage = this.totalPages;
+    }
+  }
+
+  onPageChange(page: number): void {
+    this.currentPage = page;
+  }
+
   getIcon(type: Notification['type']): string {
     switch (type) {
       case 'message':
         return 'chat';
-
       case 'product':
         return 'inventory_2';
-
       case 'sale':
         return 'shopping_bag';
-
       case 'favorite':
         return 'favorite';
-
       default:
         return 'notifications';
     }
   }
-
 }
