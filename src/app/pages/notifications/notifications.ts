@@ -1,9 +1,15 @@
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
-import { HttpErrorResponse } from '@angular/common/http';
-import { BreadcrumbComponent } from '../../shared/components/breadcrumb/breadcrumb';
-import { PaginationComponent } from '../../shared/components/pagination/pagination';
-import { NotificationsService, NotificationItem } from '../../core/services/notifications.service';
+import { NotificationsService, AppNotification } from '../../core/services/notifications.service';
+
+interface Notification {
+  id: number;
+  title: string;
+  message: string;
+  date: string;
+  read: boolean;
+  type: 'message' | 'product' | 'sale' | 'favorite' | 'system';
+}
 
 @Component({
   selector: 'app-notifications',
@@ -13,21 +19,81 @@ import { NotificationsService, NotificationItem } from '../../core/services/noti
   styleUrl: './notifications.css',
 })
 export class NotificationsComponent implements OnInit {
-  private readonly notificationsService = inject(NotificationsService);
-  private readonly cdr = inject(ChangeDetectorRef);
 
-  notifications: NotificationItem[] = [];
-  unreadCount = 0;
+  notifications: Notification[] = [];
 
-  isLoading = true;
-  backendError = '';
-
-  currentPage = 1;
-  pageSize = 6;
-  totalPages = 1;
+  constructor(private notificationsService: NotificationsService) { }
 
   ngOnInit(): void {
     this.loadNotifications();
+  }
+
+  loadNotifications(): void {
+    this.notificationsService.getAll().subscribe({
+      next: (data: AppNotification[]) => {
+        this.notifications = data.map(n => this.toLocalNotification(n));
+      },
+      error: (err) => {
+        console.error('Error cargando notificaciones:', err);
+      }
+    });
+  }
+
+  private toLocalNotification(n: AppNotification): Notification {
+    return {
+      id: n.id_notifications,
+      title: this.getTitleFromMessage(n.message),
+      message: n.message,
+      date: this.formatDate(n.created_at),
+      read: n.read,
+      type: this.inferType(n.message),
+    };
+  }
+
+  /** El back solo guarda "message", deducimos un título corto a partir del contenido */
+  private getTitleFromMessage(message: string): string {
+    if (message.includes('mensaje')) return 'Nuevo mensaje';
+    if (message.includes('vendido')) return 'Producto vendido';
+    if (message.includes('publicado')) return 'Producto publicado';
+    if (message.includes('favoritos')) return 'Nuevo favorito';
+    if (message.includes('denunciado')) return 'Artículo denunciado';
+    if (message.includes('eliminado')) return 'Artículo eliminado';
+    if (message.includes('reactivado')) return 'Artículo reactivado';
+    if (message.includes('suspendida')) return 'Cuenta suspendida';
+    return 'Notificación';
+  }
+
+  private inferType(message: string): Notification['type'] {
+    if (message.includes('mensaje')) return 'message';
+    if (message.includes('vendido')) return 'sale';
+    if (message.includes('publicado')) return 'product';
+    if (message.includes('favoritos')) return 'favorite';
+    return 'system';
+  }
+
+  private formatDate(dateStr: string): string {
+    const date = new Date(dateStr);
+    const now = new Date();
+    const diffMs = now.getTime() - date.getTime();
+    const diffMins = Math.floor(diffMs / 60000);
+    const diffHours = Math.floor(diffMins / 60);
+    const diffDays = Math.floor(diffHours / 24);
+
+    if (diffMins < 1) return 'Ahora mismo';
+    if (diffMins < 60) return `Hace ${diffMins} minutos`;
+    if (diffHours < 24) return `Hace ${diffHours} horas`;
+    if (diffDays === 1) return 'Ayer';
+    return `Hace ${diffDays} días`;
+  }
+
+  markAsRead(notification: Notification): void {
+    if (notification.read) return;
+    this.notificationsService.markAsRead(notification.id).subscribe({
+      next: () => {
+        notification.read = true;
+      },
+      error: (err) => console.error('Error marcando como leída:', err)
+    });
   }
 
   loadNotifications(): void {
@@ -55,93 +121,18 @@ export class NotificationsComponent implements OnInit {
     });
   }
 
-  markAsRead(notification: NotificationItem): void {
-    if (notification.read) return;
-
-    this.notificationsService.markAsRead(notification.id_notifications).subscribe({
-      next: () => {
-        notification.read = true;
-        this.unreadCount = Math.max(0, this.unreadCount - 1);
-        this.cdr.markForCheck();
-      },
-      error: (err) => {
-        console.error('Error marcando notificación como leída:', err);
-      }
-    });
-  }
-
-  markAllAsRead(): void {
-    if (!this.unreadCount) return;
-
-    this.notificationsService.markAllAsRead().subscribe({
-      next: () => {
-        this.notifications = this.notifications.map(notification => ({
-          ...notification,
-          read: true
-        }));
-        this.unreadCount = 0;
-        this.cdr.markForCheck();
-      },
-      error: (err) => {
-        console.error('Error marcando todas como leídas:', err);
-      }
-    });
-  }
-
-  get paginatedNotifications(): NotificationItem[] {
-    const start = (this.currentPage - 1) * this.pageSize;
-    return this.notifications.slice(start, start + this.pageSize);
-  }
-
-  updatePagination(): void {
-    this.totalPages = Math.max(1, Math.ceil(this.notifications.length / this.pageSize));
-    if (this.currentPage > this.totalPages) {
-      this.currentPage = this.totalPages;
-    }
-  }
-
-  onPageChange(page: number): void {
-    this.currentPage = page;
-  }
-
-  getIcon(type?: string | null): string {
+  getIcon(type: Notification['type']): string {
     switch (type) {
       case 'message':
-        return 'mail';
+        return 'chat';
+      case 'product':
+        return 'inventory_2';
+      case 'sale':
+        return 'shopping_bag';
       case 'favorite':
         return 'favorite';
-      case 'purchase':
-        return 'shopping_bag';
-      case 'sale':
-        return 'sell';
-      case 'review':
-        return 'star';
-      case 'warning':
-        return 'warning';
       default:
         return 'notifications';
-    }
-  }
-
-  private formatDate(dateString: string): string {
-    const date = new Date(dateString);
-
-    return new Intl.DateTimeFormat('es-ES', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
-    }).format(date);
-  }
-
-  private handleError(err: HttpErrorResponse, defaultMessage: string): void {
-    if (err.status === 401) {
-      this.backendError = 'Debes iniciar sesión para ver tus notificaciones';
-    } else if (err.status === 0) {
-      this.backendError = 'Error de conexión. Verifica que el servidor esté corriendo';
-    } else {
-      this.backendError = err.error?.error || defaultMessage;
     }
   }
 }

@@ -1,9 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, computed, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { HttpErrorResponse } from '@angular/common/http';
+import { CategoriesService } from '../../../core/services/categories.service';
+import { Category } from '../../../shared/interfaces/category.interface';
 import { ModalConfirmComponent } from '../../../shared/components/modal-confirm/modal-confirm';
 import { ToastComponent, ToastType } from '../../../shared/components/toast/toast';
 
-// DEMO -> use interface Category
 interface CategoryRow {
   id: number;
   name: string;
@@ -18,33 +20,52 @@ interface CategoryRow {
   templateUrl: './categories-management.html',
   styleUrl: './categories-management.css'
 })
-export class CategoriesManagementComponent {
-  categories: CategoryRow[] = [
-    { id: 1, name: 'Electronics', description: 'Phones, laptops and digital devices', items: 83 },
-    { id: 2, name: 'Home', description: 'Furniture, decoration and home supplies', items: 41 },
-    { id: 3, name: 'Sports', description: 'Sport equipment and outdoor products', items: 26 },
-  ];
+export class CategoriesManagementComponent implements OnInit {
+  private readonly categoriesService = inject(CategoriesService);
 
-  searchTerm = '';
-  editingId: number | null = null;
-  categoryToDelete: CategoryRow | null = null;
-  toast = { visible: false, type: 'success' as ToastType, title: '', message: '' };
+  private readonly categories = signal<CategoryRow[]>([]);
+  readonly isLoading = signal(false);
+
+  readonly searchTerm = signal('');
+  readonly editingId = signal<number | null>(null);
+  readonly categoryToDelete = signal<CategoryRow | null>(null);
+  readonly toast = signal({ visible: false, type: 'success' as ToastType, title: '', message: '' });
 
   form = {
     name: '',
     description: '',
   };
 
-  get filteredCategories(): CategoryRow[] {
-    const term = this.searchTerm.trim().toLowerCase();
+  readonly filteredCategories = computed(() => {
+    const term = this.searchTerm().trim().toLowerCase();
+    const categories = this.categories();
     if (!term) {
-      return this.categories;
+      return categories;
     }
 
-    return this.categories.filter(category =>
+    return categories.filter(category =>
       category.name.toLowerCase().includes(term) ||
       category.description.toLowerCase().includes(term)
     );
+  });
+
+  ngOnInit(): void {
+    this.loadCategories();
+  }
+
+  loadCategories(): void {
+    this.isLoading.set(true);
+
+    this.categoriesService.getAll().subscribe({
+      next: categories => {
+        this.categories.set(categories.map(category => this.mapCategory(category)));
+        this.isLoading.set(false);
+      },
+      error: () => {
+        this.isLoading.set(false);
+        this.showToast('error', 'No se pudieron cargar las categorías', 'Revisa que el backend esté arrancado y que hayas iniciado sesión.');
+      },
+    });
   }
 
   saveCategory(): void {
@@ -52,26 +73,40 @@ export class CategoriesManagementComponent {
     const description = this.form.description.trim();
 
     if (!name || !description) {
-      this.showToast('warning', 'Missing fields', 'Name and description are required.');
+      this.showToast('warning', 'Faltan campos', 'El nombre y la descripción son obligatorios.');
       return;
     }
 
-    if (this.editingId) {
-      this.categories = this.categories.map(category =>
-        category.id === this.editingId ? { ...category, name, description } : category
-      );
-      this.showToast('success', 'Category updated', `${name} has been updated.`);
-    } else {
-      const nextId = Math.max(...this.categories.map(category => category.id), 0) + 1;
-      this.categories = [...this.categories, { id: nextId, name, description, items: 0 }];
-      this.showToast('success', 'Category created', `${name} has been added.`);
+    const editingId = this.editingId();
+
+    if (editingId) {
+      this.categoriesService.update(editingId, { name, description }).subscribe({
+        next: category => {
+          const updated = this.mapCategory(category);
+          this.categories.update(categories => categories.map(current =>
+            current.id === editingId ? { ...updated, items: current.items } : current
+          )
+          );
+          this.showToast('success', 'Categoría actualizada', `${name} se ha actualizado correctamente.`);
+          this.resetForm();
+        },
+        error: error => this.showCategoryError(error, 'No se pudo actualizar'),
+      });
+      return;
     }
 
-    this.resetForm();
+    this.categoriesService.create({ name, description }).subscribe({
+      next: category => {
+        this.categories.update(categories => [...categories, this.mapCategory(category)]);
+        this.showToast('success', 'Categoría creada', `${name} se ha añadido correctamente.`);
+        this.resetForm();
+      },
+      error: error => this.showCategoryError(error, 'No se pudo crear la categoría'),
+    });
   }
 
   editCategory(category: CategoryRow): void {
-    this.editingId = category.id;
+    this.editingId.set(category.id);
     this.form = {
       name: category.name,
       description: category.description,
@@ -79,26 +114,49 @@ export class CategoriesManagementComponent {
   }
 
   askDelete(category: CategoryRow): void {
-    this.categoryToDelete = category;
+    this.categoryToDelete.set(category);
   }
 
   confirmDelete(): void {
-    if (!this.categoryToDelete) {
+    const deletedCategory = this.categoryToDelete();
+    if (!deletedCategory) {
       return;
     }
 
-    const deletedName = this.categoryToDelete.name;
-    this.categories = this.categories.filter(category => category.id !== this.categoryToDelete?.id);
-    this.categoryToDelete = null;
-    this.showToast('success', 'Category deleted', `${deletedName} has been removed.`);
+    this.categoriesService.delete(deletedCategory.id).subscribe({
+      next: () => {
+        this.categories.update(categories => categories.filter(category => category.id !== deletedCategory.id));
+        this.categoryToDelete.set(null);
+        this.showToast('success', 'Categoría eliminada', `${deletedCategory.name} se ha eliminado correctamente.`);
+      },
+      error: error => this.showCategoryError(error, 'No se pudo eliminar'),
+    });
   }
 
   resetForm(): void {
-    this.editingId = null;
+    this.editingId.set(null);
     this.form = { name: '', description: '' };
   }
 
+  private mapCategory(category: Category & { id?: number }): CategoryRow {
+    return {
+      id: category.id_categories ?? category.id ?? 0,
+      name: category.name,
+      description: category.description ?? 'Sin descripción',
+      items: 0,
+    };
+  }
+
   private showToast(type: ToastType, title: string, message: string): void {
-    this.toast = { visible: true, type, title, message };
+    this.toast.set({ visible: true, type, title, message });
+  }
+
+  private showCategoryError(error: unknown, title: string): void {
+    if (error instanceof HttpErrorResponse && (error.status === 401 || error.status === 403)) {
+      this.showToast('warning', title, 'Inicia sesión con una cuenta administradora para gestionar categorías.');
+      return;
+    }
+
+    this.showToast('error', title, 'Inténtalo de nuevo en unos segundos.');
   }
 }

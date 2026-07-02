@@ -1,7 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
+import { ChatService } from '../../../core/services/chat.service';
+import { NotificationsService } from '../../../core/services/notifications.service';
+import { UserRole } from '../../enums/user-role.enum';
 
 @Component({
   selector: 'app-navbar',
@@ -14,19 +17,47 @@ export class NavbarComponent implements OnInit {
 
   isLoggedIn: boolean = false;
   userAvatar: string = '';
+  userRole: UserRole | null = null;
 
-  // Número de notificaciones sin leer
-  unreadNotifications: number = 3;
+  isModerator: boolean = false;
+  isAdministrator: boolean = false;
+
+  unreadMessagesCount: number = 0;
 
   constructor(
     private router: Router,
-    private authService: AuthService
-  ) {}
+    private chatService: ChatService,
+    public authService: AuthService,
+    public notificationsService: NotificationsService
+  ) {
+    effect(() => {
+      const user = this.authService.currentUser();
+      this.isLoggedIn = !!user;
+      this.userAvatar = user?.profile_picture || '';
+      this.userRole = user?.role ?? null;
+      this.isModerator = this.userRole === UserRole.Moderator;
+      this.isAdministrator = this.userRole === UserRole.Administrator;
 
-  ngOnInit(): void {
-    this.isLoggedIn = this.authService.isLoggedIn();
-    const user = this.authService.currentUser();
-    this.userAvatar = user?.profile_picture || '';
+      if (this.isLoggedIn) {
+        this.loadUnreadMessages();
+        this.notificationsService.refreshUnreadCount();
+      } else {
+        this.unreadMessagesCount = 0;
+      }
+    });
+  }
+
+  ngOnInit(): void { }
+
+  loadUnreadMessages(): void {
+    this.chatService.getMyChats().subscribe({
+      next: (chats) => {
+        this.unreadMessagesCount = chats.reduce((total, chat) => total + (chat.unreadCount || 0), 0);
+      },
+      error: (err) => {
+        console.error('Error cargando chats para contador:', err);
+      }
+    });
   }
 
   goToLogin(): void {
@@ -41,4 +72,11 @@ export class NavbarComponent implements OnInit {
     this.router.navigate(['/product/create']);
   }
 
+  goToReports(): void {
+    this.router.navigate(['/moderator/reports']);
+  }
+
+  goToDashboard(): void {
+    this.router.navigate(['/admin/dashboard']);
+  }
 }

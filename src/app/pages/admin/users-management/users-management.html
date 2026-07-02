@@ -1,16 +1,18 @@
-<main class="management-page">
+<div class="pattern-bg"></div>
+
+<main class="management-page relative-z-10">
 
   <header class="page-header">
     <div>
-      <p class="eyebrow">Administration</p>
-      <h1>Users management</h1>
+      <p class="eyebrow">Administración</p>
+      <h1>Gestión de usuarios</h1>
     </div>
     <div class="filters">
-      <input type="search" placeholder="Search users" [(ngModel)]="searchTerm" />
-      <select [(ngModel)]="statusFilter" aria-label="Filter by status">
-        <option value="all">All statuses</option>
-        <option value="active">Active</option>
-        <option value="blocked">Blocked</option>
+      <input type="search" placeholder="Buscar usuarios" [(ngModel)]="searchTerm" />
+      <select [(ngModel)]="statusFilter" aria-label="Filtrar por estado">
+        <option value="all">Todos los estados</option>
+        <option value="active">Activos</option>
+        <option value="blocked">Bloqueados</option>
       </select>
     </div>
   </header>
@@ -19,28 +21,28 @@
     <table>
       <thead>
         <tr>
-          <th>User</th>
-          <th>Role</th>
-          <th>Status</th>
-          <th>Items</th>
-          <th>Action</th>
+          <th>Usuario</th>
+          <th>Rol</th>
+          <th>Estado</th>
+          <th>Articulos</th>
+          <th>Accion</th>
         </tr>
       </thead>
       <tbody>
         @for (user of filteredUsers; track user.id) {
           <tr>
-            <td data-label="User">
+            <td data-label="Usuario">
               <strong>{{ user.username }}</strong>
               <span>{{ user.email }}</span>
             </td>
-            <td data-label="Role">{{ user.role }}</td>
-            <td data-label="Status">
-              <span class="status-pill" [class.blocked]="user.status === 'blocked'">{{ user.status }}</span>
+            <td data-label="Rol">{{ roleLabel(user.role) }}</td>
+            <td data-label="Estado">
+              <span class="status-pill" [class.blocked]="user.status === 'blocked'">{{ statusLabel(user.status) }}</span>
             </td>
-            <td data-label="Items">{{ user.publishedItems }}</td>
-            <td data-label="Action">
+            <td data-label="Articulos">{{ user.publishedItems }}</td>
+            <td data-label="Accion">
               <button type="button" class="link-button" [class.danger]="user.status === 'active'" (click)="askStatusChange(user)">
-                {{ user.status === 'active' ? 'Block' : 'Unblock' }}
+                {{ user.status === 'active' ? 'Bloquear' : 'Desbloquear' }}
               </button>
             </td>
           </tr>
@@ -52,9 +54,9 @@
 
 <app-modal-confirm
   [isOpen]="!!selectedUser"
-  [title]="selectedUser?.status === 'active' ? 'Block user' : 'Unblock user'"
-  [message]="'Change status for ' + selectedUser?.username + '?'"
-  [confirmText]="selectedUser?.status === 'active' ? 'Block' : 'Unblock'"
+  [title]="selectedUser?.status === 'active' ? 'Bloquear usuario' : 'Desbloquear usuario'"
+  [message]="'Cambiar el estado de ' + selectedUser?.username + '?'"
+  [confirmText]="selectedUser?.status === 'active' ? 'Bloquear' : 'Desbloquear'"
   [variant]="selectedUser?.status === 'active' ? 'danger' : 'info'"
   (confirmed)="confirmStatusChange()"
   (cancelled)="selectedUser = null"

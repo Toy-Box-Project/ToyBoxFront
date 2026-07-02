@@ -110,6 +110,51 @@ h2 {
   padding: 24px;
 }
 
+.chart-panel {
+  margin-top: 24px;
+}
+
+.chart-list {
+  display: grid;
+  gap: 16px;
+  margin-top: 18px;
+}
+
+.chart-row {
+  display: grid;
+  gap: 8px;
+}
+
+.chart-row div:first-child {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.chart-row strong {
+  color: var(--on-surface);
+  font-family: var(--font-title);
+}
+
+.chart-row span {
+  color: var(--on-surface-variant);
+}
+
+.chart-track {
+  height: 12px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(223, 191, 193, 0.55);
+}
+
+.chart-bar {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--primary-toybox), var(--secondary-toybox));
+}
+
 .task-list {
   display: grid;
   gap: 12px;
