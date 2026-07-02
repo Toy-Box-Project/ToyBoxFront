@@ -14,9 +14,9 @@ interface Notification {
 @Component({
   selector: 'app-notifications',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, BreadcrumbComponent, PaginationComponent],
   templateUrl: './notifications.html',
-  styleUrl: './notifications.css'
+  styleUrl: './notifications.css',
 })
 export class NotificationsComponent implements OnInit {
 
@@ -96,8 +96,29 @@ export class NotificationsComponent implements OnInit {
     });
   }
 
-  get unreadCount(): number {
-    return this.notifications.filter(n => !n.read).length;
+  loadNotifications(): void {
+    this.isLoading = true;
+    this.backendError = '';
+
+    this.notificationsService.getAll().subscribe({
+      next: (data) => {
+        this.notifications = data.map((notification) => ({
+          ...notification,
+          date: this.formatDate(notification.created_at)
+        }));
+
+        this.unreadCount = this.notifications.filter(n => !n.read).length;
+        this.updatePagination();
+        this.isLoading = false;
+        this.cdr.markForCheck();
+      },
+      error: (err: HttpErrorResponse) => {
+        this.isLoading = false;
+        this.handleError(err, 'Error al cargar las notificaciones');
+        console.error('Error cargando notificaciones:', err);
+        this.cdr.markForCheck();
+      }
+    });
   }
 
   getIcon(type: Notification['type']): string {
