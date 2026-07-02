@@ -1,98 +1,94 @@
-import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
+import { HttpErrorResponse } from '@angular/common/http';
 import { BreadcrumbComponent } from '../../shared/components/breadcrumb/breadcrumb';
 import { PaginationComponent } from '../../shared/components/pagination/pagination';
-
-interface Notification {
-  id: number;
-  title: string;
-  message: string;
-  date: string;
-  read: boolean;
-  type:
-    | 'message'
-    | 'product'
-    | 'sale'
-    | 'favorite'
-    | 'system';
-}
+import { NotificationsService, NotificationItem } from '../../core/services/notifications.service';
 
 @Component({
   selector: 'app-notifications',
   standalone: true,
   imports: [CommonModule, BreadcrumbComponent, PaginationComponent],
   templateUrl: './notifications.html',
-  styleUrl: './notifications.css'
+  styleUrl: './notifications.css',
 })
-export class NotificationsComponent {
+export class NotificationsComponent implements OnInit {
+  private readonly notificationsService = inject(NotificationsService);
+  private readonly cdr = inject(ChangeDetectorRef);
+
+  notifications: NotificationItem[] = [];
+  unreadCount = 0;
+
+  isLoading = true;
+  backendError = '';
+
   currentPage = 1;
-  pageSize = 5;
+  pageSize = 6;
   totalPages = 1;
 
-  notifications: Notification[] = [
-    {
-      id: 1,
-      title: 'Nuevo mensaje',
-      message: 'Juan Pérez te ha enviado un mensaje.',
-      date: 'Hace 3 minutos',
-      read: false,
-      type: 'message'
-    },
-    {
-      id: 2,
-      title: 'Producto publicado',
-      message: 'Tu LEGO Star Wars ya está publicado.',
-      date: 'Hace 20 minutos',
-      read: false,
-      type: 'product'
-    },
-    {
-      id: 3,
-      title: 'Producto vendido',
-      message: 'Has vendido una Nintendo Switch.',
-      date: 'Hace 1 hora',
-      read: false,
-      type: 'sale'
-    },
-    {
-      id: 4,
-      title: 'Nuevo favorito',
-      message: 'Alguien ha añadido tu producto a favoritos.',
-      date: 'Ayer',
-      read: true,
-      type: 'favorite'
-    },
-    {
-      id: 5,
-      title: 'Bienvenido',
-      message: 'Gracias por registrarte en ToyBox.',
-      date: 'Hace 2 días',
-      read: true,
-      type: 'system'
-    },
-    {
-      id: 6,
-      title: 'Nuevo mensaje',
-      message: 'María te ha escrito sobre tu producto.',
-      date: 'Hace 3 días',
-      read: true,
-      type: 'message'
-    }
-  ];
-
-  constructor() {
-    this.updatePagination();
+  ngOnInit(): void {
+    this.loadNotifications();
   }
 
-  markAsRead(notification: Notification): void {
-    notification.read = true;
+  loadNotifications(): void {
+    this.isLoading = true;
+    this.backendError = '';
+
+    this.notificationsService.getAll().subscribe({
+      next: (data) => {
+        this.notifications = data.map((notification) => ({
+          ...notification,
+          date: this.formatDate(notification.created_at)
+        }));
+
+        this.unreadCount = this.notifications.filter(n => !n.read).length;
+        this.updatePagination();
+        this.isLoading = false;
+        this.cdr.markForCheck();
+      },
+      error: (err: HttpErrorResponse) => {
+        this.isLoading = false;
+        this.handleError(err, 'Error al cargar las notificaciones');
+        console.error('Error cargando notificaciones:', err);
+        this.cdr.markForCheck();
+      }
+    });
   }
 
-  get unreadCount(): number {
-    return this.notifications.filter(n => !n.read).length;
+  markAsRead(notification: NotificationItem): void {
+    if (notification.read) return;
+
+    this.notificationsService.markAsRead(notification.id_notifications).subscribe({
+      next: () => {
+        notification.read = true;
+        this.unreadCount = Math.max(0, this.unreadCount - 1);
+        this.cdr.markForCheck();
+      },
+      error: (err) => {
+        console.error('Error marcando notificación como leída:', err);
+      }
+    });
   }
 
-  get paginatedNotifications(): Notification[] {
+  markAllAsRead(): void {
+    if (!this.unreadCount) return;
+
+    this.notificationsService.markAllAsRead().subscribe({
+      next: () => {
+        this.notifications = this.notifications.map(notification => ({
+          ...notification,
+          read: true
+        }));
+        this.unreadCount = 0;
+        this.cdr.markForCheck();
+      },
+      error: (err) => {
+        console.error('Error marcando todas como leídas:', err);
+      }
+    });
+  }
+
+  get paginatedNotifications(): NotificationItem[] {
     const start = (this.currentPage - 1) * this.pageSize;
     return this.notifications.slice(start, start + this.pageSize);
   }
@@ -108,18 +104,44 @@ export class NotificationsComponent {
     this.currentPage = page;
   }
 
-  getIcon(type: Notification['type']): string {
+  getIcon(type?: string | null): string {
     switch (type) {
       case 'message':
-        return 'chat';
-      case 'product':
-        return 'inventory_2';
-      case 'sale':
-        return 'shopping_bag';
+        return 'mail';
       case 'favorite':
         return 'favorite';
+      case 'purchase':
+        return 'shopping_bag';
+      case 'sale':
+        return 'sell';
+      case 'review':
+        return 'star';
+      case 'warning':
+        return 'warning';
       default:
         return 'notifications';
+    }
+  }
+
+  private formatDate(dateString: string): string {
+    const date = new Date(dateString);
+
+    return new Intl.DateTimeFormat('es-ES', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    }).format(date);
+  }
+
+  private handleError(err: HttpErrorResponse, defaultMessage: string): void {
+    if (err.status === 401) {
+      this.backendError = 'Debes iniciar sesión para ver tus notificaciones';
+    } else if (err.status === 0) {
+      this.backendError = 'Error de conexión. Verifica que el servidor esté corriendo';
+    } else {
+      this.backendError = err.error?.error || defaultMessage;
     }
   }
 }
